@@ -4,7 +4,7 @@ from scrapy.http import Request
 from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
 
 # Importer la classe de l'item par defaut
-from dirbot.items import Product
+from project.items import Product
 
 # Definition de la classe Spider pour le site seLoger
 class seLogerSpider(CrawlSpider):
