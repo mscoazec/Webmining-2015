@@ -5,3 +5,4 @@ class Product(Item):
     titre = Field()
     prix = Field()
     description = Field()
+    infos = Field()

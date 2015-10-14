@@ -16,4 +16,6 @@ class FilterPipeline(object):
         item['description'] = unicodedata.normalize('NFKD',item['description']).encode('ascii','ignore')
         item['titre'] = ' '.join(item['titre'].split())
         item['titre'] = unicodedata.normalize('NFKD',item['titre']).encode('ascii','ignore')
+        item['infos'] = ' '.join(item['infos'].split())
+        item['infos'] = unicodedata.normalize('NFKD',item['infos']).encode('ascii','ignore')
         return item

@@ -17,7 +17,7 @@ class seLogerSpider(CrawlSpider):
     
     # Url par laquelle commence la fouille
     start_urls = [
-        "http://www.seloger.com/immobilier/achat/immo-paris-75/",
+        "http://www.seloger.com/immobilier/achat/immo-paris-6eme-75/",
     ]
     
     # La regle de fouille consiste a tourner les pages
@@ -63,7 +63,7 @@ class seLogerSpider(CrawlSpider):
         s_description_liste = '';
         
         for li in li_items:
-            s_li = li.xpath('text()').extract()[0]
+            s_li = li.xpath('@title').extract()[0]
             # supprime les espaces en fin de string
             s_li = s_li.strip()
             # concatene la string extraite apres une virgule seulement si elle
@@ -74,9 +74,10 @@ class seLogerSpider(CrawlSpider):
         # enlever la derniere virgule
         s_description_liste = s_description_liste[:-1]
         
-        # Attribut description : le texte de l'annonce et les infos
+        # Attributs description et infos : le texte de l'annonce et les infos
         # aditionnelles
-        item['description'] = s_description + '\n RESUME DES CARACTERISTIQUES : ' + s_description_liste
+        item['description'] = s_description
+        item['infos'] = s_description_liste
         
         # Attribut titre : titre de l'annonce
         item['titre'] = sel.xpath('//h1[@class="detail-title"]/text()').extract()[0]
