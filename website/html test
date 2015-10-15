@@ -1,0 +1,113 @@
+<html> 
+
+<head> 
+<meta charset="UTF-8">
+<title> Hello </title>
+<LINK rel="stylesheet" type="text/css" href="bootstrap.css">
+
+
+<!--
+<style type="text/css" >
+
+table {
+border:1px solid black
+border-collapse: collapse
+}
+
+body {
+background-color:transparent;
+font-family: calibri;
+}
+
+#par1 {
+font-size: 150%;
+background-color:lightgrey;
+border-style: solid;
+
+}
+
+.normal{
+font-size:110%
+}
+
+</style>
+-->
+
+</head>
+
+<body>
+
+
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+    
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">
+          <img alt="Brand" src="https://defivoileparistech.files.wordpress.com/2011/09/logo_mines.png?w=150&h=124" height="100%">
+        </a>
+      </div>
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <p class="navbar-text">Home</p>
+        <p class="navbar-text">Contact</p>
+      </div>
+
+    </div>
+  </nav>
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="bloctop">
+
+        <h1>MINES PARISTECH </h1>
+        </bloctop>
+      </div>
+    </div>
+
+    <div class="row">
+
+      <div class="col-md-6" >
+        <div class="bloc">
+		<br>
+		<p id="par1"> L'École nationale supérieure des mines de Paris2, aussi connue sous le nom de Mines ParisTech ou École des mines de Paris, d'ENSMP, de Mines Paris ou simplement les Mines) est l'une des 210 écoles d'ingénieurs françaises habilitées à délivrer un diplôme d'ingénieur. </p>
+
+        </div>
+      </div>
+
+      <div class="col-md-6" >
+        <div class="bloc">
+
+		<form action="demo_form_action.asp" method="get">
+
+		   <fieldset>
+			name <input type="text"></input> <br>
+			<input type="radio" name="sex" value="male">Male</input><br>
+			<input type="radio" name="sex" value="female">Female</input><br>
+			<input type="checkbox" name="language" value="english"> english </input>
+			<input type="checkbox" name="language" value="french"> french </input>
+			<input type="submit" value="envoyer">
+		   </fieldset>
+
+
+</form>
+        </div>
+      </div>
+
+	
+    </div>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
+
