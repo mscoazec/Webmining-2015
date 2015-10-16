@@ -78,14 +78,16 @@ Le code s'exécute grâce à un environnement supportant le python. Pour l'insta
 
 ### Contenu du fichier Traitement_annonces.py
 
-    Données globales :
+#### Données globales :
 
 tab_features : le tableau des features importé de Liste_features.csv
     L'import se fait en tout début de code, et la liste des features est donc conservée tout au long de l'exécution.      Ce tableau comprend les noms des features, si ce sont des features booléennes, et les chaînes de caractère à          rechercher dans les textes pour chacune des features.
+    
 feature_and_price_list : la liste simple des noms de features, avec le prix en dernière position.
+
 num_dict : un dictionnaire permettant le passage de nombres écrits en toutes lettres en nombres écrits en chiffres.
 
-    Le code est ensuite divisé en sous-fonctions successives :
+#### Le code est ensuite divisé en sous-fonctions successives :
 
 traitement_dossier : prend en entrée un dossier de fichiers Json, et sort un fichier .csv contenant toutes les données de toutes les annonces de tous les fichiers contenus dans le dossier.
 
