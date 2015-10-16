@@ -51,6 +51,50 @@ Les données extraites lors de la fouille sont sauvegardées de façon dynamique
 
 ## 2. Text analysis
 
+Le dossier Text analysis est dédié à l'analyse des textes d'annonces récupérés lors du web-crawling, pour en déduire les caractéristiques numériques des biens immobiliers décrits par les annonces.
+
+### Entrées du module
+
+Un ensemble de fichiers Json contenant, pour chaque annonce, les différents champs récupérés lors du crawling. Il doit y avoir obligatoirement le champ 'url'.
+
+### Sortie du module
+
+Un fichier .csv contenant une ligne par annonce immobilière traitée, et une colonne par feature, avec la valeur de chaque feature pour chaque bien immobilier. En cas de feature non trouvée dans le texte, la valeur de la feature est mise à zéro.
+
+### Fichiers du dossier
+
+Le fichier le plus important est le code python Traitement_annonces.py
+Il est également indispensable d'avoir la liste des features en .csv : Liste_features.csv
+
+Le dossier contient un sous-dossier avec les fichiers .json donnés par le web crawling.
+Enfin il contient le fichier d'ouput : le .csv contenant les données d'apprentissage.
+
+Les trois éléments : Traitement_annonces.py, Liste_features.csv, dossier de fichiers .json doivent être dans le même dossier lors de l'exécution du code.
+Le fichier output est automatiquement créé au même endroit.
+
+### Exécution du code
+
+Le code s'exécute grâce à un environnement supportant le python. Pour l'instant le fichier Traitement_annonces.py comporte à la dernière ligne l'appel de la fonction traitant automatiquement tout un dossier contenant des fichiers Json. Il suffit de lui mettre comme argument le nom du dossier à traiter, puis de lancer l'exécution du programme Python.
+
+### Contenu du fichier Traitement_annonces.py
+
+    Données globales :
+
+tab_features : le tableau des features importé de Liste_features.csv
+    L'import se fait en tout début de code, et la liste des features est donc conservée tout au long de l'exécution.      Ce tableau comprend les noms des features, si ce sont des features booléennes, et les chaînes de caractère à          rechercher dans les textes pour chacune des features.
+feature_and_price_list : la liste simple des noms de features, avec le prix en dernière position.
+num_dict : un dictionnaire permettant le passage de nombres écrits en toutes lettres en nombres écrits en chiffres.
+
+    Le code est ensuite divisé en sous-fonctions successives :
+
+traitement_dossier : prend en entrée un dossier de fichiers Json, et sort un fichier .csv contenant toutes les données de toutes les annonces de tous les fichiers contenus dans le dossier.
+
+traitement_fichier : prend en entrée un fichier Json, et sort un fichier .csv contenant toutes les données de toutes les annonces du fichier. Cette fonction peut prendre en entrée un fichier.csv où écrire les données (ceci pour pouvoir regrouper les données de plusieurs fichiers Json dans la fonction traitement_dossier).
+
+traitement_annonce : prend en entrée une liste de string correspondant aux différents champs d'une annonce immobilière, comprenant obligatoirement le champ 'url', et sort une liste des valeurs de chaque feature.
+
+extraction_features : prend en entrée un texte (string), et sort la liste des valeurs de chaque feature trouvée dans le texte (et 0 par défaut si une feature n'est pas mentionée dans le texte).
+
 ## 3. Machine learning
 
 ## 4. Modèle client serveur, design
