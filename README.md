@@ -28,14 +28,40 @@ Le fichier `items.py` contient la définition des classes des objets que l'on ch
 * `url` : l'adresse de l'annonce du bien immobilier en question,
 * `titre` : le titre de l'annonce immobilière,
 * `description` : la description du bien, c'est-à-dire le texte de l'annonce,
-* `prix` :  le prix de vente sur l'annonce.
+* `prix` :  le prix de vente sur l'annonce,
+* `infos` : des informations additionnelles contenues dans des tableaux (notre convention est de les séparer par des virgules en les concaténant),
+* `agence` : le nom de l'agence, si disponible,
+* `localisation` : la localisation, si disponible,
+* `metro` : la liste des stations de métro à proximitié (même convention avec la virgule comme séparateur), disponible uniquement pour le site d'annonces PAP.
 
-Le fichier `spider.py` est dédié à l'implémentation des différents robots d'indexation, ou encore _spiders_, qui définissent la façon dont un site (ou un groupe de sites) est fouillé. En particulier, il s'agit de rédiger des règles permettant aux robots de cliquer sur les liens d'intérêt (ceux qui correspondent effectivement à une annonce immobilère et non pas à une publicité...) et de tourner les pages des résultats. Un objet de type `Product` est enfin extrait de chacune des annonces. Chaque robot est implémenté dans une classe, identifié par un nom et dédié à une catégorie de sites particulière (parce que les différents sites ont des architectures très variables). Suit la liste des robots implémentés :
+Le fichier `spider.py` est dédié à l'implémentation des différents robots d'indexation, ou encore _spiders_, qui définissent la façon dont un site (ou un groupe de sites) est fouillé. En particulier, il s'agit de rédiger des règles (principe de sélection) permettant aux robots de cliquer sur les liens d'intérêt (ceux qui correspondent effectivement à une annonce immobilère et non pas à une publicité...) et de tourner les pages des résultats. Un objet de type `Product` est enfin extrait de chacune des annonces. Chaque robot est implémenté dans une classe `CrawlSpider`, identifié par un nom et dédié à une catégorie de sites particulière, puisque que les différents sites ont des architectures très variables. 
+
+Pour résumer, les éléments importants à définir au sein d'une classe `CrawlSpider` sont les suivants. La liste :
+
+        start_url
+
+permet de déclarer les url par lesquelles commence la fouille. Ici ce sont les pages qui affichent les résultats de la recherche "ventes à Paris" : par exemple http://www.seloger.com/immobilier/achat/immo-paris-1er-75/. Des règles ultérieures de sélection sont définies par une `Rule`, ici il s'agit de tourner les pages de résultats. La méthode :
+
+        parse_start_url
+
+définit la façon dont ces pages sont analysées. Ici, l'on recherche sur la page http://www.seloger.com/immobilier/achat/immo-paris-1er-75/ les liens vers des url qui correspondent à une annonce : par exemple http://www.seloger.com/annonces/achat/appartement/paris-1er-75/palais-royal/103180129.htm?ci=750101&idqfix=1&idtt=2&tri=d_dt_crea&bd=Li_LienAnn_1. Enfin, sur chacun de ces pages, la méthode :
+
+        parse_item
+
+est exécutée. Elle définit la façon dont une page d'annonce est traitée, en extrayant les attributs d'un objet de la classe `Product`.
+
+Suit la liste des classes de robots implémentés :
 
 * `seLogerSpider` : fouille les ventes immobilères à Paris pour le site http://www.seloger.com/
 * `explorimmoSpider` : idem pour http://www.explorimmo.com/
+* `fnaimSpider` : idem pour http://www.fnaim.fr/
+* `paruvenduSpider` : idem pour http://www.paruvendu.fr/
+* `papSpider` : idem pour http://www.pap.fr/
+* `laforetSpider` : idem pour http://www.laforet.com/
 
 Le fichier `pipeline.py` permet de définir des routines de post-traitement : chaque objet de type `Product` extrait lors de la fouille est passé à la fonction `process_item`. Ce routine va en particulier effectuer la traduction des caractères du texte de ASCII vers Unicode, format mieux géré en Python. Il est à noter que cette conversion vers Unicode supprime les accents du texte.
+
+Le fichier `settings.py` regroupe les valeurs de nos paramètres de fouille, en particulier le temps minimal séparant deux requêtes successives (les sites n'apprécient pas être surchargés par des requêtes automatiques...).
 
 ### Exécution
 
@@ -48,6 +74,21 @@ lance le robot d'indexation nommé `seLogerSpider`, défini dans `spiders.py`, q
 ### Format des données
 
 Les données extraites lors de la fouille sont sauvegardées de façon dynamique dans un fichier, en utilisant le format objet `.json`. Dans l'exemple d'exécution donné à la section précédente, il s'agit du fichier `web-crawling\output\filename.json` ; remarquez que les fichiers en sortie ne sont jamais ecrasés : les nouvelles données sont concaténées en fin de fichier. Le format `.json` est flexible, chaque objet est sauvegardé avec le nom de ses attributs ; par ailleurs ce format est facilement convertible vers `.csv` ou `.xls`.
+
+On adopte une convention de nommage avec la date de fouille.
+
+### Remarques sur l'avancement
+
+Problématiques :
+* 12/10 : Certains champs de description incomplets sur seloger.com, qui terminent par "...", résolu en allant chercher sur la page l'intégralité du texte.
+* 13/10 : Pour une recherche donnée, les sites affichent en général un nombre limité de résultats (750 résultats - ou encore les 100 premières pages de résultats i.e. environ 1700 résultats) :
+    * cibler : au lieu de chercher toutes les ventes sur Paris, on effectue les recherches par arrondissement,
+    * vérifier si ce filtre est suffisant pour accéder à tous les résultats.
+* 15/10 : PAP a l'air de bien contrer les robots (ne pas se faire remarquer).
+* 16/10 : exhaustivité des fonctions de type _parse_url_ et _parse_item_ ?
+
+Points importants à aborder :
+* _re-visiting_ ?
 
 ## 2. Text analysis
 
