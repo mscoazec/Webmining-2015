@@ -6,3 +6,6 @@ class Product(Item):
     prix = Field()
     description = Field()
     infos = Field()
+    agence = Field()
+    localisation = Field()
+    metro = Field()
