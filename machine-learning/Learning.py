@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mon Oct 12 12:59:32 2015
+Created on Sun Oct 18 15:29:22 2015
 
 @author: Emmanuel
 """
@@ -12,222 +12,184 @@ import numpy as np
 from sklearn.ensemble import  BaggingRegressor
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.ensemble import RandomForestRegressor
-#from sklearn.utils import shuffle
-from sklearn.cross_validation import cross_val_score
+from sklearn.utils import shuffle
+#from sklearn.cross_validation import cross_val_score
+from sklearn.cross_validation import train_test_split
+from sklearn.grid_search import GridSearchCV
+from sklearn.svm import SVR
+from sklearn.svm import LinearSVR
+import csv as csv
+
 
 
 ################################
+
+### importation des donnees
 ##Extract data
-df=pd.read_excel("Test_Python.xlsx")
-data=df.values
+###nom et format du fichier
+df=pd.read_excel("Data_1610.xlsx")
+#### matrice python avec les données
+data=df.values 
+
+####construction des descripteurs (#Marion) et des étiquettes
 X=data[:,:-1]
-Y=data[:,-1]
-##########################
-# Normalize data
-mean, std = X.mean(axis=0), X.std(axis=0)
-X = (X - mean) / std
+y=data[:,-1]
+X[:,57]=map(float,X[:,57]) ### conversion des m²
+y=map(float,y) ### conversion des prix
+
+####Mélange en vue des cross valid
+X,y=shuffle(X,y)
+
+        
+######################## utilité ici?
+# Normalize data 
+#mean, std = X.mean(axis=0), X.std(axis=0)
+#X = (X - mean) / std
 # Get rid of Nan values
-X[np.isnan(X)] = -1. 
+#X[np.isnan(X)] = -1. 
 ############################
-####Learning set: 
-#### ratio r pour l'apprentissage; ici 80%/20%
-def r(m):
-    return (m*4)/5
+
+
+#######Construction des ensembles d'apprentissage et de test
+### ratio test/dataset
+ratio=0.2
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=ratio, random_state=0)
     
-n=len(Y)
-borne=r(n)
-X_learn=X[0:borne,:]
-Y_learn=Y[0:borne]
-
-#### Test set
-X_test=X[borne:,:]
-Y_test=Y[borne:]
-###################################
-
 
 ##### Machine learning
 #######################################################
-
-####definition des parametres pertinents
-#### il faudra faire des cross valid par methode d'apprentissage
-
-####Tree & Forest 
-###☻ les variables _max sont les bornes pour la recherche des parametres optimaux
-### les autres variables contiendront les paramètres optimaux pour chaque méthode de learning
-max_depth_max=10 
-max_depth=1###tree simple
-max_depth_bag=1
-max_depth_Forest=1
-
-n_max= 10
-n_estimators_Forest=2
-n_estimators_Bag=2
-
-min_samples_max= 10
-min_samples_split_Forest=1
-min_samples_split_Bag=1
-
-####SVM
-
-
-###ICA
-
-
-#########################################################
-####methodes d'apprentissage
-
-#### Tree & Forest
-
-##########################################"
-####Tree simples
-v=range(max_depth_max)
-score_Reg=np.zeros(max_depth_max)
-
-for i in v:
-    
-    Regressor= tree.DecisionTreeRegressor(criterion='mse',max_depth=i+1) 
-    Regressor.fit(X_learn,Y_learn)
-    score_Reg[i]=1-np.mean(cross_val_score(Regressor, X_learn, Y_learn, cv=5))
-    
-    
-max_depth=np.argmin(score_Reg)
-######
-Tree_Regressor=tree.DecisionTreeClassifier(max_depth=max_depth)
-Tree_Regressor.fit(X_learn,Y_learn)
-score_tree=Tree_Regressor.score(X_test,Y_test)
-########################################
-
-#####"Bagging & random forest
-
-####attention: dedoubler les vecteur car les optima ne st pas les mm pour forets et arbres
-#### les variables score_ contiendront les scores calculés dans chaque boucle pour la cross valid
-score_depth_Forest= np.zeros(max_depth_max)
-score_samples_Forest=np.zeros(min_samples_max)
-score_estimator_Forest=np.zeros(n_max)
-score_depth_Bag= np.zeros(max_depth_max)
-score_samples_Bag=np.zeros(min_samples_max)
-score_estimator_Bag=np.zeros(n_max)
-#### les vecteurs suivants contiendront k*(j,i) et j*(i) 
-#### ce sont les paramètres optimaux relatifs aux boucles supérieures
-n_estimators_Bag_vec=np.zeros((min_samples_max,max_depth_max)) ### longueur/j,i
-n_estimators_Forest_vec=np.zeros((min_samples_max,max_depth_max)) ### longueur/j,i
-min_samples_split_Bag_vec=np.zeros(max_depth_max) ### longueur/i
-min_samples_split_Forest_vec=np.zeros(max_depth_max) ### longueur/i
-
-#### Cross valid
-### i est la mex_depth
-### j min_samples_split
-### k n_estimators
-for i in v:
-    
-    for j in range(min_samples_max):
-        
-        for k in range(n_max):
-#### on fait un parcours pour trouver k*(j,i)
-            params = {'n_estimators': k+1, 'max_depth': i+1,
-'min_samples_split':j+1}
-            rfc=RandomForestRegressor(**params)
-            clf=DecisionTreeRegressor(max_depth=i+1,min_samples_split=j+1)
-            bag=BaggingRegressor(base_estimator=clf,n_estimators=k+1)
-            rfc.fit(X_learn,Y_learn)
-            bag.fit(X_learn,Y_learn)
-            score_rfc = [np.mean(cross_val_score(rfc, X_learn, Y_learn, cv=5)),np.std(cross_val_score(rfc, X_learn, Y_learn, cv=5))]
-            score_bag = [np.mean(cross_val_score(bag, X_learn, Y_learn, cv=5)),np.std(cross_val_score(bag, X_learn, Y_learn, cv=5))]
-        
-            score_estimator_Forest[k]=1-score_rfc[0]
-            score_estimator_Bag[k]=1-score_bag[0]
-    ### on stocke les k*(j,i)    
-        n_estimators_Bag_vec[j,i]=int(np.argmin(score_estimator_Bag)//1)
-        n_estimators_Forest_vec[j,i]=int(np.argmin(score_estimator_Forest)//1)
-#### on calcule alors les nouveaux arbres avec i, j et k*(j,i)
-        params = {'n_estimators': int(n_estimators_Forest_vec[j,i]+1), 'max_depth': i+1,
-                     'min_samples_split':j+1}
-        rfc=RandomForestRegressor(**params)
-        clf=DecisionTreeRegressor(max_depth=i+1,min_samples_split=j+1)
-        bag=BaggingRegressor(base_estimator=clf,n_estimators=int(1+n_estimators_Bag_vec[j,i]))
-        rfc.fit(X_learn,Y_learn)
-        bag.fit(X_learn,Y_learn)
-        score_rfc = [np.mean(cross_val_score(rfc, X_learn, Y_learn, cv=5)),np.std(cross_val_score(rfc, X_learn, Y_learn, cv=5))]
-        score_bag = [np.mean(cross_val_score(bag, X_learn, Y_learn, cv=5)),np.std(cross_val_score(bag, X_learn, Y_learn, cv=5))]
-          
-        score_samples_Bag[j]=1-score_bag[0]
-        score_samples_Forest[j]=1-score_rfc[0]
-### on stocke les j*(i)
-    min_samples_split_Bag_vec[i]=int(np.argmin(score_samples_Bag)//1)
-    min_samples_split_Forest_vec[i]=int(np.argmin(score_samples_Forest)//1)
-### idem, on recalcule les arbres avec i, j*(i) et k*(j*(i),i)
-    params = {'n_estimators': int(1+n_estimators_Forest_vec[min_samples_split_Forest_vec[i],i]), 'max_depth':1+ i,
-   'min_samples_split':int(1+min_samples_split_Forest_vec[i])}
-    rfc=RandomForestRegressor(**params)
-    clf=DecisionTreeRegressor(max_depth=1+i,min_samples_split=int(1+min_samples_split_Bag_vec[i]))
-    bag=BaggingRegressor(base_estimator=clf,n_estimators=int(1+n_estimators_Bag_vec[min_samples_split_Bag_vec[i],i]))
-    rfc.fit(X_learn,Y_learn)
-    bag.fit(X_learn,Y_learn)
-    score_rfc = [np.mean(cross_val_score(rfc, X_learn, Y_learn, cv=5)),np.std(cross_val_score(rfc, X_learn, Y_learn, cv=5))]
-    score_bag = [np.mean(cross_val_score(bag, X_learn, Y_learn, cv=5)),np.std(cross_val_score(bag, X_learn, Y_learn, cv=5))]
-          
-    score_depth_Bag[i]=1-score_bag[0]
-    score_depth_Forest[i]=1-score_rfc[0]
-### on trouve alors i* et on a les paramètres optimaux pour nos méthodes de learning
-max_depth_bag=int(np.argmin(score_depth_Bag)//1)
-max_depth_Forest=int(np.argmin(score_depth_Forest)//1)
-
-min_samples_split_Bag=int(min_samples_split_Bag_vec[max_depth_bag]//1)
-min_samples_split_Forest=int(min_samples_split_Forest_vec[max_depth_Forest]//1)
-
-n_estimators_Bag=int(n_estimators_Bag_vec[min_samples_split_Bag,max_depth_bag]//1)
-n_estimators_Forest=int(n_estimators_Forest_vec[min_samples_split_Forest,max_depth_Forest]//1)
-
-###################
-#### on applique enfin nos méthodes avec les bons paramètres
-params = {'n_estimators': int(1+n_estimators_Forest), 'max_depth': int(1+max_depth_Forest),
-   'min_samples_split':int(1+min_samples_split_Forest)}
-rfc=RandomForestRegressor(**params)
-clf=DecisionTreeRegressor(max_depth=1+max_depth_bag,min_samples_split=1+min_samples_split_Bag)
-bag=BaggingRegressor(base_estimator=clf,n_estimators=int(1+n_estimators_Bag))
-rfc.fit(X_learn,Y_learn)
-bag.fit(X_learn,Y_learn)
+###☻Pour chaque méthode, nous donnons les paramètres de l'estimateur et nous
+#### cherchons à trouver les meilleurs par cross validation
+#### à la fin, on construit le predict associé à ces paramètres
+cv=5### nb d'étape dans le cross valid
 ########################
+#### Trees
 
-score_rfc = rfc.score(X_test,Y_test)
-score_bag = bag.score(X_test,Y_test)
-    
-     
+###Simple tree
 
-           
+#### Parameters ._max
+max_depth_max_tree=5 
+min_samples_split_max_tree=5
 
+### liste de dictionnaires contenant les valeurs possibles de chaque paramètre
+parameters_tree={'max_depth': range(1,max_depth_max_tree+1),
+                 'min_samples_split':range(1,min_samples_split_max_tree+1)}
+### gridsearch qui trouve le set optimal de parametres
+tree_reg = GridSearchCV(DecisionTreeRegressor(), parameters_tree, cv=cv)
+### generation de l'arbre
+tree_reg.fit(X_train, y_train)
+### predicteur
+y_tree=tree_reg.predict(X_test)
+score_tree=tree_reg.score(X_test,y_test)
 
+#### Bagging
+### bornes des parametres ._max
+n_estimators_max_bag=4
+min_samples_split_max_bag=4
+max_depth_max_bag=4
 
-#####SVM
+parameters_tree_bag={'max_depth':range(1,max_depth_max_bag+1),
+'min_samples_split':range(1,min_samples_split_max_bag+1)}
 
-
-
-#####ICA
-
-
-
-
-
-
-
-#######Bilan
-###fonction d'erreur
-def f(z):
-    return abs(z)
-    
-    ### on affiche les scores et la sommes des écarts aux prix réels par méthode
-print "Random forest"  +" "+"score"+" "+"ecart"
-print score_rfc 
-print sum(map(f,rfc.predict(X_test)-Y_test))
-print "Bagging"+" "+"score"+" "+"ecart"
-print score_bag
-print sum(map(f,bag.predict(X_test)-Y_test))
-print "Tree" +" "+"score"+" "+"ecart"
-print score_tree
-print sum(map(f,Tree_Regressor.predict(X_test)-Y_test))
+### Gridsearch
+tree_reg_bag=GridSearchCV(DecisionTreeRegressor(), parameters_tree_bag, cv=cv)
+bag_reg=GridSearchCV(BaggingRegressor(tree_reg_bag),{'n_estimators':range(1,n_estimators_max_bag)},cv=cv)
+### .fit et predicteur
+bag_reg.fit(X_train,y_train)
+score_bag=bag_reg.score(X_test,y_test)
 
 
-    
+
+#### Random Forest
+### bornes des parametres ._max
+n_estimators_max_forest=4
+min_samples_split_max_forest=4
+max_depth_max_forest=4
+
+parameters_tree_forest={'max_depth':range(1,max_depth_max_forest+1),
+'min_samples_split':range(1,min_samples_split_max_forest+1),'n_estimators':range(1,n_estimators_max_forest)}
+### Gridsearch
+forest_reg=GridSearchCV(RandomForestRegressor(),parameters_tree_forest,cv=cv)
+forest_reg.fit(X_train,y_train)
+score_forest=forest_reg.score(X_test,y_test)
+
+### SVR
+###◘ spaces of parameters
+precision=5
+gamma_vec=10**(np.linspace(-4,0,precision))
+C_vec=2**(np.linspace(0,8,precision))
+epsilon_vec=10**(np.linspace(-3,-0.5,precision))
+
+### list of dictionaries with all possible values of the parameters
+parameters_SVR =[{'kernel': ['linear'], 'C': C_vec,'epsilon':epsilon_vec},
+                 {'kernel': ['rbf'], 'gamma': gamma_vec,'C': C_vec,'epsilon':epsilon_vec},
+                {'kernel': ['poly'], 'gamma': gamma_vec,'C': C_vec,'epsilon':epsilon_vec}]
+### Gridsearch & fit
+#SVR_reg=GridSearchCV(SVR(cache_size=1000),parameters_SVR,cv=cv)
+#SVR_reg.fit(X_train,y_train)
+
+### linear svr faster
+SVR_lin=GridSearchCV(LinearSVR(),[{'C': C_vec,'epsilon':epsilon_vec}],cv=cv)
+SVR_lin.fit(X_train,y_train)
+
+score_linSVR=SVR_lin.score(X_test,y_test)
+
+                    
+                    
+
+
+#### Comparaison des scores et "erreur moyenne" en terme de prix
+### les noms des objets à appeler sont donnés en-dessous
+
+
+print ("Scores and average gap  of different methods")
+print ()
+
+### tree simple: tree_reg
+print ("Simple tree")
+print (score_tree)
+print(sum(map(abs,tree_reg.predict(X_test)-y_test))/len(X_test))
+
+
+### bagging: bag_reg
+print ("Bagging")
+print (score_bag)
+print(sum(map(abs,bag_reg.predict(X_test)-y_test))/len(X_test))
+
+
+### Random forest: forest_reg
+print ("Random forest")
+print (score_forest)
+print(sum(map(abs,forest_reg.predict(X_test)-y_test))/len(X_test))
+
+
+### SVR: SVR_lin
+print ("Linear Svr")
+print (score_linSVR)
+print(sum(map(abs,SVR_lin.predict(X_test)-y_test))/len(X_test))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
