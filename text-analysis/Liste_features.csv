@@ -56,7 +56,7 @@ meuble,meublé,x,meuble,,,,,
 etat_general,Bon état général,x,bon etat general,excellent etat general,etat general bon,etat general excellent,,
 etat_copropriete,Etat de la copropriété,x,copropriete en bon etat,,,,,
 studio,Studio,x,studio,1 piece,,,,
-surface,Surface (m2),,"([0-9,.]+) m2","([0-9,.]+)m2","([0-9,.]+) metres carres",,,
+surface,Surface (m2),,"([0-9,.]+) m2","([0-9,.]+[0-9]|[0-9])m2","([0-9,.]+) metres carres",,,
 coordonnee_x,Coordonnée X,,,,,,,
 coordonne_y,Coordonnée Y,,,,,,,
 arrondissement,Arrondissement,,([0-9]+)(eme|e) arrondissement,([0-9]+)(eme|e) ardt,Paris ([0-9][0-9])e,Paris ([0-9])e,750([0-9][0-9]),751([0-9][0-9])

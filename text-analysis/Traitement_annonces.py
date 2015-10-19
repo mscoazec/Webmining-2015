@@ -28,6 +28,9 @@ Déclaration de variables générales
 #le fichier contenant la liste des features
 fichier_features = "Liste_features.csv"
 
+#le dossier où mettre les output (les fichiers .csv contenant les données d'apprentissage)
+dossier_output = "Output"
+
 #la colonne de la première chaîne de caractère à chercher
 column_chains = 3
 
@@ -277,6 +280,21 @@ def traitement_annonce(annonce):
     #Les différents sites
     if re.search("seloger", url_string):
         site_annonce = "seloger"
+    else:
+        if re.search("explorimmo", url_string):
+            site_annonce = "explorimmo"
+        else:
+            if re.search("fnaim", url_string):
+                site_annonce = "fnaim"
+            else:
+                if re.search("laforet", url_string):
+                    site_annonce = "laforet"
+                else:
+                    if re.search("www.pap.fr", url_string):
+                        site_annonce = "pap"
+                    else:
+                        if re.search("paruvendu", url_string):
+                            site_annonce = "paruvendu"
     
     
     #La sortie : un tableau de string
@@ -313,18 +331,82 @@ def traitement_annonce(annonce):
         """
 
 
-
         """
         Version un seul champ concaténé
         """
-        #On récupère les informations contenues dans le titre et dans la description
+        #On récupère les informations contenues dans le titre, dans la description, et dans infos
         feat_values_description = extraction_features(annonce["titre"] + annonce["infos"] + annonce["description"])
         
-
-
-        #On rajoute le prix à la main
-        feat_values_description.append(annonce["prix"])
+        #On rajoute le prix à la main (la fonction float("") bug si la chaîne est vide)
+        if annonce["prix"] != "":
+            feat_values_description.append(int(float(annonce["prix"].replace(",", "."))))
     
+    
+    #explorimmo
+    if site_annonce == "explorimmo":
+        #Champs : "titre", "infos", "description", "prix", "localisation"
+        
+        #On récupère les informations contenues dans le titre, dans la description, dans infos, et dans la localisation
+        feat_values_description = extraction_features(annonce["titre"] + annonce["infos"] + annonce["description"] + annonce["localisation"])
+        
+        #On rajoute le prix à la main (la fonction float("") bug si la chaîne est vide)
+        if annonce["prix"] != "":
+            feat_values_description.append(int(float(annonce["prix"].replace(",", "."))))
+    
+    #fnaim
+    #Attention il y a des espaces dans les prix
+    if site_annonce == "fnaim":
+        #Champs : "titre", "infos", "description", "prix", "localisation"
+        
+        #On récupère les informations contenues dans le titre, dans la description, dans infos, et dans la localisation
+        feat_values_description = extraction_features(annonce["titre"] + annonce["infos"] + annonce["description"] + annonce["localisation"])
+        
+        #On rajoute le prix à la main (la fonction float("") bug si la chaîne est vide)
+        #Il y a des espaces qu'il faut enlever
+        if annonce["prix"] != "":
+            feat_values_description.append(int(float(annonce["prix"].replace(",", ".").replace(" ",""))))
+    
+    #laforet
+    #Attention il y a des espaces dans les prix
+    if site_annonce == "laforet":
+        #Champs : "titre", "infos", "description", "prix"
+        
+        #On récupère les informations contenues dans le titre, dans la description, et dans infos
+        feat_values_description = extraction_features(annonce["titre"] + annonce["infos"] + annonce["description"])
+        
+        #On rajoute le prix à la main (la fonction float("") bug si la chaîne est vide)
+        #Il y a des espaces qu'il faut enlever
+        if annonce["prix"] != "":
+            feat_values_description.append(int(float(annonce["prix"].replace(",", ".").replace(" ",""))))
+    
+    
+    #pap
+    #Attention les prix sont avec des . séparant les millions des milliers des euros
+    #4.800.000 pour 4 millions et huit cent mille euros
+    if site_annonce == "pap":
+        #Champs : "titre", "infos", "description", "prix", "localisation"
+        
+        #On récupère les informations contenues dans le titre, dans la description, dans infos, et dans la localisation
+        feat_values_description = extraction_features(annonce["titre"] + annonce["infos"] + annonce["description"] + annonce["localisation"])
+        
+        #On rajoute le prix à la main (la fonction float("") bug si la chaîne est vide)
+        if annonce["prix"] != "":
+            feat_values_description.append(int(float(annonce["prix"].replace(".","").replace(",", "."))))
+    
+    
+    
+    #paruvendu
+    #Attention il y a des espaces dans les prix
+    if site_annonce == "paruvendu":
+        #Champs : "titre", "infos", "description", "prix", "localisation"
+        
+        #On récupère les informations contenues dans le titre, dans la description, dans infos, et dans la localisation
+        feat_values_description = extraction_features(annonce["titre"] + annonce["infos"] + annonce["description"] + annonce["localisation"])
+        
+        #On rajoute le prix à la main (la fonction float("") bug si la chaîne est vide)
+        #Il y a des espaces qu'il faut enlever
+        if annonce["prix"] != "":
+            feat_values_description.append(int(float(annonce["prix"].replace(",", ".").replace(" ", ""))))
     
     
     #La sortie : le tableau de features avec le prix au bout
@@ -346,6 +428,8 @@ def traitement_fichier(fichierJson, fichier_sortie = None):
     """
     fichierJson est le nom d'un fichier Json contenant des annonces extraites d'un site Web :
     Il doit se terminer par .json
+    Chaque fichier Json doit contenir un champ "prix" car on vérifie qu'il est non nul et non égal à Prix NC    
+    
     fichier_sortie est un csv.writer donnant le fichier dans lequel renseigner les caractéristiques.
     
     Si on ne donne pas de fichier_sortie, la fonction traitement_fichier
@@ -376,8 +460,10 @@ def traitement_fichier(fichierJson, fichier_sortie = None):
     temps_debut = time.clock()
     
     #On traite chacune des annonces une par une
+    #On vérifie que les prix sont bien des valeurs numériques, et qu'il n'y a pas d'espaces
     for i in range(nombre_annonces):
-        fichier_sortie.writerow(traitement_annonce(annoncesJson[i]))
+        if annoncesJson[i]["prix"].replace(".","").replace(" ","").isdigit():
+            fichier_sortie.writerow(traitement_annonce(annoncesJson[i]))
         
         #Affichage du nombre d'annonces toutes les 100 annonces pour suivre l'avancement
         if (i>0 and (i%100) == 0):
@@ -385,9 +471,10 @@ def traitement_fichier(fichierJson, fichier_sortie = None):
     
     
     #Calcul du temps de traitement des annonces
+    #On ajoute 0.001 au temps total pour éviter la division par zéro si le traitement est instantané
     temps_fin = time.clock()
     temps_total = temps_fin - temps_debut + 0.0
-    annonces_par_seconde = (nombre_annonces + 0.0)/temps_total
+    annonces_par_seconde = (nombre_annonces + 0.0)/(temps_total + 0.001)
     
 
     #Impression du temps de traitement
@@ -403,7 +490,7 @@ def traitement_fichier(fichierJson, fichier_sortie = None):
 
 
 #Extraction de toutes les annonces de tous les fichiers d'un dossier contenant des fichiers Json
-def traitement_dossier(dossierFichiers):
+def traitement_dossier(dossierEnInput):
     """
     dossierFichiers est le chemin d'un dossier contenant des .json d'annonces
     La fonction traitement_dossier crée un fichier csv concaténant toutes les caractéristiques
@@ -414,15 +501,17 @@ def traitement_dossier(dossierFichiers):
     #Calcul du temps total du programme
     temps_debut = time.clock()
     
+    #Le chemin d'accès complet au dossier qui est dans l'Input
+    dossierFichiers = "Input/" + dossierEnInput
     
     #Le fichier de sortie dans lequel on écrira les données
-    fichier_sortie = csv.writer(open(dossierFichiers + "_traite.csv", "wb"))
+    fichier_sortie = csv.writer(open(dossier_output + "/" + dossierEnInput + "_traite.csv", "wb"))
     
     #On renseigne les en-tête : les noms de features
     fichier_sortie.writerow(feature_and_price_list)    
     
     #Suivi du traitement sur la console
-    print "Traitement du dossier " + dossierFichiers
+    print "Traitement du dossier " + dossierEnInput
     
     #On parcourt tous les fichiers du dossier
     for fichierJson in os.listdir(dossierFichiers):
@@ -437,9 +526,14 @@ def traitement_dossier(dossierFichiers):
     
 
     #Impression du temps de traitement
-    print "Temps total du programme : %d secondes." %(temps_total)
-
-    
+    #On indique le nombre de minutes si cela a pris plus d'une minute
+    if temps_total < 60:
+        print "Temps total du programme : %d secondes." %(temps_total)
+    else:
+        if temps_total < 120:
+            print "Temps total du programme : 1 minute %d secondes." %(temps_total - 60)
+        else:
+            print "Temps total du programme : %d minutes %d secondes." %(int(temps_total/60), temps_total%60)
     
 
 
@@ -466,6 +560,10 @@ Commandes de tests
 #traitement_fichier('items_seLoger-10-12.json')
 
 
-#Test de la fonction traitement_dossier
-traitement_dossier('Fichiers_Json')
+#Appel de la fonction traitement_dossier
+traitement_dossier('cinq_sites_10-17')
+
+
+#Pour tester sur certains fichiers
+#traitement_dossier('Test')
 
