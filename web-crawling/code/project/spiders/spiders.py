@@ -162,7 +162,7 @@ class explorimmoSpider(CrawlSpider):
         start_urls.append("http://www.explorimmo.com/"
         +"immobilier-vente-bien-paris+7500"+str(i)+".html")
         
-        for n_page in range(1,100):
+        for n_page in range(1,30):
             start_urls.append("http://www.explorimmo.com/"+
             "immobilier-vente-bien-paris+7500"+str(i)+"-"+str(n_page)+".html")
     
@@ -171,7 +171,7 @@ class explorimmoSpider(CrawlSpider):
         start_urls.append("http://www.explorimmo.com/"+
         "immobilier-vente-bien-paris+750"+str(i)+".html")
         
-        for n_page in range(1,100):
+        for n_page in range(1,30):
             start_urls.append("http://www.explorimmo.com/"+
             "immobilier-vente-bien-paris+7500"+str(i)+"-"+str(n_page)+".html")
     
@@ -488,7 +488,7 @@ class paruvenduSpider(CrawlSpider):
         
         # traiter les cas : paruvendu.fr/n/programme-neuf/appartements-neufs
         if not zone_loc:
-            zone_loc = sel.xpath('//div[@class="im12_txt_ann"/p/strong]'+
+            zone_loc = sel.xpath('//div[@class="im12_txt_ann"]/p/strong'+
         '/text()').extract()
         
         if zone_loc:
