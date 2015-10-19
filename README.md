@@ -141,3 +141,46 @@ extraction_features : prend en entrée un texte (string), et sort la liste des v
 ## 3. Machine learning
 
 ## 4. Modèle client serveur, design
+
+Pour créer un serveur depuis votre ordinateur, placer le fichier "serveur.py" dans un nouveau répertoire. Les pages HTML fixes doivent se trouver dans le même dossier et les fichiers python que vous voudrez exécuter par la suite doivent se trouver dans un sous-répertoire "exec".
+
+Avant tout de choses, il faut donner des droits supplémentaires à tous les fichiers pythons qui seront exécutés depuis le serveur. Pour cela, placez-vous dans le dossier contenant les fichiers (commande cd "...") puis utilisez la commande ( "chmod +x NomDuFichier.py"). Ensuite, vous pouvez simplement lancer le serveur en appelant "python serveur.py" dans le terminal de commandes.
+
+Une fois cette opération réalisée, vous disposez d'un serveur local dont le port par défaut est 8000. Vous pouvez y accéder par l'URL http://localhost:8000. Les fichiers HMTL se trouvant dans le même répertoire que "serveur.py" peuvent être chargés simplement en rentrant l'URL suivante : http://localhost:8000/NoMduFichier.html. La syntaxe à adopter ne chnage pas par rapport à ce que nous avons vu  en cours sur ce langage.
+
+Pour créer des pages interprétés par python, il faut utiliser un fichier .py que l'on peut charger par http://localhost:8000/exec/NomDuFichier.py. Pour que ce type de fichier affiche un code HMTL, il suffit d'utiliser la commande print en plaçant le code html sous format text. Par exemple :
+
+
+hmtl =  """ <head>
+        
+                <body>
+                
+                MON TEXTE
+                
+                </body>
+                
+        </head>
+""""
+
+print (html) 
+
+
+[les trois """ servent à indiquer que tout ce qui suit est à interpréter comme du texte]
+
+La syntaxe des variables utilisées est la même que pour le PHP. Dans l'idée, la page attend un certain nombre de paramètres qui doivent être insérés dans l'URL après le symbole "?". Si vous créez un formulaire sur un fichier .html, l'utilisateur sera redirigée vers une nouvelle page, dont l'URL contiendra par exemple `?name=VALEUR&first_name=VALEUR`. Si vous laissez les champs vide, les valeurs par défaut seront None.
+
+La commande a utiliser ensuite est `cgi.FieldStorage()`. Il s'agit d'une commande magique qui permet de récupérer toutes les variables présentes dans la page. Typiquement, on peut appeler les paramètres par la syntaxe :
+
+`form = cgi.FieldStorage()`
+
+`print(form["Name"].value)`
+
+Vous pouvez bien-sur remplacer "Name" par tous les paramètres des formulaires que vous souhaitez. La syntaxe à respecter pour créer un formulaire est :
+
+`<form action="exec/NomDuFichier.py" method="get">`
+
+[...]
+
+`<input type="number" class="form-control" name="NomDeLaVariable" placeholder="100">`
+
+[...]
