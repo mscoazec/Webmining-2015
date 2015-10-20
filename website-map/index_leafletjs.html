@@ -7,6 +7,33 @@
         rel="stylesheet" 
         href="http://cdn.leafletjs.com/leaflet-0.7/leaflet.css"
     />
+	<style>
+		.info {
+			padding: 6px 8px;
+			font: 14px/16px Arial, Helvetica, sans-serif;
+			background: white;
+			background: rgba(255,255,255,0.8);
+			box-shadow: 0 0 15px rgba(0,0,0,0.2);
+			border-radius: 5px;
+		}
+		.info h4 {
+			margin: 0 0 5px;
+			color: #777;
+		}
+
+		.legend {
+			text-align: left;
+			line-height: 18px;
+			color: #555;
+		}
+		.legend i {
+			width: 18px;
+			height: 18px;
+			float: left;
+			margin-right: 8px;
+			opacity: 0.7;
+		}
+	</style>
 </head>
 <body>
     <div id="map" style="width: 800px; height: 600px"></div>
@@ -31,6 +58,11 @@
 		
 		// ------------------------------------------
 		
+		// import csv data
+		
+		
+		// ------------------------------------------
+		
 		// import geojson data
 					
 		// --------------------- style
@@ -41,7 +73,7 @@
 			return {
 				weight: 2,
 				opacity: 1,
-				color: 'LightSteelBlue',
+				color: 'LightCoral',
 				dashArray: '3',
 				fillOpacity: 0.7
 			};
@@ -60,9 +92,9 @@
 		};
 
 		info.update = function (props) {
-			this._div.innerHTML = '<h4>Nom</h4>' +  (props ?
-				'<b>' + props.nom + '</b><br />'
-				: 'Hover over a state');
+			this._div.innerHTML = '<h4> Nom</h4>' +  (props ?
+				'<b>' + props.nom : 'Passez la souris sur un arrondissement') + '</b><br />'
+				+ '</b><br />' + 'Cliquez sur un objet pour zoomer';
 		};
 
 		info.addTo(map);
@@ -74,7 +106,7 @@
 
 			layer.setStyle({
 				weight: 5,
-				color: 'LightSlateGray',
+				color: 'FireBrick',
 				dashArray: '',
 				fillOpacity: 0.7
 			});
@@ -90,6 +122,7 @@
 		
 		function resetHighlight(e) {
 			geojson.resetStyle(e.target);
+			info.update();
 		}
 		
 		// zoom to feature
@@ -125,21 +158,8 @@
 		
 		legend.onAdd = function (map) {
 
-			var div = L.DomUtil.create('div', 'info legend'),
-				grades = [0, 10, 20, 50, 100, 200, 500, 1000],
-				labels = [],
-				from, to;
-
-			for (var i = 0; i < grades.length; i++) {
-				from = grades[i];
-				to = grades[i + 1];
-
-				labels.push(
-					'<i style="background:' + getColor(from + 1) + '"></i> ' +
-					from + (to ? '&ndash;' + to : '+'));
-			}
-
-			div.innerHTML = labels.join('<br>');
+			var div = L.DomUtil.create('div', 'info legend');
+			
 			return div;
 		};
 		
