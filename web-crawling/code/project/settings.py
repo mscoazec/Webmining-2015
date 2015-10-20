@@ -6,4 +6,4 @@ DEFAULT_ITEM_CLASS = 'project.items.Product'
 
 DOWNLOAD_DELAY = 0.5
 
-ITEM_PIPELINES = {'project.pipelines.FilterPipeline': 1}
+ITEM_PIPELINES = {'project.pipelines.FilterPipeline': 1, 'project.pipelines.DuplicatesPipeline': 2}

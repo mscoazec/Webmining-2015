@@ -1,10 +1,10 @@
 import unicodedata
+from scrapy import signals
+from scrapy.exceptions import DropItem
+
+# nettoyage des chaines de caractere
 
 class FilterPipeline(object):
-    """A pipeline for filtering out items which contain certain words in their
-    description"""
-
-    # put all words in lowercase
 
     def process_item(self, item, spider):
         
@@ -34,3 +34,17 @@ class FilterPipeline(object):
                                    item[champs]).encode('ascii','ignore')
             
         return item
+
+# gestion des doublons
+
+class DuplicatesPipeline(object):
+
+    def __init__(self):
+        self.ids_seen = set()
+
+    def process_item(self, item, spider):
+        if item['url'] in self.ids_seen:
+            raise DropItem("Duplicate item found: %s" % item)
+        else:
+            self.ids_seen.add(item['url'])
+            return item
