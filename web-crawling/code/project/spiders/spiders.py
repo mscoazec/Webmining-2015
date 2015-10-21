@@ -7,7 +7,11 @@ from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
 from project.items import Product
 
 # Sauvegarde des explorations dans des fichiers texte
-debug = 1
+debug = 0
+
+# Separer si l'on veut crawler des apparts ou des maisons (ou les deux)
+appart = 1
+maison = 0
 
 ###############################################################################
 # -- to do
@@ -29,13 +33,26 @@ class seLogerSpider(CrawlSpider):
     allowed_domains = ["seloger.com"]
     
     # Url par lesquelles commence la fouille
-
-    start_urls = ["http://www.seloger.com/"+
-    "immobilier/achat/immo-paris-1er-75/"]
-
-    for i in range(2,21):
+    
+    start_urls = []
+    
+    if appart:
+        
         start_urls.append("http://www.seloger.com/"+
-        "immobilier/achat/immo-paris-"+str(i)+"eme-75/")
+        "immobilier/achat/immo-paris-1er-75/bien-appartement/")
+        
+        for i in range(2,21):
+            start_urls.append("http://www.seloger.com/"+
+            "immobilier/achat/immo-paris-"+str(i)+"eme-75/bien-appartement/")
+    
+    if maison:
+        
+        start_urls.append("http://www.seloger.com/"+
+        "immobilier/achat/immo-paris-1er-75/bien-maison/")
+        
+        for i in range(2,21):
+            start_urls.append("http://www.seloger.com/"+
+            "immobilier/achat/immo-paris-"+str(i)+"eme-75/bien-maison/")
     
     # La regle de fouille consiste a tourner les pages
 
@@ -157,23 +174,49 @@ class explorimmoSpider(CrawlSpider):
     
     start_urls = []
     
-    for i in range(1,10):
+    if appart:
         
-        start_urls.append("http://www.explorimmo.com/"
-        +"immobilier-vente-bien-paris+7500"+str(i)+".html")
+        for i in range(1,10):
+            
+            start_urls.append("http://www.explorimmo.com/"
+            +"immobilier-vente-appartement-paris+7500"+str(i)+".html")
+            
+            for n_page in range(1,30):
+                start_urls.append("http://www.explorimmo.com/"+
+                "immobilier-vente-appartement-paris+7500"+str(i)+"-"+
+                str(n_page)+".html")
         
-        for n_page in range(1,30):
+        for i in range(10,21):
+            
             start_urls.append("http://www.explorimmo.com/"+
-            "immobilier-vente-bien-paris+7500"+str(i)+"-"+str(n_page)+".html")
-    
-    for i in range(10,21):
+            "immobilier-vente-appartement-paris+750"+str(i)+".html")
+            
+            for n_page in range(1,30):
+                start_urls.append("http://www.explorimmo.com/"+
+                "immobilier-vente-appartement-paris+7500"+str(i)+"-"+
+                str(n_page)+".html")
+                
+    if maison:
         
-        start_urls.append("http://www.explorimmo.com/"+
-        "immobilier-vente-bien-paris+750"+str(i)+".html")
+        for i in range(1,10):
+            
+            start_urls.append("http://www.explorimmo.com/"
+            +"immobilier-vente-maison-paris+7500"+str(i)+".html")
+            
+            for n_page in range(1,30):
+                start_urls.append("http://www.explorimmo.com/"+
+                "immobilier-vente-maison-paris+7500"+str(i)+"-"+
+                str(n_page)+".html")
         
-        for n_page in range(1,30):
+        for i in range(10,21):
+            
             start_urls.append("http://www.explorimmo.com/"+
-            "immobilier-vente-bien-paris+7500"+str(i)+"-"+str(n_page)+".html")
+            "immobilier-vente-maison-paris+750"+str(i)+".html")
+            
+            for n_page in range(1,30):
+                start_urls.append("http://www.explorimmo.com/"+
+                "immobilier-vente-maison-paris+7500"+str(i)+"-"+
+                str(n_page)+".html")
     
     # Ouverture de toutes les annonces
     
@@ -298,22 +341,26 @@ class paruvenduSpider(CrawlSpider):
     
     start_urls = []
 
-    for i in range(1,10):
-        start_urls.append("http://www.paruvendu.fr/"+
-        "immobilier/vente/appartement/paris-7500"+str(i)+"/")
-
-    for i in range(10,21):
-        start_urls.append("http://www.paruvendu.fr/"+
-        "immobilier/vente/appartement/paris-750"+str(i)+"/")
-
-    for i in range(1,10):
-        start_urls.append("http://www.paruvendu.fr/"+
-        "immobilier/vente/maison/paris-7500"+str(i)+"/")
-
-    for i in range(10,21):
-        start_urls.append("http://www.paruvendu.fr/"+
-        "immobilier/vente/maison/paris-750"+str(i)+"/")
+    if appart:
         
+        for i in range(1,10):
+            start_urls.append("http://www.paruvendu.fr/"+
+            "immobilier/vente/appartement/paris-7500"+str(i)+"/")
+    
+        for i in range(10,21):
+            start_urls.append("http://www.paruvendu.fr/"+
+            "immobilier/vente/appartement/paris-750"+str(i)+"/")
+
+    if maison:
+    
+        for i in range(1,10):
+            start_urls.append("http://www.paruvendu.fr/"+
+            "immobilier/vente/maison/paris-7500"+str(i)+"/")
+    
+        for i in range(10,21):
+            start_urls.append("http://www.paruvendu.fr/"+
+            "immobilier/vente/maison/paris-750"+str(i)+"/")
+            
     # La regle de fouille consiste a tourner les pages
   
     rules = (
@@ -517,35 +564,29 @@ class fnaimSpider(CrawlSpider):
     
     start_urls = []
 
-    for i in range(1,10):
-        start_urls.append("http://www.fnaim.fr/"+
-        "liste-annonces-immobilieres/17-acheter-appartement-paris-"+
-        str(i)+"e-arrondissement-7500"+str(i)+".htm")
-
-    for i in range(10,21):
-        start_urls.append("http://www.fnaim.fr/"+
-        "liste-annonces-immobilieres/17-acheter-appartement-paris-"+
-        str(i)+"e-arrondissement-750"+str(i)+".htm")
+    if appart:
+            
+        for i in range(1,10):
+            start_urls.append("http://www.fnaim.fr/"+
+            "liste-annonces-immobilieres/17-acheter-appartement-paris-"+
+            str(i)+"e-arrondissement-7500"+str(i)+".htm")
     
-    for i in range(1,10):
-        start_urls.append("http://www.fnaim.fr/"+
-        "liste-annonces-immobilieres/17-acheter-maison-paris-"+
-        str(i)+"e-arrondissement-7500"+str(i)+".htm")
-
-    for i in range(10,21):
-        start_urls.append("http://www.fnaim.fr/"+
-        "liste-annonces-immobilieres/17-acheter-maison-paris-"+
-        str(i)+"e-arrondissement-750"+str(i)+".htm")
+        for i in range(10,21):
+            start_urls.append("http://www.fnaim.fr/"+
+            "liste-annonces-immobilieres/17-acheter-appartement-paris-"+
+            str(i)+"e-arrondissement-750"+str(i)+".htm")
     
-    for i in range(1,10):
-        start_urls.append("http://www.fnaim.fr/"+
-        "liste-annonces-immobilieres/17-acheter-parking-paris-"+
-        str(i)+"e-arrondissement-7500"+str(i)+".htm")
-
-    for i in range(10,21):
-        start_urls.append("http://www.fnaim.fr/"+
-        "liste-annonces-immobilieres/17-acheter-parking-paris-"+
-        str(i)+"e-arrondissement-750"+str(i)+".htm")
+    if maison:
+        
+        for i in range(1,10):
+            start_urls.append("http://www.fnaim.fr/"+
+            "liste-annonces-immobilieres/17-acheter-maison-paris-"+
+            str(i)+"e-arrondissement-7500"+str(i)+".htm")
+    
+        for i in range(10,21):
+            start_urls.append("http://www.fnaim.fr/"+
+            "liste-annonces-immobilieres/17-acheter-maison-paris-"+
+            str(i)+"e-arrondissement-750"+str(i)+".htm")
     
     # La regle de fouille consiste a tourner les pages
     rules = (
