@@ -5,9 +5,13 @@ Created on Sun Oct 18 15:29:22 2015
 """
 
 ####Packages à importer
+print(__doc__)
+from time import time
+from operator import itemgetter
 import pandas as pd
 from sklearn import tree
 import numpy as np
+from sklearn.ensemble import AdaBoostRegressor
 from sklearn.ensemble import  BaggingRegressor
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.ensemble import RandomForestRegressor
@@ -20,245 +24,252 @@ from sklearn.grid_search import GridSearchCV
 from sklearn.grid_search import RandomizedSearchCV
 from sklearn.svm import SVR
 #from sklearn.svm import LinearSVR
-import os
 from sklearn import preprocessing 
 from scipy.stats import randint
 from scipy.stats import uniform
 import scipy.stats as st
-
+from sklearn import metrics
+import matplotlib.pyplot as plt
+from sklearn.neighbors import KNeighborsRegressor
 ################################
 
-### importation des donnees
-##Extract data
-###nom et format du fichier
-## chemin en cours
-os.getcwd()
-df=pd.read_csv("Test_Python/Data_1910.csv") ### 1er appel
-#df=pd.read_csv("Data_1910.csv")
-#### matrice python avec les données
-data=df.values 
 
 
-####construction des descripteurs (#Marion) et des étiquettes
-X_0=data[:,:-1]
-y_0=data[:,-1]
+
+class Learning:
+    def __init__(self): 
+        self.database = ""#"Test_Python/Data_2010.csv" ### base de donnees des maisons ### EX:"Test_Python/Data_2010.csv"
+        self.X=[] ###X_
+        self.label=[] ### y_
+        self.ratio= 0.2 ### ratio test / length database
+        self.X_train=[]
+        self.X_test=[]
+        self.y_train=[]
+        self.y_test=[]
+        self.transfo=[],[]
+        self.cv = 5
+        self.n_iter= 20
+        self.max_depth_max=50
+        self.min_samples_split_max=20
+        self.min_samples_leaf_max=10
+        self.max_leaf_nodes_max=30
+        self.max_features_max=30
+        self.n_estimators_max=50
+        self.n_neigh_max=15
+        self.kernel="rbf"
+        self.tree_reg=[]
+        self.ada_reg=[]
+        self.Kneigh_reg=[]
+        self.bag_reg=[]
+        self.forest_reg=[]
+        self.extra_reg=[]
+        self.boost_reg=[]
+        self.SVR_reg=[]
+        self.loss="ls"
 
 
-n=len(X_0)### nombre d'annonces
-k=len(X_0[0,:]) ###nombres de features
+    def matrix(self):  ### renvoie matrice des descripteurs, vecteur prix
+        df=pd.read_csv(self.database)
+        data=df.values  #### matrice python avec les données
+        X_0=data[:,:-1]####construction des descripteurs (#Marion) et des étiquettes
+        y_0=data[:,-1]
+        n=len(X_0)### nombre d'annonces
+        k=len(X_0[0,:]) ###nombres de features
+        X=np.zeros((n,k)) ### descripteurs
+        y=np.zeros(n) ### prix
+        for i in range(n):
+            for j in range(k):
+                if (np.isnan(X_0[i,j])):
+                    X[i,j]=-1
+                else:
+                    X[i,j]=X_0[i,j]*1.0
+            y[i]=(y_0[i]//1000)*1000.0
+        X,y=shuffle(X,y) ####Mélange en vue des cross valid
+        self.X= X
+        self.label = y 
 
-X=np.zeros((n,k))
-y=np.zeros(n)
+    def learning_data(self): ###renvoie X_train, X_test, y_train, y_test
+                                    ### ratio représente la taille relative de X_test par rapport à database
+    
+        X = self.X
+        y= self.label
+        X_train, X_test, y_train, y_test = train_test_split( X, y, test_size=self.ratio, random_state=0)
+        self.X_train=X_train
+        self.X_test=X_test
+        self.y_train=y_train
+        self.y_test=y_test
+        
+    def transform(self): ### fonction qui transforme nos données et permet d'appliquer la mm transfo aux prochains inputs
+        X_train=self.X_train
+        ### normalisation: moyenne 0 et variance 1
+        mean_0=X_train.mean(axis=0)
+        std_0= X_train.std(axis=0)
+        for i in range(len(std_0)):#### eviter les nan si std = 0: on laisse la variable pseudo-cste inchangée
+            if (std_0[i]==0):
+                std_0[i]=1.   
+        self.transfo=mean_0,std_0
 
+    
+    def transform_data(self,z):
+        mean,std = self.transfo
+        return (z-mean)/std
+  
+    def Var_Creation(self): ### cree les ensembles de train et de test
+        self.X_train=self.transform_data(self.X_train)
+        self.X_test=self.transform_data(self.X_test)
+        
+        
+    def Initialisation_data(self):
+        self.matrix() #### creation de X,y descripteurs, prix
+        self.learning_data()  ### creation des variables d'apprentissage et de test
+        self.transform() ### cree la fonction de normalisation
+        self.Var_Creation() ## normamlise les inputs
 
-for i in range(n):
-    for j in range(k):
-        X[i,j]=X_0[i,j]*1.
-    y[i]=y_0[i]*1.
+        
+        
+        
+        
+    def simple_tree(self): #### methode d'apprentissage avec arbre simple
+                                                ### cv: nb d'etapes ds la cross valid
+                                                ### n_iter est le nb d'iteration pour la random cross valid
+                                                ### renvoie le predicteur
+                
+        parameters_tree={'max_depth': randint(1,self.max_depth_max+1),
+                 'min_samples_split':randint(1,self.min_samples_split_max+1),
+                    'min_samples_leaf':randint(1,self.min_samples_leaf_max+1),
+                    'max_leaf_nodes':randint(2,self.max_leaf_nodes_max),
+        "max_features": randint(1, self.max_features_max)}
+        tree_reg = RandomizedSearchCV(DecisionTreeRegressor(), param_distributions=parameters_tree, cv=self.cv, n_iter=self.n_iter,n_jobs=-1)
+        X_train, y_train =self.X_train,self.y_train
+        tree_reg.fit(X_train, y_train)
+        self.tree_reg=tree_reg.best_estimator_
+        
+        
+    def adaboost(self):### changer le tree + options
+        X_train, y_train =self.X_train,self.y_train
+        parameters_ada={'n_estimators':randint(45,self.n_estimators_max),'learning_rate':[1.0]}
+        ada_reg=RandomizedSearchCV(AdaBoostRegressor(DecisionTreeRegressor(),loss='square'),param_distributions=parameters_ada,cv=self.cv, n_iter=self.n_iter,n_jobs=-1)
+        ada_reg.fit(X_train,y_train)
+        self.ada_reg=ada_reg.best_estimator_
+        
+    def Kneighbors(self): ### changer metric
+        X_train, y_train =self.X_train,self.y_train
+        param_nei={'n_neighbors':randint(4,self.n_neigh_max)}
+        Kneigh_reg=RandomizedSearchCV(KNeighborsRegressor(),param_distributions=param_nei,cv=self.cv, n_iter=self.n_iter,n_jobs=-1)
+        Kneigh_reg.fit(X_train,y_train)
+        self.Kneigh_reg=Kneigh_reg.best_estimator_
+
+    def bagging(self): ##changer tree et options
+        X_train, y_train =self.X_train,self.y_train
+        parameters_bag={'n_estimators':randint(15,self.n_estimators_max),"bootstrap": [True, False]}
+        bag_reg=RandomizedSearchCV(BaggingRegressor(DecisionTreeRegressor()),param_distributions=parameters_bag,cv=self.cv, n_iter=self.n_iter,n_jobs=-1)
+        bag_reg.fit(X_train,y_train)
+        self.bag_reg=bag_reg.best_estimator_
+
+    def RandonFo(self):
+        parameters_forest={'max_depth':randint(1,self.max_depth_max+1),
+                                "bootstrap": [True, False],
+    'min_samples_split':randint(1,self.min_samples_split_max+1),
+    "min_samples_leaf": randint(1,self.min_samples_leaf_max+1),
+    "max_features": randint(1, self.max_features_max),
+    'n_estimators':randint(15,self.n_estimators_max),
+}
+### Gridsearch
+        X_train, y_train =self.X_train,self.y_train
+        forest_reg=RandomizedSearchCV(RandomForestRegressor(),param_distributions=parameters_forest,cv=self.cv, n_iter=self.n_iter,n_jobs=-1)
+        forest_reg.fit(X_train,y_train)
+        self.forest_reg=forest_reg.best_estimator_
+        
+    
+    def Extra(self):
+        parameters_extra={'max_depth':randint(1,self.max_depth_max+1),
+"bootstrap": [True, False],
+'min_samples_split':randint(1,self.min_samples_split_max+1),
+  "min_samples_leaf": randint(1, self.min_samples_leaf_max+1),
+'n_estimators':randint(20,20+self.n_estimators_max)
+}
+        X_train, y_train =self.X_train,self.y_train
+        extra_reg=RandomizedSearchCV(ExtraTreesRegressor(),param_distributions=parameters_extra,cv=self.cv, n_iter=self.n_iter,n_jobs=-1)
+        extra_reg.fit(X_train,y_train)
+        self.extra_reg=extra_reg.best_estimator_
+        
+    def Gradient(self): 
+        X_train, y_train =self.X_train,self.y_train
+        parameters_boost={'max_depth':randint(1,self.max_depth_max+1),
+                  'min_samples_split':randint(1,self.min_samples_split_max+1),'n_estimators':randint(80,100+self.n_estimators_max)}
+        boost_reg=RandomizedSearchCV(GradientBoostingRegressor(loss=self.loss),param_distributions=parameters_boost,cv=self.cv, n_iter=self.n_iter,n_jobs=-1)
+        boost_reg.fit(X_train,y_train)
+        self.boost_reg=boost_reg.best_estimator_
+
+    def SVR(self):### ajout option parametres
+        X_train, y_train =self.X_train,self.y_train
+        param_SVR={'gamma': st.expon(scale=.1),'C': st.expon(scale=100),'epsilon':st.expon(scale=0.1),'degree':randint(3,7)}
+        SVR_reg=RandomizedSearchCV(SVR(kernel=self.kernel),param_SVR,cv=self.cv, n_iter=self.n_iter,n_jobs=-1)
+        SVR_reg.fit(X_train,y_train)
+        self.SVR_reg=SVR_reg.best_estimator_
         
 
-
-
-####Mélange en vue des cross valid
-X,y=shuffle(X,y)
-
-        ############################
-
-
-#######Construction des ensembles d'apprentissage et de test
-### ratio test/dataset
-ratio=0.2
-
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=ratio, random_state=0)
-    
-# Normalize data 
-### on normalise les données d'apprentissage et on applique la même transfo à l'ensemble de test:
-### ici toutes les donnees sont entre 0 et 1: on écrase entre min et max
-min_max_scaler= preprocessing.MinMaxScaler()
-X_train=min_max_scaler.fit_transform(X_train)
-X_test=min_max_scaler.transform(X_test)
-
-### normalisation: moyenne 0 et variance 1
-mean, std = X_train.mean(axis=0), X_train.std(axis=0)
-
-#### eviter les nan si std = 0: on laisse la variable pseudo-cste inchangée
-for i in range(len(std)):
-    if (std[i]==0):
-        std[i]=1
-
-X_train = (X_train - mean) / std ### on apprend sur desdonnées standardisées et 
-####on applique notre predict à des données qui ont subi la mm transfo
-X_test=(X_test-mean)/std
-    
-
-##### Machine learning
-#######################################################
-###☻Pour chaque méthode, nous donnons les paramètres de l'estimateur et nous
-#### cherchons à trouver les meilleurs par cross validation
-#### à la fin, on construit le predict associé à ces paramètres
-cv=5### nb d'étape dans le cross valid
-n_iter=20###  nombre  d'iteration dans le random grid search
-########################
-#### Trees
-
-###Simple tree
-
-#### Parameters ._max
-max_depth_max_tree=15
-min_samples_split_max_tree=10
-min_samples_leaf_max_tree=10 
-
-
-### liste de dictionnaires contenant les valeurs possibles de chaque paramètre
-parameters_tree={'max_depth': randint(1,max_depth_max_tree+1),
-                 'min_samples_split':randint(1,min_samples_split_max_tree+1),
-                    'min_samples_leaf':randint(1,min_samples_leaf_max_tree+1)
-}
-### gridsearch qui trouve le set optimal de parametres
-tree_reg = RandomizedSearchCV(DecisionTreeRegressor(), parameters_tree, cv=cv, n_iter=n_iter,n_jobs=-1)
-### generation de l'arbre
-tree_reg.fit(X_train, y_train)
-### predicteur
-y_tree=tree_reg.predict(X_test)
-score_tree=tree_reg.score(X_test,y_test)
+        
+test = Learning()
+test.database="Test_Python/Data_2110.csv"
+#test.database="Data_2110.csv"
+test.Initialisation_data()### cree les donnes de test et de validation
+test.simple_tree()
+test.adaboost()
+test.Kneighbors()
+test.bagging()
+test.RandonFo()
+test.Extra()
+test.Gradient()
+test.SVR()
 
 
 
-#### Bagging
-### bornes des parametres ._max
-max_depth_max_bag=10
-min_samples_split_max_bag=10
-min_samples_leaf_max_bag=10 
-n_estimators_max_bag=10
-
-### liste de dictionnaires contenant les valeurs possibles de chaque paramètre
-parameters_tree_bag={'max_depth': randint(1,max_depth_max_bag+1),
-                 'min_samples_split':randint(1,min_samples_split_max_bag+1),
-                    'min_samples_leaf':randint(1,min_samples_leaf_max_bag+1),
-"bootstrap": [True, False]
-}
-
-### Gridsearch  ### ameliorer par double apprentissage?
-#tree_reg_bag=RandomizedSearchCV(DecisionTreeRegressor(), parameters_tree_bag, cv=cv,n_iter=n_iter)
-bag_reg=RandomizedSearchCV(BaggingRegressor(DecisionTreeRegressor()),{'n_estimators':randint(20-n_estimators_max_bag,20+n_estimators_max_bag)},cv=cv,n_iter=n_iter,n_jobs=-1)
-### .fit et predicteur
-bag_reg.fit(X_train,y_train)
-score_bag=bag_reg.score(X_test,y_test)
 
 
 
-#### Random Forest
-### bornes des parametres ._max
-n_estimators_max_forest=10
-min_samples_split_max_forest=10
-max_depth_max_forest=10
-min_samples_leaf_max_forest=10
-max_features_max=10
-
-
-parameters_tree_forest={'max_depth':randint(1,max_depth_max_forest+1),
-"bootstrap": [True, False],
-'min_samples_split':randint(1,min_samples_split_max_forest+1),
-  "min_samples_leaf": randint(1, min_samples_leaf_max_forest+1),
-"max_features": randint(1, max_features_max),
-'n_estimators':randint(20-n_estimators_max_forest,20+n_estimators_max_forest)
-}
-### Gridsearch
-forest_reg=RandomizedSearchCV(RandomForestRegressor(),parameters_tree_forest,cv=cv,n_iter=n_iter,n_jobs=-1)
-forest_reg.fit(X_train,y_train)
-score_forest=forest_reg.score(X_test,y_test)
-
-
-
-####Extra Trees
-### bornes des parametres ._max
-n_estimators_max_extra=10
-min_samples_split_max_extra=10
-max_depth_max_extra=10
-min_samples_leaf_max_extra=10
-
-parameters_tree_extra={'max_depth':randint(1,max_depth_max_extra+1),
-"bootstrap": [True, False],
-'min_samples_split':randint(1,min_samples_split_max_extra+1),
-  "min_samples_leaf": randint(1, min_samples_leaf_max_extra+1),
-'n_estimators':randint(20-n_estimators_max_extra,20+n_estimators_max_extra)
-}
-### Gridsearch
-extra_reg=RandomizedSearchCV(ExtraTreesRegressor(),parameters_tree_extra,cv=cv,n_iter=n_iter,n_jobs=-1)
-extra_reg.fit(X_train,y_train)
-score_extra=extra_reg.score(X_test,y_test)
-
-
-
-### Gradient-boosting
-### Parameters
-learning_rate=0.1 ### utiliser une loi uniforme
-n_estimators_max_boost=10
-max_depth_max_boost=5
-min_samples_split_max_boost=5
-
-parameters_boost={'loss':['ls'],'max_depth':randint(1,max_depth_max_boost+1),
-                  'min_samples_split':randint(1,min_samples_split_max_boost+1),'n_estimators':randint(100-n_estimators_max_boost,100+n_estimators_max_boost)}
-
-boost_reg=RandomizedSearchCV(GradientBoostingRegressor(),parameters_boost,cv=cv,n_iter=n_iter,n_jobs=-1)
-boost_reg.fit(X_train,y_train)
-score_boost=boost_reg(X_test,y_test)
-
-### SVR
-###◘ spaces of parameters
-precision=1
-gamma_vec=10**(np.linspace(-4,0,precision)) #### defaut = 
-C_vec=2**(np.linspace(0,8,precision)) ###defaut = 1
-epsilon_vec=10**(np.linspace(-2,-0.5,precision))  ### defaut =0.1
-degree_vec=range(3,6,4)
-
-### list of dictionaries with all possible values of the parameters
-parameters_SVR =[{'class_weight':['auto', None],'kernel': ['linear'], 'C': st.expon(scale=100),'epsilon':st.expon(scale=0.1)},
-                 {'class_weight':['auto', None],'kernel': ['rbf'], 'gamma': st.expon(scale=.1),'C': st.expon(scale=100),'epsilon':st.expon(scale=0.1),'degree':randint(3,7)},
-                {'class_weight':['auto', None],'kernel': ['poly'], 'gamma': st.expon(scale=.1),'C': st.expon(scale=100),'epsilon':st.expon(scale=0.1),'degree':randint(3,7)}]
-### Gridsearch & fit
-SVR_reg=RandomizedSearchCV(SVR(),{'gamma': st.expon(scale=.1),'C': st.expon(scale=100),'epsilon':st.expon(scale=0.1),'degree':randint(3,7)},cv=cv,n_iter=n_iter,n_jobs=-1)
-SVR_reg.fit(X_train,y_train)
-score_SVR=SVR_reg.score(X_test,y_test)
 
 #### Comparaison des scores et "erreur moyenne" en terme de prix
 ### les noms des objets à appeler sont donnés en-dessous
 
-
+X_train, y_train =test.X_train,test.y_train
+X_test, y_test =test.X_test,test.y_test
 print ("Scores and average gap  of different methods")
 print ()
 
 ### tree simple: tree_reg
 print ("Simple tree")
-print (score_tree)
-print(sum(map(abs,tree_reg.predict(X_test)-y_test))/len(X_test))
+print(sum(map(abs,test.tree_reg.predict(X_test)-y_test))/len(X_test))
 
 
 ### bagging: bag_reg
 print ("Bagging")
-print (score_bag)
-print(sum(map(abs,bag_reg.predict(X_test)-y_test))/len(X_test))
+print(sum(map(abs,test.bag_reg.predict(X_test)-y_test))/len(X_test))
 
 
 ### Random forest: forest_reg
 print ("Random forest")
-print (score_forest)
-print(sum(map(abs,forest_reg.predict(X_test)-y_test))/len(X_test))
+print(sum(map(abs,test.forest_reg.predict(X_test)-y_test))/len(X_test))
 
 ### Extra Trees: extra_reg
 print ("Extra trees")
-print (score_extra)
-print(sum(map(abs,extra_reg.predict(X_test)-y_test))/len(X_test))
+print(sum(map(abs,test.extra_reg.predict(X_test)-y_test))/len(X_test))
 ### Gradient boosting: boost_reg
 print ("Gradient boosting")
-print (score_boost)
-print(sum(map(abs,boost_reg.predict(X_test)-y_test))/len(X_test))
+print(sum(map(abs,test.boost_reg.predict(X_test)-y_test))/len(X_test))
 
 ### SVR: SVR_lin
 print ("Svr")
-print (score_SVR)
-print(sum(map(abs,SVR_reg.predict(X_test)-y_test))/len(X_test))
+print(sum(map(abs,test.SVR_reg.predict(X_test)-y_test))/len(X_test))
+
+### Adaboost
+print ("Ada")
+print(sum(map(abs,test.ada_reg.predict(X_test)-y_test))/len(X_test))
+### K-neighbour
+print("K_neighbours")
+print (sum(map(abs,test.Kneigh_reg.predict(X_test)-y_test))/len(X_test))
+
+
 
 
 
