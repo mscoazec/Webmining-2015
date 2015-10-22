@@ -10,8 +10,8 @@ from project.items import Product
 debug = 0
 
 # Separer si l'on veut crawler des apparts ou des maisons (ou les deux)
-appart = 1
-maison = 0
+appart = 0
+maison = 1
 
 ###############################################################################
 # -- to do
@@ -711,9 +711,17 @@ class papSpider(CrawlSpider):
     
     # Url par lesquelles commence la fouille
     
-    start_urls = [
-        "http://www.pap.fr/annonce/vente-appartement-maison-paris-75-g439",
-    ]
+    start_urls = []
+    
+    if appart:
+        
+        start_urls.append("http://www.pap.fr/annonce/"+
+        "vente-appartement-paris-75-g439")
+        
+    if maison:
+        
+        start_urls.append("http://www.pap.fr/annonce/"+
+        "vente-maison-paris-75-g439")
     
     # La regle de fouille consiste a tourner les pages
 
