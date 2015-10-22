@@ -40,6 +40,7 @@
 
     <script src="http://cdn.leafletjs.com/leaflet-0.7/leaflet.js"></script>
     <script src="./communes-75.json"></script>
+	<script src="./items_data.json"></script>
     <script>
 	
 		// create map on Paris
@@ -58,8 +59,23 @@
 		
 		// ------------------------------------------
 		
-		// import csv data
+		// import crawled data
 		
+		console.log(items.length + " items dans le fichier de donnees de biens")
+		var nb = new Array(20)
+		
+		for (i=0; i<items.length; i++) {
+			for (arr=1; arr<10; arr++) {
+				if ((items[i].localisation).indexOf("7500"+arr) >= 0) {
+					nb[arr] += 1;
+				}
+			}
+			for (arr=10; arr<21; arr++) {
+				if ((items[i].localisation).indexOf("750"+arr) >= 0) {
+					nb[arr] += 1;
+				}
+			}
+		}
 		
 		// ------------------------------------------
 		
@@ -93,7 +109,9 @@
 
 		info.update = function (props) {
 			this._div.innerHTML = '<h4> Nom</h4>' +  (props ?
-				'<b>' + props.nom : 'Passez la souris sur un arrondissement') + '</b><br />'
+				'<b>' + props.nom + '</b><br />'
+				+ 'items disponibles : ' + nb[1]: 'Passez la souris sur un arrondissement' + '</b><br />'
+				) + '</b><br />' 
 				+ '</b><br />' + 'Cliquez sur un objet pour zoomer';
 		};
 
