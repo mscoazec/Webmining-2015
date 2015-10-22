@@ -851,6 +851,16 @@ class laforetSpider(CrawlSpider):
         for i in range(10,21):
             start_urls.append("http://immobilier.laforet.com/"+
             "annonce-achat_appartement_paris-"+str(i)+".html")
+            
+    if maison:
+        
+        for i in range(1,10):
+            start_urls.append("http://immobilier.laforet.com/"+
+            "annonce-achat_maison_paris-0"+str(i)+".html")
+        
+        for i in range(10,21):
+            start_urls.append("http://immobilier.laforet.com/"+
+            "annonce-achat_maison_paris-"+str(i)+".html")
     
     # La regle de fouille consiste a tourner les pages
     rules = (
