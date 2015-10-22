@@ -36,6 +36,11 @@ data = data.astype(np.float)
 
 def traceNuage(xname, yname):
     
+    # limite max en x, y du graphe (si defini = 1, sinon y_max = max(y))
+    defini = 0
+    x_max = 400
+    y_max = 8000000
+    
     # affichage
     plt.figure(figsize = (12,10))
 
@@ -47,14 +52,40 @@ def traceNuage(xname, yname):
     plt.scatter(x, y)
     
     # gestion de l'affichage
-    plt.xlim(0, max(x))
-    plt.ylim(0, max(y))
+    if defini:
+        plt.xlim(0, x_max)
+        plt.ylim(0, y_max)
+    else:
+        plt.xlim(0, max(x))
+        plt.ylim(0, max(y))
     plt.xlabel(xname)
     plt.ylabel(yname)
+    plt.grid(True)
     title("'"+yname+"' en fonction de '"+xname+"' sur le training set")
     
     # sauvegarde en png
     plt.savefig(yname+'_'+xname+datename+'.png')
+    
+# fonction pour tracer un histogramme
+
+def traceHisto(yname):
+    
+    # affichage
+    plt.figure(figsize = (12,10))
+
+    # donnees    
+    y = data[:,labels.index(yname)]
+    
+    # trace du graphe
+    hist(y)
+    
+    # gestion de l'affichage
+    plt.ylabel(yname)
+    plt.grid(True)
+    title("repartition de '"+yname+"' sur le training set")
+    
+    # sauvegarde en png
+    plt.savefig(yname+'_hist.png')
 
 # fonction pour tracer un parametre en fonction d'un parametre discret
 
@@ -95,6 +126,7 @@ def traceMoustache(xname, yname):
     
     plt.xlabel(xname)
     plt.ylabel(yname)
+    plt.grid(True)
     title("'"+yname+"' en fonction de '"+xname+"' sur le training set")
     
     # trace du graphe 2 histogramme
@@ -110,6 +142,11 @@ def traceMoustache(xname, yname):
     
     # sauvegarde en png
     plt.savefig(yname+'_'+xname+datename+'_box'+'.png')
+
+# histogramme prix, surface
+
+traceHisto('prix')
+traceHisto('surface')
 
 # prix en fonction de la surface
 
@@ -130,3 +167,5 @@ traceMoustache('ascenseur','prix')
 # prix en fonction de l'etage
 
 traceMoustache('etage','prix')
+
+# 
