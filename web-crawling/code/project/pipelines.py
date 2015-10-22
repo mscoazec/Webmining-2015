@@ -23,16 +23,26 @@ class FilterPipeline(object):
             if isinstance(item['url'], unicode):
                 item['url'] = item['url'].replace(u"\u00A0", "")
         
-        for champs in ['description', 'titre', 'metro',
+        for champs in ['description', 'titre',
                        'infos', 'localisation', 'agence']:
             if champs in item:
                 # suppression des espaces multiples
                 item[champs] = ' '.join(item[champs].split())
-                #unicode
+                # unicode - suppression des accents
                 if isinstance(item[champs], unicode):
                     item[champs] = unicodedata.normalize('NFKD',
                                    item[champs]).encode('ascii','ignore')
-            
+                item[champs] = item[champs].lower()
+                
+        if 'metro' in item:
+            for i in range(len(item['metro'])):
+                item['metro'][i] = ' '.join(item['metro'][i].split())
+                # unicode - suppression des accents
+                if isinstance(item['metro'][i], unicode):
+                    item['metro'][i] = unicodedata.normalize('NFKD',
+                                   item['metro'][i]).encode('ascii','ignore')
+                item['metro'][i] = item['metro'][i].lower()
+        
         return item
 
 # gestion des doublons

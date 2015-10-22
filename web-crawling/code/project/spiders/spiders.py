@@ -779,19 +779,16 @@ class papSpider(CrawlSpider):
         for el in zone_description:
             item['localisation'] += el
             
-        # Attribut metro
+        # Attribut metro - liste des stations
             
-        item['metro'] = ''
+        item['metro'] = []
         zone_metro = sel.xpath('//div[@class="metro"]/ul/li')
         
         for el in zone_metro:
             station_name = el.xpath('span/text()').extract()
             
             if station_name:
-                item['metro'] += station_name[0] + ', '
-        
-        # enleve la derniere virgule
-        item['metro'] = item['metro'][:-2]
+                item['metro'].append(station_name[0])
                 
         # Attribut infos
         
