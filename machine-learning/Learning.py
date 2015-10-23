@@ -48,15 +48,14 @@ class Learning:
         self.y_test=[]
         self.transfo=[],[]
         self.cv = 5
-        self.n_iter= 20
-        self.max_depth_max=50
-        self.min_samples_split_max=20
-        self.min_samples_leaf_max=10
-        self.max_leaf_nodes_max=30
-        self.max_features_max=30
-        self.n_estimators_max=50
+        self.n_iter= 200
+        self.max_depth_max=100
+        self.min_samples_split_max=100
+        self.min_samples_leaf_max=100
+        self.max_leaf_nodes_max=100
+        self.max_features_max=80
+        self.n_estimators_max=80
         self.n_neigh_max=15
-        self.kernel="rbf"
         self.tree_reg=[]
         self.ada_reg=[]
         self.Kneigh_reg=[]
@@ -66,6 +65,7 @@ class Learning:
         self.boost_reg=[]
         self.SVR_reg=[]
         self.loss="ls"
+        self.kernel="rbf"
 
 
     def matrix(self):  ### renvoie matrice des descripteurs, vecteur prix
@@ -132,7 +132,6 @@ class Learning:
     def simple_tree(self): #### methode d'apprentissage avec arbre simple
                                                 ### cv: nb d'etapes ds la cross valid
                                                 ### n_iter est le nb d'iteration pour la random cross valid
-                                                ### renvoie le predicteur
                 
         parameters_tree={'max_depth': randint(1,self.max_depth_max+1),
                  'min_samples_split':randint(1,self.min_samples_split_max+1),
@@ -224,11 +223,6 @@ test.Gradient()
 test.SVR()
 
 
-
-
-
-
-
 #### Comparaison des scores et "erreur moyenne" en terme de prix
 ### les noms des objets à appeler sont donnés en-dessous
 
@@ -239,6 +233,7 @@ print ()
 
 ### tree simple: tree_reg
 print ("Simple tree")
+
 print(sum(map(abs,test.tree_reg.predict(X_test)-y_test))/len(X_test))
 
 
