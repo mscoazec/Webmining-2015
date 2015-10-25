@@ -284,11 +284,17 @@ pour la carte
 """
 
 arr, prix_arr, count_arr = statsPar('prix', 'arrondissement')
+arr_, surface_arr, count_arr_ = statsPar('surface', 'arrondissement')
 
 meanPrix_arr = []
 
 for i in range(len(arr)):
     meanPrix_arr.append(np.average(prix_arr[i]))
+    
+meanSurf_arr = []
+
+for i in range(len(arr)):
+    meanSurf_arr.append(np.average(surface_arr[i]))
     
 # import
 file_id = open('communes-75.json')
@@ -301,6 +307,7 @@ for i in range(len(arrFeat)):
     i_arr = int(arrFeat[i]["properties"]["code"]) - 75100
     arrFeat[i]["properties"]["nb_apparts"] = str(count_arr[i_arr])
     arrFeat[i]["properties"]["prix_moyen"] = str(meanPrix_arr[i_arr])
+    arrFeat[i]["properties"]["surface_moyenne"] = str(meanSurf_arr[i_arr])
     
 arrJson["features"] = arrFeat
 

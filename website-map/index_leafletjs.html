@@ -44,7 +44,7 @@
 	
 		// create map on Paris
 		
-        var map = L.map('map').setView([48.857391, 2.338477], 12);
+        var map = L.map('map').setView([48.8555875, 2.3726803], 12);
         mapLink = 
             '<a href="http://openstreetmap.org">OpenStreetMap</a>';
 			
@@ -65,17 +65,19 @@
 		// feature style
 		
 		function getColor(d) {
-			return d > 1000000  ? '#BD0026' :
-				   d > 800000  ? '#E31A1C' :
-				   d > 600000  ? '#FC4E2A' :
-				   d > 400000  ? '#FD8D3C' :
-				   d > 200000  ? '#FEB24C' :
+			return d > 14000 ? '#800026' :
+				   d > 12000  ? '#BD0026' :
+				   d > 11000  ? '#E31A1C' :
+				   d > 10000  ? '#FC4E2A' :
+				   d > 9000   ? '#FD8D3C' :
+				   d > 8000   ? '#FEB24C' :
+				   d > 7000   ? '#FED976' :
 							  '#FFEDA0';
 		}
 
 		function style(feature) {
 			return {
-				fillColor: getColor(feature.properties.prix_moyen),
+				fillColor: getColor(feature.properties.prix_moyen/feature.properties.surface_moyenne),
 				weight: 2,
 				opacity: 1,
 				color: 'white',
@@ -89,14 +91,14 @@
 		legend.onAdd = function (map) {
 
 			var div = L.DomUtil.create('div', 'info legend'),
-				grades = [200000, 400000, 600000, 800000, 1000000],
+				grades = [7000, 8000, 9000, 10000, 11000, 12000, 14000],
 				labels = [];
 
 			// loop through our density intervals and generate a label with a colored square for each interval
 			for (var i = 0; i < grades.length; i++) {
 				div.innerHTML +=
 					'<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
-					grades[i]/1000 + ' k€' + (grades[i + 1] ? ' &ndash; ' + grades[i + 1]/1000 + ' k€' + '<br>' : ' +');
+					grades[i]/1000 + ' €/m²' + (grades[i + 1] ? ' &ndash; ' + grades[i + 1]/1000 + ' k€' + '<br>' : ' +');
 			}
 
 			return div;
@@ -120,9 +122,13 @@
 			this._div.innerHTML = '<h4> Nom</h4>' +  (props ?
 				'<b>' + props.nom + '</b><br />' + '</b><br />' +
 				"Nombre d'appartements analysés : " + '</b><br />' +
-				props.nb_apparts + '</b><br />' + '</b><br />' +
+				'<b>' + props.nb_apparts + '</b><br />' + '</b><br />' +
+				"Prix par mètre carré en moyenne : " + '</b><br />' +
+				'<b>' + parseInt(props.prix_moyen/props.surface_moyenne) + ' € par m²' + '</b><br />' + '</b><br />' +
+				"Surface moyenne des appartements analysés : " + '</b><br />' +
+				'<b>' + parseInt(props.surface_moyenne) + ' m²' + '</b><br />' + '</b><br />' +
 				"Prix moyen des appartements analysés : " + '</b><br />' +
-				parseInt(props.prix_moyen/1000) + ' k€' + '</b><br />' :
+				'<b>' + parseInt(props.prix_moyen/1000) + ' k€' + '</b><br />':
 				'</b><br />' + 'Passez la souris sur un arrondissement' + '</b><br />'
 				) + '</b><br />' 
 				+ '</b><br />' + 'Cliquez sur un objet pour zoomer';
@@ -170,7 +176,7 @@
 			layer.on({
 				mouseover: highlightFeature,
 				mouseout: resetHighlight,
-				click: zoomToFeature
+				click: onMapClick
 			});
 		}
 		
@@ -197,6 +203,17 @@
 		// add legend to map
 		
 		legend.addTo(map);
+		
+		//
+		
+		function onMapClick(e) {
+			popup
+				.setLatLng(e.latlng)
+				.setContent("You clicked the map at " + e.latlng.toString())
+				.openOn(map);
+		}
+
+		map.on('click', onMapClick);
 		
     </script>
 </body>
