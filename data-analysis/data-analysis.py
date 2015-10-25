@@ -9,6 +9,12 @@ import csv
 import numpy as np
 from pylab import *
 import matplotlib.pyplot as plt
+import json
+import io
+
+"""
+pour l'analyse
+"""
 
 ##### donnees a modifier en fonction du fichier que l'on souhaite analyser
 filename = "apparts_10-22_traite_minus_one.csv"
@@ -178,10 +184,7 @@ def traceNuagePar(yname, zname, xname):
 # fonction pour tracer un parametre en fonction d'un parametre discret
 # equivalente a la precedante mais avec une presentation boite a moustaches
 
-def traceMoustache(xname, yname, defini, y_max):
-    
-    # affichage
-    plt.figure(figsize = (28,10))
+def statsPar(yname, xname):
     
     # donnees    
     y = data[:,labels.index(yname)]
@@ -198,6 +201,16 @@ def traceMoustache(xname, yname, defini, y_max):
     
     split_y = np.array(split_y)
     count_y = np.array(count_y)
+    
+    return unique_x, split_y, count_y
+    
+
+def traceMoustachePar(yname, xname, defini, y_max):
+    
+    unique_x, split_y, count_y = statsPar(yname, xname)
+    
+    # affichage
+    plt.figure(figsize = (28,10))
     
     # trace du graphe 1
     plt.subplot(1, 2, 2)
@@ -254,22 +267,57 @@ if al:
 
 y_max_prix = 5000000
 
-traceMoustache('arrondissement','prix', 1, y_max_prix)
+traceMoustachePar('prix', 'arrondissement', 1, y_max_prix)
 
 # surface en fonction de l'arrondissement
 
-traceMoustache('arrondissement','surface', 1, 400)
-
-# prix en fonction de la présence de balcon
-
-traceMoustache('balcon','prix', 1, y_max_prix)
+traceMoustachePar('surface','arrondissement',  1, 400)
 
 # prix en fonction de la présence d'ascenseur
 
-traceMoustache('ascenseur','prix', 1, y_max_prix)
-
-# prix en fonction de l'etage
-
-traceMoustache('etage','prix', 1, y_max_prix)
+traceMoustachePar('prix', 'ascenseur', 1, y_max_prix)
 
 # 
+
+"""
+pour la carte
+"""
+
+arr, prix_arr, count_arr = statsPar('prix', 'arrondissement')
+
+meanPrix_arr = []
+
+for i in range(len(arr)):
+    meanPrix_arr.append(np.average(prix_arr[i]))
+    
+# import
+file_id = open('communes-75.json')
+file_id_out = open('communes-75-out.json', 'w')
+arrJson = json.load(file_id)
+
+arrFeat =  arrJson["features"]
+
+for i in range(len(arrFeat)):
+    i_arr = int(arrFeat[i]["properties"]["code"]) - 75100
+    arrFeat[i]["properties"]["nb_apparts"] = str(count_arr[i_arr])
+    arrFeat[i]["properties"]["prix_moyen"] = str(meanPrix_arr[i_arr])
+    
+arrJson["features"] = arrFeat
+
+#arrJson = "var communesData = " + str(arrJson)
+
+json.dump(arrJson, file_id_out, ensure_ascii=False)
+
+file_id.close()
+file_id_out.close()
+
+file_id = open('communes-75-out.json')
+text = file_id.read()
+file_id.close()
+ 
+textInsert = "var communesData = "
+ 
+file_id = open('..\website-map\communes-75.json', 'w')
+file_id.write(textInsert + text)
+file_id.close()
+

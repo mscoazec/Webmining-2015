@@ -36,11 +36,10 @@
 	</style>
 </head>
 <body>
-    <div id="map" style="width: 800px; height: 600px"></div>
+    <div id="map" style="width: 1000px; height: 600px"></div>
 
     <script src="http://cdn.leafletjs.com/leaflet-0.7/leaflet.js"></script>
     <script src="./communes-75.json"></script>
-	<script src="./items_data.json"></script>
     <script>
 	
 		// create map on Paris
@@ -59,41 +58,51 @@
 		
 		// ------------------------------------------
 		
-		// import crawled data
-		
-		console.log(items.length + " items dans le fichier de donnees de biens")
-		var nb = new Array(20)
-		
-		for (i=0; i<items.length; i++) {
-			for (arr=1; arr<10; arr++) {
-				if ((items[i].localisation).indexOf("7500"+arr) >= 0) {
-					nb[arr] += 1;
-				}
-			}
-			for (arr=10; arr<21; arr++) {
-				if ((items[i].localisation).indexOf("750"+arr) >= 0) {
-					nb[arr] += 1;
-				}
-			}
-		}
-		
-		// ------------------------------------------
-		
 		// import geojson data
 					
 		// --------------------- style
 
 		// feature style
 		
+		function getColor(d) {
+			return d > 1000000  ? '#BD0026' :
+				   d > 800000  ? '#E31A1C' :
+				   d > 600000  ? '#FC4E2A' :
+				   d > 400000  ? '#FD8D3C' :
+				   d > 200000  ? '#FEB24C' :
+							  '#FFEDA0';
+		}
+
 		function style(feature) {
 			return {
+				fillColor: getColor(feature.properties.prix_moyen),
 				weight: 2,
 				opacity: 1,
-				color: 'LightCoral',
+				color: 'white',
 				dashArray: '3',
 				fillOpacity: 0.7
 			};
 		}
+		
+		var legend = L.control({position: 'bottomleft'});
+
+		legend.onAdd = function (map) {
+
+			var div = L.DomUtil.create('div', 'info legend'),
+				grades = [200000, 400000, 600000, 800000, 1000000],
+				labels = [];
+
+			// loop through our density intervals and generate a label with a colored square for each interval
+			for (var i = 0; i < grades.length; i++) {
+				div.innerHTML +=
+					'<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+					grades[i]/1000 + ' k€' + (grades[i + 1] ? ' &ndash; ' + grades[i + 1]/1000 + ' k€' + '<br>' : ' +');
+			}
+
+			return div;
+		};
+
+		legend.addTo(map);
 		
 		// --------------------- listeners
 		
@@ -109,8 +118,12 @@
 
 		info.update = function (props) {
 			this._div.innerHTML = '<h4> Nom</h4>' +  (props ?
-				'<b>' + props.nom + '</b><br />'
-				+ 'items disponibles : ' + nb[1]: 'Passez la souris sur un arrondissement' + '</b><br />'
+				'<b>' + props.nom + '</b><br />' + '</b><br />' +
+				"Nombre d'appartements analysés : " + '</b><br />' +
+				props.nb_apparts + '</b><br />' + '</b><br />' +
+				"Prix moyen des appartements analysés : " + '</b><br />' +
+				parseInt(props.prix_moyen/1000) + ' k€' + '</b><br />' :
+				'</b><br />' + 'Passez la souris sur un arrondissement' + '</b><br />'
 				) + '</b><br />' 
 				+ '</b><br />' + 'Cliquez sur un objet pour zoomer';
 		};
