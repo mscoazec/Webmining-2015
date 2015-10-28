@@ -17,8 +17,8 @@ pour l'analyse
 """
 
 ##### donnees a modifier en fonction du fichier que l'on souhaite analyser
-filename = "clean_dataset-10-22.csv"
-datename = "-10-22"
+filename = "errors.csv"
+datename = ""
 ##### ##### #####
 
 # ouverture du csv
@@ -205,7 +205,7 @@ def statsPar(yname, xname):
     return unique_x, split_y, count_y
     
 
-def traceMoustachePar(yname, xname, defini, y_max):
+def traceMoustachePar(yname, xname, defini, y_min, y_max):
     
     unique_x, split_y, count_y = statsPar(yname, xname)
     
@@ -218,9 +218,7 @@ def traceMoustachePar(yname, xname, defini, y_max):
     
     # gestion de l'affichage 1
     if defini:
-        plt.ylim(0, y_max)
-    else:
-        plt.ylim(0, max(y))
+        plt.ylim(y_min, y_max)
     
     plt.xlabel(xname,fontsize=14)
     plt.ylabel(yname,fontsize=14)
@@ -247,7 +245,7 @@ def traceMoustachePar(yname, xname, defini, y_max):
     
 # histogrammes prix, surface
 
-al = 1;
+al = 0;
 
 traceHisto('prix')
 if al:
@@ -265,66 +263,19 @@ if al:
 
 # prix en fonction de l'
 
-y_max_prix = 5000000
+y_max_prix = 500000
+y_min_prix = - y_max_prix
 
-traceMoustachePar('prix', 'arrondissement', 1, y_max_prix)
+traceMoustachePar('prix', 'arrondissement', 1, y_min_prix, y_max_prix)
 
 # surface en fonction de l'arrondissement
 
-traceMoustachePar('surface','arrondissement',  1, 400)
+traceMoustachePar('surface','arrondissement', 1, y_min_prix, y_max_prix)
 
 # prix en fonction de la présence d'ascenseur
 
-traceMoustachePar('prix', 'ascenseur', 1, y_max_prix)
+y_max_prix = 1000
+y_min_prix = - y_max_prix
 
-# 
-
-"""
-pour la carte
-"""
-
-arr, prix_arr, count_arr = statsPar('prix', 'arrondissement')
-arr_, surface_arr, count_arr_ = statsPar('surface', 'arrondissement')
-
-meanPrix_arr = []
-
-for i in range(len(arr)):
-    meanPrix_arr.append(np.average(prix_arr[i]))
-    
-meanSurf_arr = []
-
-for i in range(len(arr)):
-    meanSurf_arr.append(np.average(surface_arr[i]))
-    
-# import
-file_id = open('communes-75.json')
-file_id_out = open('communes-75-out.json', 'w')
-arrJson = json.load(file_id)
-
-arrFeat =  arrJson["features"]
-
-for i in range(len(arrFeat)):
-    i_arr = int(arrFeat[i]["properties"]["code"]) - 75100
-    arrFeat[i]["properties"]["nb_apparts"] = str(count_arr[i_arr])
-    arrFeat[i]["properties"]["prix_moyen"] = str(meanPrix_arr[i_arr])
-    arrFeat[i]["properties"]["surface_moyenne"] = str(meanSurf_arr[i_arr])
-    
-arrJson["features"] = arrFeat
-
-#arrJson = "var communesData = " + str(arrJson)
-
-json.dump(arrJson, file_id_out, ensure_ascii=False)
-
-file_id.close()
-file_id_out.close()
-
-file_id = open('communes-75-out.json')
-text = file_id.read()
-file_id.close()
- 
-textInsert = "var communesData = "
- 
-file_id = open('..\website-map\communes-75.json', 'w')
-file_id.write(textInsert + text)
-file_id.close()
+traceMoustachePar('prix', 'ascenseur', 1, y_min_prix, y_max_prix)
 
