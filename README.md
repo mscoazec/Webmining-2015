@@ -19,6 +19,20 @@ des biens immobiliers présentés sur les principaux sites d'annonces.
 
 La documentation de l'environnement utilisé est disponible à http://doc.scrapy.org/. L'architecture du code, qui est dans `web-crawling\code`, s'inspire de l'exemple du tutoriel et est détaillée plus loin. Les données extraites lors de la fouille sont quant à elles sauvegardées dans des fichiers au format `.json`, que l'on a choisi de stocker dans un dossier à part, nommé `web-crawling\output`.
 
+### Outils
+
+Le shell permet de code interactivement, la doc est ici : http://doc.scrapy.org/en/latest/topics/shell.html. Et il s'exécuter avec 
+
+                scrapy shell <url>
+
+Une fois le shell ouvert, exécuter par exemple :
+
+                from scrapy.selector import Selector
+                sel = Selector(response)
+                sel.xpath('//p')
+
+pour visualiser tous les paragraphes de la page analysée.
+
 ### Architecture et implémentation
 
 Le code est structuré pour l'implémentation de méthodes de fouille de données, développées pour l'extraction de classes d'objets particuliers : des produits, ici des biens immobiliers en vente.
