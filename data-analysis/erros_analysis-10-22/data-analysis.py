@@ -11,13 +11,14 @@ from pylab import *
 import matplotlib.pyplot as plt
 import json
 import io
+from sklearn import linear_model
 
 """
 pour l'analyse
 """
 
 ##### donnees a modifier en fonction du fichier que l'on souhaite analyser
-filename = "errors.csv"
+filename = "errors_.csv"
 datename = ""
 ##### ##### #####
 
@@ -72,6 +73,46 @@ def traceNuage(xname, yname):
     
     # sauvegarde en png
     plt.savefig(yname+'_'+xname+datename+'.png')
+    
+def traceNuageReg(xname, yname):
+    
+    # limite max en x, y du graphe (si defini = 1, sinon y_max = max(y))
+    defini = 0
+    x_max = 400
+    y_max = 8000000
+    
+    # affichage
+    plt.figure(figsize = (12,10))
+
+    # donnees    
+    y = data[:,labels.index(yname)]
+    x = data[:,labels.index(xname)]
+    
+    # trace du graphe
+    plt.scatter(x, y)
+    
+    regr = linear_model.LinearRegression()
+    regr.fit(x[:,np.newaxis], y)
+    
+    x_test = np.linspace(np.min(x), np.max(x), 100)
+    
+    plt.plot(x_test, regr.predict(x_test[:,np.newaxis]), color='red', linewidth=3)
+    
+    # gestion de l'affichage
+    if defini:
+        plt.xlim(0, x_max)
+        plt.ylim(0, y_max)
+    else:
+        plt.xlim(0, max(x))
+        plt.ylim(0, max(y))
+    plt.xlabel(xname,fontsize=14)
+    plt.ylabel(yname,fontsize=14)
+    plt.grid(True)
+    title("'"+yname+"' en fonction de '"+xname+"' sur le training set",
+          fontsize=18)
+    
+    # sauvegarde en png
+    plt.savefig(yname+'_'+xname+'_reg'+datename+'.png')
     
 # fonction pour tracer un histogramme
 
@@ -245,28 +286,21 @@ def traceMoustachePar(yname, xname, defini, y_min, y_max):
     
 # histogrammes prix, surface
 
-al = 0;
-
 traceHisto('prix')
-if al:
-    traceHistoPar('prix','arrondissement')
 
 traceHisto('surface')
-if al:
-    traceHistoPar('surface','arrondissement')
 
 # prix en fonction de la surface
 
-traceNuage('surface','prix')
-if al:
-    traceNuagePar('surface','prix','arrondissement')
+traceNuageReg('surface','prix')
+traceNuageReg('surface','ecart')
 
 # prix en fonction de l'
 
-y_max_prix = 500000
+y_max_prix = 0.2
 y_min_prix = - y_max_prix
 
-traceMoustachePar('prix', 'arrondissement', 1, y_min_prix, y_max_prix)
+traceMoustachePar('ecart', 'arrondissement', 1, y_min_prix, y_max_prix)
 
 # surface en fonction de l'arrondissement
 
@@ -274,8 +308,8 @@ traceMoustachePar('surface','arrondissement', 1, y_min_prix, y_max_prix)
 
 # prix en fonction de la présence d'ascenseur
 
-y_max_prix = 1000
+y_max_prix = 1
 y_min_prix = - y_max_prix
 
-traceMoustachePar('prix', 'ascenseur', 1, y_min_prix, y_max_prix)
+traceMoustachePar('ecart', 'ascenseur', 1, y_min_prix, y_max_prix)
 

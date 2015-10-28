@@ -180,6 +180,62 @@ def traceNuagePar(yname, zname, xname):
         # sauvegarde en png
     plt.savefig(zname+'_'+yname+'_par_'+xname+'.png')
     plt.close("all")
+    
+def traceNuageRegPar(yname, zname, xname):
+    
+    plt.close("all")
+    
+    # donnees    
+    y = data[:,labels.index(yname)]
+    x = data[:,labels.index(xname)]
+    z = data[:,labels.index(zname)]
+    
+    # couper y en differentes box selon les labels donnes par x
+    unique_x = np.unique(x)
+    split_y = []
+    
+    plt.figure(figsize = (20,40))
+    
+    for i in range(len(unique_x)):
+        
+        split_y = y[x == unique_x[i]]
+        split_y = np.array(split_y)
+        
+        split_z = z[x == unique_x[i]]
+        split_z = np.array(split_z)
+            
+        # affichage
+        if i == 1:
+            ax1 = plt.subplot(len(unique_x)/2, 2, 1)
+        if i > 1:
+            plt.subplot(len(unique_x)/2, 2, i, sharex=ax1, sharey=ax1)
+    
+        # trace du graphe
+        plt.scatter(split_y, split_z)
+        
+        x = split_y
+        y = split_z
+        
+        if x.any():
+            if y.any():
+        
+                regr = linear_model.LinearRegression()
+                regr.fit(x[:,np.newaxis], y)
+                    
+                x_test = np.linspace(np.min(x), np.max(x), 100)
+            
+                plt.plot(x_test, regr.predict(x_test[:,np.newaxis]), color='red', linewidth=3)
+        
+        # gestion de l'affichage
+        plt.xlabel(yname)
+        plt.ylabel(zname)
+        plt.grid(True)
+        title("'"+zname+"' en fonction de '"+yname+"' sur '"+
+        xname+"' numero "+str(int(unique_x[i])))
+        
+        # sauvegarde en png
+    plt.savefig(zname+'_'+yname+'_par_'+xname+'_reg'+'.png')
+    plt.close("all")
 
 # fonction pour tracer un parametre en fonction d'un parametre discret
 # equivalente a la precedante mais avec une presentation boite a moustaches
@@ -245,23 +301,63 @@ def traceMoustachePar(yname, xname, defini, y_max):
     plt.savefig(yname+'_'+xname+datename+'_box'+'.png')
     plt.close("all")
     
+def traceNuageReg(xname, yname):
+    
+    # limite max en x, y du graphe (si defini = 1, sinon y_max = max(y))
+    defini = 0
+    x_max = 400
+    y_max = 8000000
+    
+    # affichage
+    plt.figure(figsize = (12,10))
+
+    # donnees    
+    y = data[:,labels.index(yname)]
+    x = data[:,labels.index(xname)]
+    
+    # trace du graphe
+    plt.scatter(x, y)
+    
+    regr = linear_model.LinearRegression()
+    regr.fit(x[:,np.newaxis], y)
+    
+    x_test = np.linspace(np.min(x), np.max(x), 100)
+    
+    plt.plot(x_test, regr.predict(x_test[:,np.newaxis]), color='red', linewidth=3)
+    
+    # gestion de l'affichage
+    if defini:
+        plt.xlim(0, x_max)
+        plt.ylim(0, y_max)
+    else:
+        plt.xlim(0, max(x))
+        plt.ylim(0, max(y))
+    plt.xlabel(xname,fontsize=14)
+    plt.ylabel(yname,fontsize=14)
+    plt.grid(True)
+    title("'"+yname+"' en fonction de '"+xname+"' sur le training set",
+          fontsize=18)
+    
+    # sauvegarde en png
+    plt.savefig(yname+'_'+xname+'_reg'+datename+'.png')
+    
 # histogrammes prix, surface
 
 al = 1;
 
 traceHisto('prix')
-if al:
+if 0:
     traceHistoPar('prix','arrondissement')
 
 traceHisto('surface')
-if al:
+if 0:
     traceHistoPar('surface','arrondissement')
 
 # prix en fonction de la surface
 
-traceNuage('surface','prix')
+traceNuageReg('surface','prix')
 if al:
-    traceNuagePar('surface','prix','arrondissement')
+    traceNuageRegPar('surface','prix','arrondissement')
 
 # prix en fonction de l'
 
@@ -276,55 +372,3 @@ traceMoustachePar('surface','arrondissement',  1, 400)
 # prix en fonction de la présence d'ascenseur
 
 traceMoustachePar('prix', 'ascenseur', 1, y_max_prix)
-
-# 
-
-"""
-pour la carte
-"""
-
-arr, prix_arr, count_arr = statsPar('prix', 'arrondissement')
-arr_, surface_arr, count_arr_ = statsPar('surface', 'arrondissement')
-
-meanPrix_arr = []
-
-for i in range(len(arr)):
-    meanPrix_arr.append(np.average(prix_arr[i]))
-    
-meanSurf_arr = []
-
-for i in range(len(arr)):
-    meanSurf_arr.append(np.average(surface_arr[i]))
-    
-# import
-file_id = open('communes-75.json')
-file_id_out = open('communes-75-out.json', 'w')
-arrJson = json.load(file_id)
-
-arrFeat =  arrJson["features"]
-
-for i in range(len(arrFeat)):
-    i_arr = int(arrFeat[i]["properties"]["code"]) - 75100
-    arrFeat[i]["properties"]["nb_apparts"] = str(count_arr[i_arr])
-    arrFeat[i]["properties"]["prix_moyen"] = str(meanPrix_arr[i_arr])
-    arrFeat[i]["properties"]["surface_moyenne"] = str(meanSurf_arr[i_arr])
-    
-arrJson["features"] = arrFeat
-
-#arrJson = "var communesData = " + str(arrJson)
-
-json.dump(arrJson, file_id_out, ensure_ascii=False)
-
-file_id.close()
-file_id_out.close()
-
-file_id = open('communes-75-out.json')
-text = file_id.read()
-file_id.close()
- 
-textInsert = "var communesData = "
- 
-file_id = open('..\website-map\communes-75.json', 'w')
-file_id.write(textInsert + text)
-file_id.close()
-
