@@ -24,7 +24,7 @@ import math
 import unicodedata
 import numpy as np
 
-class text_analysis:
+class Text_analysis:
     
     def __init__(self):
         """
@@ -34,7 +34,7 @@ class text_analysis:
         self.fichier_features = "Liste_features.csv"
         
         #la colonne de la première chaîne de caractère à chercher
-        self.column_chains = 3
+        self.column_chains = 4
         
         #le nombre maximal de chaînes de caractères entraînant l'activation d'une feature
         self.number_chains = 6
@@ -44,6 +44,9 @@ class text_analysis:
         
         #la colonne yes/no
         self.column_yesNo = 2
+        
+        #la colonne négation
+        self.column_negation = 3
         
         
         
@@ -67,11 +70,14 @@ class text_analysis:
         #la colonne de la coordonnee y
         self.column_yCoordonnee = 2
         
-        #la ligne de la première ligne d'arrondissements
+        #la ligne de la première ligne d'arrondissements (la ligne de l'excel moins un)
         self.line_ardt = 1
         
-        #la ligne de la première ligne de métro
+        #la ligne de la première ligne de métro (la ligne de l'excel moins un)
         self.line_metro = 21
+
+        #la ligne du premier autre lieu qu'un métro (la ligne de l'excel moins un)
+        self.line_other_locations = 408
         
         """
         Importation des features depuis le fichier csv
@@ -80,6 +86,12 @@ class text_analysis:
             Pour les features numériques, il faut que le groupe ([0-9,.]) doit être le premier groupe,
             cela signifie que les accents/non accents ne peuvent être gérés par des groups qu'après le
             groupe qui contient la valeur numérique.
+        Attention aussi aux features négatives
+            Les features négatives sont présentes dans Liste_features.csv
+            Elles sont importées dans tab_features mais PAS dans feature_and_price_list
+            Elles ne sont donc pas recopiées dans le fichier de sortie
+            Faire attention aux références : une feature négative fait référence à une feature positive
+            Si vous insérez une ligne dans le fichier, vérifier que ces correspondances sont toujours correctes
         """
         self.cr = csv.reader(open(self.fichier_features,"rb"))
         
@@ -103,9 +115,14 @@ class text_analysis:
         
         
         
-        #Suivi du nombre de metros trouves avec mon algorithme
+        #Suivi du nombre de metros trouves avec mon algorithme (site pap)
         self.nombre_metros_trouves = 0
         
+        #Suivi du nombre de lieux trouves avec mon algorithme
+        self.nombre_lieux_trouves = 0
+        
+        #Suivi du nombre d'annonces comportant un lieu trouve par l'algorithme
+        self.nombre_annonces_avec_lieu = 0
         
         
         """
@@ -117,12 +134,13 @@ class text_analysis:
         """
         
         """
-        On en profite pour récupérer la position des features coordonnees x et y, et de l'arrondissement
-        dans la liste des features
+        On en profite pour récupérer la position des features coordonnees x et y, de
+        coordonnees_precises et de l'arrondissement dans la liste des features
         """
         self.pos_xCoordinate = 0
         self.pos_yCoordinate = 0
         self.pos_ardt = 0
+        self.pos_coor_precises = 0
         
         
         #Parcours du tableau
@@ -140,6 +158,9 @@ class text_analysis:
                 #Yes / No (booléen)
                 current_row.append(row[self.column_yesNo] == "x")
                 
+                #Négation de la feature n°...
+                current_row.append(row[self.column_negation])
+                
                 #les chaînes de caractère à rechercher (on ne prend pas les dernières cases vides)
                 for i in range(self.number_chains):
                     if row[self.column_chains + i] != '':
@@ -150,7 +171,9 @@ class text_analysis:
                 
                 
                 #On rajoute la feature dans notre liste de features
-                self.feature_and_price_list.append(row[self.column_featureName])
+                #Mais uniquement si ce n'est pas une feature négative
+                if row[self.column_negation] == "":
+                    self.feature_and_price_list.append(row[self.column_featureName])
                 
                 #Si c'est la ligne de la coordonne x, on renseigne la position des features x et y
                 if row[self.column_featureName] == "coordonnee_x":
@@ -160,6 +183,10 @@ class text_analysis:
                 #Si c'est la ligne de l'arrondissement, on renseigne la position de la feature ardt
                 if row[self.column_featureName] == "arrondissement":
                     self.pos_ardt = self.number_features
+                    
+                #Si c'est la ligne de coordonnees_precises, on renseigne la position de la feature ardt
+                if row[self.column_featureName] == "coordonnees_precises":
+                    self.pos_coor_precises = self.number_features
                 
                 
             self.number_features += 1
@@ -287,18 +314,27 @@ class text_analysis:
                     #Puis on enlève les accents des noms
                     cur_locationName = unicodedata.normalize('NFKD', cur_locationName).encode('ascii','ignore')
                     
-                    #On renseigne la coordonnee en x et en y, en entier et pas en string
-                    #On rajoute le mot 'metro' pour qu'il ne prenne en compte que les métros
-                    #Car certains métros comme Commerce se retrouvent dans un texte sans être un métro
-                    self.dict_xCoordonnees_lieux['metro ' + cur_locationName] = int(row[self.column_xCoordonnee])
-                    self.dict_yCoordonnees_lieux['metro ' + cur_locationName] = int(row[self.column_yCoordonnee])
                     
                     
-                    #En attendant de rajouter d'autres lieux je mets True
-                    #A terme si on a d'autre lieu il faudra remplacer True par self.number_locations < self.line_other_locations
-                    if True:
+                    
+                    #Pour les métros :
+                    #On let met dans le dico des lieux avec le mot métro devant.
+                    #On let met dans le dico des métros avec juste le nom du métro
+                    if self.number_locations < self.line_other_locations - 1:
+                        #On renseigne la coordonnee en x et en y, en entier et pas en string
+                        #On rajoute le mot 'metro' pour qu'il ne prenne en compte que les métros
+                        #Car certains métros comme Commerce se retrouvent dans un texte sans être un métro
+                        self.dict_xCoordonnees_lieux['metro ' + cur_locationName] = int(row[self.column_xCoordonnee])
+                        self.dict_yCoordonnees_lieux['metro ' + cur_locationName] = int(row[self.column_yCoordonnee])
+                        
+                        #Pour le dico des métros, on met juste le nom du métro
                         self.dict_xCoordonnees_metros[cur_locationName] = int(row[self.column_xCoordonnee])
                         self.dict_yCoordonnees_metros[cur_locationName] = int(row[self.column_yCoordonnee])
+                        
+                    #Pour les autres lieux (les rues), on les met tels quels dans le dico des lieux
+                    else:
+                        self.dict_xCoordonnees_lieux[cur_locationName] = int(row[self.column_xCoordonnee])
+                        self.dict_yCoordonnees_lieux[cur_locationName] = int(row[self.column_yCoordonnee])
                     
             
             self.number_locations += 1
@@ -316,7 +352,7 @@ class text_analysis:
         
     
     #Extraction des caractéristiques d'un bien à partir d'un texte
-    def extraction_features(self, texte, rechercher_lieux = False):
+    def extraction_features(self, texte, rechercher_lieux = False, fonction_test = False):
         """
         texte est un texte d'annonce. Ce doit être un string.
         Cette fonction ressort un tableau des valeurs des features
@@ -340,7 +376,7 @@ class text_analysis:
             value_feat = None
             
             #On parcourt l'ensemble des chaînes de caractère à chercher pour la feature courante
-            for chain_num in range(2, len(self.tab_features[feat_num])):
+            for chain_num in range(3, len(self.tab_features[feat_num])):
                 
                 #La recherche de la chaîne de caractères courante
                 value_feat_chain = re.search(self.tab_features[feat_num][chain_num], texte)
@@ -379,6 +415,8 @@ class text_analysis:
         Recherche de coordonnées : uniquement si l'on a mis rechercher_lieux à vrai
         """
         if rechercher_lieux:
+            
+            
             for lieu in self.dict_xCoordonnees_lieux:
                 #On cherche le nom du lieu dans le texte
                 metro_found = re.search(lieu, texte)
@@ -396,9 +434,17 @@ class text_analysis:
                     feat_values[self.pos_xCoordinate].append(self.dict_xCoordonnees_lieux[lieu])
                     feat_values[self.pos_yCoordinate].append(self.dict_yCoordonnees_lieux[lieu])
                     
-                    #Suivi du nombre de metros trouves avec mon algorithme
-                    self.nombre_metros_trouves += 1
                     
+                    #Affichage d'un lieu trouve : ligne non prise en compte quand on lance l'analyse de tous les textes
+                    if fonction_test:
+                        print "Lieu trouve : " + lieu + " (%d, %d)." %(self.dict_xCoordonnees_lieux[lieu], self.dict_yCoordonnees_lieux[lieu])
+                    
+                    #Suivi du nombre de lieux trouves avec mon algorithme
+                    self.nombre_lieux_trouves += 1
+                    
+            #Un peu d'affichage quand on fait des tests
+            if fonction_test:
+                print ""
             
             """
             Une fois une liste de coordonnes trouvees, on prend la moyenne des coordonnes trouvees
@@ -421,7 +467,7 @@ class text_analysis:
     
     
     #Extraction de toutes les caractéristiques d'une annonce complète (comprenant URL, titre, description, prix ...)
-    def traitement_annonce(self, annonce):
+    def traitement_annonce(self, annonce, fonction_test = False):
         """
         annonce est un tableau de string, contenant obligatoirement l'URL, et possiblement d'autres
         champs : texte de l'annonce, prix, récapitulatif des caractéristiques ... Cela dépend du site
@@ -478,9 +524,10 @@ class text_analysis:
             Version description séparée
             """
             #On récupère les informations contenues dans le titre, dans les infos, et dans la description
-            #Dans description on cherche des mentions de lieux
-            feat_values_infos = self.extraction_features(annonce["titre"] + annonce["infos"])
-            feat_values_description = self.extraction_features(annonce["description"], True)
+            #Dans description on cherche des mentions de lieux, et on affiche si on est en test
+            #On rajoute le nom du site à la main pour les features de site web
+            feat_values_infos = self.extraction_features(annonce["titre"] + annonce["infos"]  + "site "+site_annonce)
+            feat_values_description = self.extraction_features(annonce["description"], True, fonction_test)
             
             #Les informations dans le titre et dans les infos priment sur celles
             #contenues dans la description en cas de redondance.
@@ -518,8 +565,9 @@ class text_analysis:
             """
             #On récupère les informations contenues dans le titre, dans les infos, dans la localisation, et dans la description
             #Dans description on cherche des mentions de lieux
-            feat_values_infos = self.extraction_features(annonce["titre"] + annonce["infos"] + annonce["localisation"])
-            feat_values_description = self.extraction_features(annonce["description"], True)
+            #On rajoute le nom du site à la main pour les features de site web
+            feat_values_infos = self.extraction_features(annonce["titre"] + annonce["infos"] + annonce["localisation"] + "site "+site_annonce)
+            feat_values_description = self.extraction_features(annonce["description"], True, fonction_test)
             
             #Les informations dans le titre, dans les infos et dans localisation priment sur celles
             #contenues dans la description en cas de redondance.
@@ -559,8 +607,9 @@ class text_analysis:
             """
             #On récupère les informations contenues dans le titre, dans les infos, dans la localisation, et dans la description
             #Dans description on cherche des mentions de lieux
-            feat_values_infos = self.extraction_features(annonce["titre"] + annonce["infos"] + annonce["localisation"])
-            feat_values_description = self.extraction_features(annonce["description"], True)
+            #On rajoute le nom du site à la main pour les features de site web
+            feat_values_infos = self.extraction_features(annonce["titre"] + annonce["infos"] + annonce["localisation"] + "site "+site_annonce)
+            feat_values_description = self.extraction_features(annonce["description"], True, fonction_test)
             
             #Les informations dans le titre, dans les infos, et dans la localisation priment sur celles
             #contenues dans la description en cas de redondance.
@@ -600,8 +649,9 @@ class text_analysis:
             """
             #On récupère les informations contenues dans le titre, dans les infos, et dans la description
             #Dans description on cherche des mentions de lieux
-            feat_values_infos = self.extraction_features(annonce["titre"] + annonce["infos"])
-            feat_values_description = self.extraction_features(annonce["description"], True)
+            #On rajoute le nom du site à la main pour les features de site web
+            feat_values_infos = self.extraction_features(annonce["titre"] + annonce["infos"] + "site "+site_annonce)
+            feat_values_description = self.extraction_features(annonce["description"], True, fonction_test)
             
             #Les informations dans le titre, et dans les infos priment sur celles
             #contenues dans la description en cas de redondance.
@@ -642,7 +692,8 @@ class text_analysis:
             """
             #On récupère les informations contenues dans le titre, dans les infos, et dans la description
             #On ne cherche pas la mention de lieux dans description car on a déjà les métros dans le champ métro
-            feat_values_infos = self.extraction_features(annonce["titre"] + annonce["infos"] + annonce["localisation"])
+            #On rajoute le nom du site à la main pour les features de site web
+            feat_values_infos = self.extraction_features(annonce["titre"] + annonce["infos"] + annonce["localisation"] + "site "+site_annonce)
             feat_values_description = self.extraction_features(annonce["description"])
             
             #Les informations dans le titre, dans les infos, et dans la localisation priment sur celles
@@ -653,7 +704,6 @@ class text_analysis:
                 #Recopie des valeurs contenues dans infos, titre, et localisation
                 if feat_values_infos[i] != '':
                     feat_values_description[i] = feat_values_infos[i]
-            
             
             
             """
@@ -680,10 +730,17 @@ class text_analysis:
                     feat_values_description[self.pos_xCoordinate].append(self.dict_xCoordonnees_metros[metro])
                     feat_values_description[self.pos_yCoordinate].append(self.dict_yCoordonnees_metros[metro])
                     
+                    #Affichage d'un lieu trouve : ligne non prise en compte quand on lance l'analyse de tous les textes
+                    if fonction_test:
+                        print "Metro trouve (pap) : " + metro + " (%d, %d)." %(self.dict_xCoordonnees_metros[metro], self.dict_yCoordonnees_metros[metro])
+                    
                     #Suivi du nombre de metros trouves avec mon algorithme
                     self.nombre_metros_trouves += 1
                     
-                    
+            #Lorsque l'on fait des tests, on fait un peu d'affichage
+            if fonction_test:
+                print ""        
+            
             
             #Une fois remplie la liste des coordonnées de métros, on prend la moyenne
             if feat_values_description[self.pos_xCoordinate] != "":
@@ -711,8 +768,9 @@ class text_analysis:
             """
             #On récupère les informations contenues dans le titre, dans les infos, dans la localisation, et dans la description
             #Dans description on cherche des mentions de lieux
-            feat_values_infos = self.extraction_features(annonce["titre"] + annonce["infos"] + annonce["localisation"])
-            feat_values_description = self.extraction_features(annonce["description"], True)
+            #On rajoute le nom du site à la main pour les features de site web
+            feat_values_infos = self.extraction_features(annonce["titre"] + annonce["infos"] + annonce["localisation"] + "site "+site_annonce)
+            feat_values_description = self.extraction_features(annonce["description"], True, fonction_test)
             
             #Les informations dans le titre, dans les infos, et dans la localisation priment sur celles
             #contenues dans la description en cas de redondance.
@@ -770,9 +828,54 @@ class text_analysis:
         if site_annonce != "":
             if feat_values_description[self.pos_xCoordinate] == "":
                 if feat_values_description[self.pos_ardt] in self.dict_xCoordonnees_ardt:
+                    #Remplissage des coordonnees de l'arrondissement
                     feat_values_description[self.pos_xCoordinate] = str(self.dict_xCoordonnees_ardt[feat_values_description[self.pos_ardt]])
                     feat_values_description[self.pos_yCoordinate] = str(self.dict_yCoordonnees_ardt[feat_values_description[self.pos_ardt]])
+                    
+                    #Et on met la feature correspondante à 0 (0 signifie qu'on a juste l'arrondissement)
+                    feat_values_description[self.pos_coor_precises] = 0
+            else:
+                #Sinon c'est qu'on a une annonce avec un lieu (métro pap ou lieu autre) dedans
+            
+                #Donc on augmente le nombre d'annonces avec un lieu
+                self.nombre_annonces_avec_lieu += 1
+                
+                #Et on met la feature correspondante à 1 (1 signifie qu'on a un lieu précis)
+                feat_values_description[self.pos_coor_precises] = 1
         
+        
+        #Report des valeurs des features négatives et suppression des features négatives
+        for i in range(len(self.tab_features)):
+            #numéro de la feature à négationner
+            feature_number = self.tab_features[i][self.column_negation - 1]
+            
+            #Si ce n'est pas une chaîne vide, c'est une feature négative
+            if feature_number != "":
+                #la feature à négationner est deux lignes plus bas que la valeur, car le tableau commence à 0
+                #et qu'on a pas pris dans le tableau la première ligne du fichier Excel
+                #Il faut transformer la valeur en int car c'est encore un string
+                feature_number = int(feature_number) - 2
+                
+                #Si elle a été mise à un dans le traitement de l'annonce, il faut négationner la featurecorrespondante
+                if feat_values_description[i] == 1:
+                    feat_values_description[feature_number] = 0
+        
+        
+        
+        
+        #Suppression des features négatives
+        #Il faut garder le nombre de delete car on parcourt deux tableaux différents à la fois
+        nombre_deletions = 0
+        for i in range(len(self.tab_features)):
+            
+            
+            #Si ce n'est pas une chaîne vide, c'est une feature négative
+            if self.tab_features[i][self.column_negation - 1] != "":
+                #On la supprime dans le tableau de sortie
+                del feat_values_description[i - nombre_deletions]
+                
+                #On oublie pas d'incrémenter le nombre de delete
+                nombre_deletions += 1
         
         
         #La sortie : le tableau de features avec le prix au bout
@@ -803,6 +906,11 @@ class text_analysis:
         des features (et le prix) pour chaque annonce, avec une ligne par annonce
         """
         
+        #Réinitialisation du nombre de lieux trouves
+        self.nombre_lieux_trouves = 0
+        
+        #Réinitialisation du nombre d'annonces comportant un lieu
+        self.nombre_annonces_avec_lieu = 0
         
         #Si on n'a pas donné de fichier de sortie dans les paramètres, on en crée un
         #Création du fichier csv qui contiendra les données
@@ -831,6 +939,14 @@ class text_analysis:
             if annoncesJson[i]["prix"].replace(".","").replace(" ","").isdigit():
                 fichier_sortie.writerow(self.traitement_annonce(annoncesJson[i]))
             
+            #Affichage du nombre d'annonces par seconde au bout de 50 annonces pour estimer le temps total
+            if (i == 15):
+                temps_fin = time.clock()
+                temps_total = temps_fin - temps_debut + 0.0
+                annonces_par_seconde = (i + 0.0)/(temps_total + 0.001)
+                print "%1.1f annonces/seconde." %annonces_par_seconde
+                
+                
             #Affichage du nombre d'annonces toutes les 100 annonces pour suivre l'avancement
             if (i>0 and (i%100) == 0):
                 print "%s/%s" %(i, nombre_annonces)
@@ -845,8 +961,9 @@ class text_analysis:
     
         #Impression du temps de traitement
         print "%s annonces traitées en %1.1f secondes, soit %1.1f annonces/seconde." %(nombre_annonces, temps_total, annonces_par_seconde)
-        print "Nombre de métros trouvés : %d." %self.nombre_metros_trouves
-    
+        print "Nombre de lieux trouvés (hors métros pap) : %d." %self.nombre_lieux_trouves
+        print "Nombre d'annonces comportant un lieu : %d." %self.nombre_annonces_avec_lieu
+        print ""
     
     
     
@@ -908,10 +1025,115 @@ class text_analysis:
     
     
 
+    def test_une_annonce(self, site=0, numero_annonce=0):
+        """
+        Fonction pour comparer le texte d'une annonce (aléatoire par défaut) avec les features que je donne
+        """
+        
+        #Saut de ligne initial
+        print ""
+        
+        
+        #Valeur du site
+        if site > 6 or site < 0:
+            print "Veuillez rentrer un site entre 0 et 6 SVP."
+            
+            #Saut de ligne final
+            print ""
+            
+            return
+            
+        
+        #Choix aléatoire du site si rien n'est renseigné
+        if site == 0:
+            site = int(np.floor(6 * np.random.rand() + 1))
+        
+        #nom du site
+        sitename = ""
+        if site == 1:
+            sitename = "explorimmo"
+        if site == 2:
+            sitename = "fnaim"
+        if site == 3:
+            sitename = "laforet"
+        if site == 4:
+            sitename = "pap"
+        if site == 5:
+            sitename = "paruvendu"
+        if site == 6:
+            sitename = "seloger"
+            
+        #Ouverture du fichier du site
+        fichierJson = "Input/apparts_10-22/items_appart_" + sitename + "-10-22.json"
+        annoncesJson = json.load(open(fichierJson))
 
+        #Nombre d'annonces dans le fichier
+        nombre_annonces = len(annoncesJson)
+        
+        #Choix aléatoire d'une annonce si rien n'est renseigné
+        if numero_annonce == 0:
+            numero_annonce = int(np.floor(nombre_annonces * np.random.rand()))
+        
+        #Si l'annonce rentrée est supérieure au nombre d'annonces dans le fichier
+        if numero_annonce > nombre_annonces:
+            print "Numéro d'annonce : %d plus grand que le nombre d'annonces dans le fichier : %d." %(numero_annonce, nombre_annonces)
+            
+            #Saut de ligne final
+            print ""
+            
+            return
+        
+        #Extraction des features avec ma fonction
+        annonce = annoncesJson[numero_annonce]
+        features_de_lannonce = self.traitement_annonce(annonce, True)
+        
+        #Impression d'informations sur la console
+        print "Site " + sitename + " (n°%d)," %site+ " annonce numéro %d." %numero_annonce
+        print "Contenu de l'annonce :"
+        
+        #Les différents champs : "titre", "infos", "description", "prix", "localisation", "metro"
+        if "url" in annonce:
+            print "Url : " + annonce["url"]
+        if "titre" in annonce:
+            print "Titre : " + annonce["titre"]
+        if "infos" in annonce:
+            print "Infos : " + annonce["infos"]
+        if "localisation" in annonce:
+            print "Localisation : " + annonce["localisation"]
+        if "metro" in annonce:
+            #Pour les métros, on est obligés de faire une liste des métros à la main
+            liste_metros = ""
+            for j in range(len(annonce["metro"])):
+                if j > 0:
+                    liste_metros += " | "
+                liste_metros += annonce["metro"][j]
+            print "Metros : " + liste_metros
+        if "description" in annonce:
+            print "Description : " + annonce["description"]
+        if "prix" in annonce:
+            print "Prix : " + annonce["prix"]
+            
+        
+        
+        
+        #Impression des features extraites : seulement celles remplies
+        print ""
+        print "Features extraites avec le traitement du texte :"
+        
+        for i in range(len(features_de_lannonce)):
+            #Si la feature est remplie on l'imprime
+            if features_de_lannonce[i] != "":
+                #On différencie si la valeur est un string ou un entier.
+                if isinstance(features_de_lannonce[i], str):
+                    print self.feature_and_price_list[i] + " : " + features_de_lannonce[i]
+                else:
+                    print self.feature_and_price_list[i] + " : %d." %features_de_lannonce[i]
+                
 
-
-
+        
+        #Saut de ligne final
+        print ""        
+        return
 
 """
 Commandes de tests
@@ -929,16 +1151,19 @@ Commandes de tests
 
 
 #Pour tester sur certains fichiers
-#text_analysis().traitement_dossier('Test')
+#Text_analysis().traitement_dossier('Test')
 
 #Pour tester l'affichage de mes dictionnaires de coordonnées
-#print text_analysis().dict_yCoordonnees_lieux
+#print Text_analysis().dict_yCoordonnees_lieux
 
 #Test avec une annonce de test
 #annoncetest = {"description": "henri martin-pompe quartier residentiel metros. bel appt 9p spacieux 296m2 4 etage asc traversant. bel imm pdt tres bon standing ensoleille double sejour 47m2 salle a manger 34m2 cuisine dinatoire 21m2, 6 chambres tres beaux volumes hsp 3,40m nbx rangements 2 s.bains, s.eau. 2 services reunissables inclus. tres bon plan modulable caves. ch. copro: 8004 e par an. hono. 4%ttc. dpe en cours.", "url": "http://www.fnaim.fr/annonce-immobiliere/36009398/17-acheter-appartement-paris-75.htm", "localisation": "paris 16", "prix": "2700000", "agence": "john arthur et tiffen, 130 avenue victor hugo", "titre": "appartement 9 piece(s) - 300 m2", "infos": "type d'habitation : appartement, numero d'etage : 4, nombre d'etage : 7, surface habitable : 300 m2, surface du sejour : 47 m2, nombre de chambres : 6, nombre de salles de bains : 2, nombre de salles deau : 1, cave : 2, type de chauffage : collectif"}
-#print text_analysis().traitement_annonce(annoncetest)
+#print Text_analysis().traitement_annonce(annoncetest)
+
+#Test avec impression propre sur des annonces aléatoires
+#Text_analysis().test_une_annonce()
 
 """
 Appel de la fonction traitement_dossier sur les vraies données
 """
-text_analysis().traitement_dossier('apparts_10-22')
+Text_analysis().traitement_dossier('apparts_10-22')
