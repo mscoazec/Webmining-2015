@@ -1,0 +1,557 @@
+requete,formattage,lat,lng
+"impasse+Baudricourt,Paris,France","Impasse Baudricourt, 75013 Paris, France",48.8254544,2.3623219
+"rue+Henri+Becque,Paris,France","Rue Henri Becque, 75013 Paris, France",48.82522729999999,2.3424325
+"rue+Lesage,Paris,France","Rue Lesage, 75020 Paris, France",48.87226889999999,2.3817883
+"rue+Ligner,Paris,France","Rue Ligner, 75020 Paris, France",48.8575774,2.3973012
+"cite+Antoine+Loubeyre,Paris,France","Cite Antoine Loubeyre, 75020 Paris, France",48.8707632,2.3889981
+"place+du+General+Tessier+de+Marguerittes,Paris,France","Place du General Tessier de Marguerittes, 75020 Paris, France",48.8512093,2.410245
+"place+Henri+Matisse,Paris,France","Place Henri Matisse, 75020 Paris, France",48.8661553,2.3908992
+"allee+des+Mauves,Paris,France","Allee des Mauves, 75020 Paris, France",48.85702,2.408184
+"rue+Paul+Meurice,Paris,France","Rue Paul Meurice, 75020 Paris, France",48.875688,2.4111733
+"rue+Mondonville,Paris,France","Rue Mondonville, 75020 Paris, France",48.8659703,2.406718300000001
+"rue+Saint-Just,Paris,France","Rue Saint-Just, 75017 Paris, France",48.8964922,2.3136744
+"rue+Labie,Paris,France","Rue Labie, 75017 Paris, France",48.8792281,2.2879925
+"rue+du+Capitaine+Lagache,Paris,France","Rue du Capitaine Lagache, 75017 Paris, France",48.8921457,2.3254377
+"rue+Toulouse+Lautrec,Paris,France","Rue Toulouse Lautrec, 75017 Paris, France",48.90095030000001,2.327244
+"place+Monseigneur+Loutil,Paris,France","Paris, France",48.856614,2.3522219
+"rue+Margueritte,Paris,France","Rue Margueritte, 75017 Paris, France",48.8808035,2.3004543
+"impasse+Marty,Paris,France","Impasse Marty, 75017 Paris, France",48.8969026,2.3252127
+"passage+Saint-Michel,Paris,France","Passage Saint-Michel, Paris, France",48.8886994,2.3254525
+"square+Monceau,Paris,France","Square Monceau, 75017 Paris, France",48.8820862,2.3180756
+"place+Richard+De+Coudenhove-Kalergi,Paris,France","Place Richard de Coudenhove-Kalergi, 75116 Paris, France",48.8704471,2.2954803
+"place+du+Docteur+Paul+Michaux,Paris,France","Place du Dr Paul Michaux, 75016 Paris, France",48.8383268,2.2551507
+"rue+Mignard,Paris,France","Rue Mignard, 75116 Paris, France",48.863361,2.27438
+"rue+Mignet,Paris,France","Rue Mignet, 75016 Paris, France",48.8490905,2.2693822
+"square+Mignot,Paris,France","Square Mignot, 75116 Paris, France",48.8620836,2.2831202
+"avenue+Moliere,Paris,France","Avenue Moliere, 75016 Paris, France",48.844457,2.262890000000001
+"rue+Molitor,Paris,France","Rue Molitor, 75016 Paris, France",48.84524,2.2618841
+"avenue+Albert+Ier+de+Monaco.,Paris,France","Avenue Albert 1er de Monaco, 75116 Paris, France",48.8616494,2.2899844
+"place+Jean+Monnet,Paris,France","Rue Jean Monnet, 94270 Le Kremlin-Bicetre, France",48.8097311,2.3611024
+"avenue+de+Montespan,Paris,France","Avenue de Montespan, 75116 Paris, France",48.8654956,2.2776975
+"avenue+Albert+De+Mun,Paris,France","Avenue Albert de Mun, 75116 Paris, France",48.8629962,2.291873
+"villa+George+Sand,Paris,France","Villa George Sand, 75016 Paris, France",48.8502918,2.2684985
+"boulevard+Jules+Sandeau,Paris,France","Boulevard Jules Sandeau, 75116 Paris, France",48.862137,2.2726224
+"square+Victorien+Sardou,Paris,France","Square Victorien Sardou, 75016 Paris, France",48.84332970000001,2.2673381
+"porte+de+la+Seine,Paris,France","Quai de la Seine, 75019 Paris, France",48.8866796,2.3745539
+"rue+de+Siam,Paris,France","Rue de Siam, 75116 Paris, France",48.8622403,2.2747064
+"rue+Singer,Paris,France","Rue Singer, 75016 Paris, France",48.856439,2.2769451
+"villa+Spontini,Paris,France","Villa Spontini, 75116 Paris, France",48.8680767,2.2781152
+"chemin+de+Ceinture+Du+Lac+Superieur,Paris,France","Chemin de Ceinture du Lac Superieur, 75016 Paris, France",48.85684850000001,2.2562933
+"avenue+des+Sycomores,Paris,France","Avenue des Sycomores, 75016 Paris, France",48.8501896,2.2626112
+"rue+Emile+Richard,Paris,France","Rue Emile Richard, 75014 Paris, France",48.8385602,2.3295382
+"rue+de+Bellevue,Paris,France","Rue de Bellevue, 75019 Paris, France",48.8794884,2.3943301
+"rue+Emile+Bollaert,Paris,France","Rue Emile Bollaert, 75019 Paris, France",48.8998467,2.3758191
+"passage+de+la+Brie,Paris,France","Passage de la Brie, 75019 Paris, France",48.8808751,2.3722987
+"place+BZ/19,Paris,France","Paris, France",48.856614,2.3522219
+"rue+de+Cambo,Paris,France","Rue de Cambo, 75019 Paris, France",48.8780213,2.3974387
+"villa+Cantate,Paris,France","Villa Cantate, 75019 Paris, France",48.8901463,2.3863353
+"quai+de+la+Charente,Paris,France","Quai de la Charente, 75019 Paris, France",48.895848,2.3844599
+"rue+des+Chaufourniers,Paris,France","Rue des Chaufourniers, 75019 Paris, France",48.8781177,2.3734531
+"rue+de+Colmar,Paris,France","Rue de Colmar, 75019 Paris, France",48.88816449999999,2.3805043
+"rue+Compans,Paris,France","Rue Compans, Paris, France",48.87878980000001,2.3926091
+"rue+Abel+Rabaud,Paris,France","Rue Abel Rabaud, 75011 Paris, France",48.8694088,2.3718278
+"rue+de+la+Folie-Regnault,Paris,France","Rue de la Folie-Regnault, 75011 Paris, France",48.859611,2.386698
+"avenue+de+la+Republique,Paris,France","Avenue de la Republique, 75011 Paris, France",48.864847,2.3767457
+"rue+de+la+Fontaine+Au+Roi,Paris,France","Rue de la Fontaine au Roi, 75011 Paris, France",48.8681625,2.3737312
+"rue+Roubo,Paris,France","Rue Roubo, 75011 Paris, France",48.8496915,2.3873444
+"passage+Saint-Sabin,Paris,France","Passage Saint-Sabin, 75011 Paris, France",48.8552065,2.3727498
+"passage+Salarnier,Paris,France","Passage Salarnier, 75011 Paris, France",48.8570594,2.373869
+"cour+Sedaine,Paris,France","Cour Sedaine, 75011 Paris, France",48.8566772,2.3743828
+"rue+Spinoza,Paris,France","Rue Spinoza, 75011 Paris, France",48.86356070000001,2.3857553
+"rue+Gaby+Sylvia,Paris,France","Rue Gaby Sylvia, 75011 Paris, France",48.85896469999999,2.3709109
+"rue+Titon,Paris,France","Rue Titon, 75011 Paris, France",48.85187819999999,2.3863788
+"rue+Clotilde+De+Vaux,Paris,France","Rue Clotilde de Vaux, 75011 Paris, France",48.8576811,2.3682757
+"rue+du+Faubourg+Saint-Antoine,Paris,France","Rue du Faubourg Saint-Antoine, Paris, France",48.8502987,2.3824653
+"porte+du+Bel+Air,Paris,France","Porte Doree, 75012 Paris, France",48.83544879999999,2.4067461
+"avenue+de+Bel+Air,Paris,France","Avenue de Bel air, Paris, France",48.8431775,2.421542
+"avenue+du+Bel+Air,Paris,France","Avenue du Bel air, 75012 Paris, France",48.846515,2.3974351
+"place+Louis+Armand,Paris,France","Place Louis Armand, 75012 Paris, France",48.8448789,2.3728401
+"rue+d'Artagnan,Paris,France","Rue d'Artagnan, 75012 Paris, France",48.8454365,2.3857161
+"impasse+des+Arts,Paris,France","Metiers Art Museum, 60 Rue Reaumur, 75003 Paris, France",48.86663919999999,2.3554383
+"rue+d'Austerlitz,Paris,France","Rue d'Austerlitz, 75012 Paris, France",48.8470588,2.3707364
+"route+du+Bac,Paris,France","Route du Bac, 75012 Paris, France",48.8270322,2.4137381
+"impasse+Barrier,Paris,France","Impasse Barrier, 75012 Paris, France",48.8478281,2.3801244
+"villa+Belliard,Paris,France","Villa Belliard, 75018 Paris, France",48.8954709,2.329025
+"place+Charles+Bernard,Paris,France","Place Charles Bernard, 75018 Paris, France",48.8934096,2.3429706
+"rue+Bervic,Paris,France","Rue Bervic, 75018 Paris, France",48.8840657,2.3489428
+"voie+BF/18,Paris,France","Paris, France",48.856614,2.3522219
+"voie+BG/18,Paris,France","Paris, France",48.856614,2.3522219
+"rue+Rene+Binet,Paris,France","Rue Rene Binet, 75018 Paris, France",48.89921710000001,2.3401153
+"voie+BK/18,Paris,France","Paris, France",48.856614,2.3522219
+"rue+Emile+Blemont,Paris,France","Rue Emile Blemont, 75018 Paris, France",48.894614,2.3416269
+"voie+BN/18,Paris,France","18 Voie Bn 17, 75017 Paris, France",48.8865589,2.2865409
+"voie+BR/18,Paris,France","18 Avenue la Voie Lactee, 92100 Boulogne-Billancourt, France",48.833382,2.2601481
+"voie+BG/16,Paris,France","Paris, France",48.856614,2.3522219
+"square+du+Docteur+Blanche,Paris,France","Square du Dr Blanche, 75016 Paris, France",48.8522676,2.2649725
+"rue+du+Docteur+Blanche,Paris,France","Rue du Dr Blanche, 75016 Paris, France",48.85385609999999,2.265351
+"quai+Louis+Bleriot,Paris,France","Quai Louis Bleriot, 75016 Paris, France",48.845279,2.2726607
+"voie+BM/16,Paris,France","Paris, France",48.856614,2.3522219
+"rue+du+Pasteur+Marc+Boegner,Paris,France","Rue du Pasteur Marc Boegner, 75116 Paris, France",48.8634919,2.2815935
+"rue+Louis+Boilly,Paris,France","Rue Louis Boilly, 75016 Paris, France",48.8593662,2.2663201
+"place+de+Bolivie,Paris,France","Place de Bolivie, 75016 Paris, France",48.85454379999999,2.2835912
+"rue+de+Boulainvilliers,Paris,France","Rue de Boulainvilliers, Paris, France",48.8546322,2.2754179
+"allee+des+Bouleaux,Paris,France","Allee des Bouleaux, Paris, France",48.87273,2.2622049
+"rue+Paul-Jean+Toulet,Paris,France","Rue Paul-Jean Toulet, 75020 Paris, France",48.8574361,2.4063527
+"villa+Dury-Vasselon,Paris,France","Villa Dury-Vasselon, 75020 Paris, France",48.8759649,2.4037208
+"rue+Jean+Veber,Paris,France","Rue Jean Veber, 75020 Paris, France",48.8625231,2.4101493
+"place+de+l'Adjudant+Vincenot,Paris,France","Place de l'Adjudant Vincenot, 75020 Paris, France",48.870678,2.408339
+"rue+Albert+Willemetz,Paris,France","Rue Albert Willemetz, 75020 Paris, France",48.8483506,2.4155959
+"allee+Alexandre+Vialatte,Paris,France","Allee Alexandre Vialatte, 75013 Paris, France",48.8218708,2.3570512
+"allee+Christian+Pineau,Paris,France","Paris, France",48.856614,2.3522219
+"rue+Jean+Oberle,Paris,France","Rue Jean Oberle, 75019 Paris, France",48.8997244,2.3704379
+"allee+du+Philosophe,Paris,France","Allee du Philosophe, 75011 Paris, France",48.8557299,2.384505
+"rue+Jean-Baptiste+Say,Paris,France","Rue Jean-Baptiste Say, 75009 Paris, France",48.88143280000001,2.3416426
+"rue+Jean+Pierre-Bloch,Paris,France","Rue Jean-Pierre Bloch, 75015 Paris, France",48.8534227,2.2959913
+"voie+CQ/15,Paris,France","Paris, France",48.856614,2.3522219
+"voie+CR/15,Paris,France","15 Avenue la Voie Lactee, 92100 Boulogne-Billancourt, France",48.83327730000001,2.260195
+"place+Olympe+de+Gouges,Paris,France","Olympe de Gouges, Rue Albert Einstein, 75013 Paris, France",48.8265903,2.3822295
+"rue+Francois+Bloch-Laine,Paris,France","Rue Francois Bloch-Laine, 75013 Paris, France",48.8405749,2.3691578
+"voie+FF/13,Paris,France","Paris, France",48.856614,2.3522219
+"place+Jean+Pronteau,Paris,France","Place Jean Pronteau, 75014 Paris, France",48.8342867,2.3214386
+"esplanade+Jacques+Chaban-Delmas,Paris,France","Esplanade Jacques Chaban-Delmas, 75007 Paris, France",48.8479198,2.3116517
+"voie+EW/13,Paris,France","Paris, France",48.856614,2.3522219
+"voie+CW/15,Paris,France","Paris, France",48.856614,2.3522219
+"place+Chavarche+Missakian,Paris,France","Paris, France",48.856614,2.3522219
+"place+Emmanuel+Levinas,Paris,France","Place Emmanuel Levinas, 75005 Paris, France",48.844569,2.3479188
+"allee+Pierre-Christian+Taittinger,Paris,France","Paris, France",48.856614,2.3522219
+"voie+B/4,Paris,France","4U Voie 24, 75015 Paris, France",48.8381976,2.315009
+"rue+Isabey,Paris,France","Rue Isabey, 75016 Paris, France",48.8487133,2.2635149
+"rue+Jasmin,Paris,France","Rue Jasmin, 75016 Paris, France",48.852024,2.2667652
+"voie+CM/16,Paris,France","Paris, France",48.856614,2.3522219
+"rue+du+Conseiller+Collignon,Paris,France","Rue du Conseiller Collignon, 75116 Paris, France",48.85942499999999,2.2728064
+"rue+Dumont+d'Urville,Paris,France","Rue Dumont d'Urville, 75116 Paris, France",48.8701269,2.2940474
+"villa+Erlanger,Paris,France","Villa Erlanger, 75016 Paris, France",48.8461327,2.2617655
+"villa+de+la+Faisanderie,Paris,France","Villa de la Faisanderie, 75116 Paris, France",48.87017040000001,2.2753497
+"square+des+Ecrivains+Combattants+Morts+Pour+La+France,Paris,France","Square des Ecrivains Combattants Morts pour la France, 75016 Paris, France",48.8597911,2.2655625
+"square+Theophile+Gautier,Paris,France","Square Theophile Gautier, 75016 Paris, France",48.8476886,2.2700666
+"place+de+l'Amiral+De+Grasse,Paris,France","Place de l'Amiral de Grasse, 75116 Paris, France",48.867664,2.2953781
+"rue+Gauguet,Paris,France","Rue Gauguet, 75014 Paris, France",48.8261116,2.3341488
+"rue+Guilleminot,Paris,France","Rue Guilleminot, 75014 Paris, France",48.8356192,2.3172266
+"villa+Halle,Paris,France","Villa Halle, 75014 Paris, France",48.83097,2.332082
+"rue+du+Faubourg+Saint-Jacques,Paris,France","Rue du Faubourg Saint-Jacques, 75014 Paris, France",48.8362865,2.338019
+"rue+Edouard+Jacques,Paris,France","Rue Edouard Jacques, 75014 Paris, France",48.8351215,2.3218218
+"villa+Jamot,Paris,France","Villa Jamot, 75014 Paris, France",48.8276218,2.3167152
+"rue+Jolivet,Paris,France","Rue Jolivet, 75014 Paris, France",48.84088209999999,2.3237438
+"rue+Lalande,Paris,France","Rue Lalande, 75014 Paris, France",48.8343897,2.3284591
+"rue+Larochelle,Paris,France","Rue Larochelle, 75014 Paris, France",48.839167,2.3236875
+"rue+Wilfrid+Laurier,Paris,France","Rue Wilfrid Laurier, 75014 Paris, France",48.8267484,2.3066134
+"rue+du+General+Sere+de+Rivieres,Paris,France","Rue du General Sere de Rivieres, 75014 Paris, France",48.8258096,2.3111842
+"rue+Maurice+Rouvier,Paris,France","Rue Maurice Rouvier, 75014 Paris, France",48.8308632,2.3100844
+"rue+Sarrette,Paris,France","Rue Sarrette, 75014 Paris, France",48.8262211,2.3291275
+"villa+Adrienne+Simon,Paris,France","Villa Adrienne Simon, 75014 Paris, France",48.8350878,2.3280243
+"rue+Albert+Sorel,Paris,France","Rue Albert Sorel, 75014 Paris, France",48.8234339,2.3222622
+"rue+Vandamme,Paris,France","Rue Vandamme, 75014 Paris, France",48.839527,2.3228812
+"place+de+la+Porte+de+Vanves,Paris,France","Place de la Porte de Chatillon, 75014 Paris, France",48.8242392,2.3187362
+"passage+de+la+Tour+de+Vanves,Paris,France","Passage de la Tour de Vanves, 75014 Paris, France",48.8347349,2.3232131
+"square+de+la+Porte+de+Vanves,Paris,France","Porte de Vanves, 75014 Paris, France",48.827571,2.305935
+"rue+du+Moulin+Vert,Paris,France","Rue du Moulin Vert, 75014 Paris, France",48.8303145,2.3220079
+"voie+CG/17,Paris,France","Paris, France",48.856614,2.3522219
+"rue+Blanche-Antoinette,Paris,France","Rue Blanche-Antoinette, 75019 Paris, France",48.8821352,2.3900002
+"rue+des+Ardennes,Paris,France","Rue des Ardennes, 75019 Paris, France",48.8887521,2.3859427
+"rue+des+Sept+Arpents,Paris,France","Rue des Sept Arpents, 75019 Paris, France",48.8895065,2.3983288
+"rue+Alphonse+Aulard,Paris,France","Rue Alphonse Aulard, 75019 Paris, France",48.8805375,2.3996587
+"rue+Barbanegre,Paris,France","Rue Barbanegre, 75019 Paris, France",48.8928527,2.3838731
+"place+Auguste+Baron,Paris,France","Place Auguste Baron, 75019 Paris, France",48.9001355,2.3873175
+"villa+Remi+Belleau,Paris,France","Villa Remi Belleau, 75019 Paris, France",48.8851642,2.3773427
+"rue+Bellot,Paris,France","Rue Bellot, Paris, France",48.8860569,2.3674546
+"voie+BG/19,Paris,France","Paris, France",48.856614,2.3522219
+"passage+Binder,Paris,France","Passage Binder, 75019 Paris, France",48.8843022,2.3825701
+"passage+Trubert-Bellier,Paris,France","Passage Trubert-Bellier, 75013 Paris, France",48.8244666,2.3511426
+"rue+du+Dessous+des+Berges,Paris,France","Rue du Dessous des Berges, 75013 Paris, France",48.8270849,2.3742086
+"rue+de+la+Maison+Blanche,Paris,France","Rue de la Maison Blanche, 75013 Paris, France",48.82593989999999,2.3581046
+"avenue+Leon+Bollee,Paris,France","Avenue Leon Bollee, 75013 Paris, France",48.8179705,2.362025
+"rue+Fernand+Braudel,Paris,France","Rue Fernand Braudel, 75013 Paris, France",48.8356308,2.3729798
+"rue+Le+Brun,Paris,France","Rue le Brun, Paris, France",48.8363064,2.3548484
+"rue+Gerty+Archimede,Paris,France","Rue Gerty Archimede, 75012 Paris, France",48.8354062,2.387736
+"rue+du+Docteur+Lucas-Championniere,Paris,France","Rue du Dr Lucas-Championniere, 75013 Paris, France",48.8227233,2.3548324
+"rue+Charcot,Paris,France","Rue Charcot, 75013 Paris, France",48.8307277,2.3711636
+"rue+de+Croulebarbe,Paris,France","Rue de Croulebarbe, 75013 Paris, France",48.8326179,2.3508998
+"avenue+d'Ivry,Paris,France","Avenue d'Ivry, 75013 Paris, France",48.8237768,2.3648133
+"quai+d'Ivry,Paris,France","Quai d'Ivry, 75013 Paris, France",48.8262398,2.3869767
+"rue+Jenner,Paris,France","Rue Jenner, 75013 Paris, France",48.8354939,2.3619141
+"rue+Jonas,Paris,France","Rue Jonas, 75013 Paris, France",48.828944,2.3504074
+"rue+du+Jura,Paris,France","Rue du Jura, Paris, France",48.8374182,2.3560434
+"rue+Kuss,Paris,France","Rue Kuss, 75013 Paris, France",48.8221717,2.3514565
+"rue+Lahire,Paris,France","Rue Lahire, 75013 Paris, France",48.8296888,2.3663371
+"rue+Dupuy+De+Lome,Paris,France","Rue Dupuy de Lome, 75013 Paris, France",48.8214784,2.3711735
+"place+Albert+Londres,Paris,France","Place Albert Londres, 75013 Paris, France",48.8241425,2.3630372
+"rue+Edouard+Manet,Paris,France","Rue Edouard Manet, 75013 Paris, France",48.83283669999999,2.3577882
+"rue+de+la+Vistule,Paris,France","Rue de la Vistule, 75013 Paris, France",48.8233673,2.360641
+"voie+Y/13,Paris,France","13Z Voie Communale en 19, 75019 Paris, France",48.8997505,2.3780913
+"boulevard+Arago,Paris,France","Boulevard Arago, Paris, France",48.83483830000001,2.3422845
+"rue+Colette+Magny,Paris,France","Rue Colette Magny, 75019 Paris, France",48.8949858,2.3762637
+"rue+de+l'Empereur+Valentinien,Paris,France","Rue de l'Empereur Valentinien, 75014 Paris, France",48.8262268,2.3376725
+"voie+AR/14,Paris,France","Paris, 14380, France",48.943447,-1.055286
+"rue+d'Arcueil,Paris,France","Rue d'Arcueil, 75014 Paris, France",48.820455,2.3428399
+"voie+AS/14,Paris,France","Paris, 14380, France",48.943447,-1.055286
+"voie+AV/14,Paris,France","14 Avenue la Voie Lactee, 92100 Boulogne-Billancourt, France",48.833372,2.260227
+"voie+AX/14,Paris,France","Paris, 14380, France",48.943447,-1.055286
+"rue+de+Laborde,Paris,France","Rue de Laborde, 75008 Paris, France",48.8756822,2.3196154
+"rue+Chauveau-Lagarde,Paris,France","Rue Chauveau Lagarde, 75008 Paris, France",48.87147479999999,2.3231807
+"rue+de+Lisbonne,Paris,France","Rue de Lisbonne, 75008 Paris, France",48.8776107,2.3125577
+"passage+de+la+Madeleine,Paris,France","Passage de la Madeleine, 75008 Paris, France",48.8709292,2.3237962
+"rue+Thiers,Paris,France","Rue Thiers, 75116 Paris, France",48.8666408,2.2771182
+"rue+Robert+Turquan,Paris,France","Rue Robert Turquan, 75016 Paris, France",48.8527752,2.2664702
+"voie+V/16,Paris,France","16 Voie Georges Pompidou, 75004 Paris, France",48.8542062,2.3548685
+"rue+de+Varize,Paris,France","Rue de Varize, 75016 Paris, France",48.8413119,2.2575831
+"rue+Henry+De+La+Vaulx,Paris,France","Rue Henry de la Vaulx, 75016 Paris, France",48.8350088,2.2592277
+"avenue+de+Versailles,Paris,France","Avenue de Versailles, 75016 Paris, France",48.8440139,2.2703012
+"rue+de+l'Armorique,Paris,France","Rue de l'Armorique, 75015 Paris, France",48.8396351,2.3147488
+"rue+de+l'Arrivee,Paris,France","Rue de l'Arrivee, 75015 Paris, France",48.8430444,2.3220046
+"rue+d'Arsonval,Paris,France","Rue d'Arsonval, 75015 Paris, France",48.8403065,2.3133159
+"rue+du+General+Baratier,Paris,France","Rue du General Baratier, 75015 Paris, France",48.850599,2.299816
+"rue+Paul+Barruel,Paris,France","Rue Paul Barruel, 75015 Paris, France",48.8383735,2.3054201
+"avenue+Albert+Bartholome,Paris,France","Avenue Albert Bartholome, 75015 Paris, France",48.8284637,2.2966535
+"rue+Jacques+Baudry,Paris,France","Rue Jacques Baudry, 75015 Paris, France",48.8289277,2.3042535
+"rue+Bausset,Paris,France","Rue Bausset, 75015 Paris, France",48.8394395,2.2987887
+"rue+Beaugrenelle,Paris,France","Rue Beaugrenelle, 75015 Paris, France",48.84803100000001,2.2844822
+"place+du+General+Beuret,Paris,France","Place du General Beuret, 75015 Paris, France",48.8419018,2.3029667
+"rue+du+General+Beuret,Paris,France","Rue du General Beuret, 75015 Paris, France",48.8407562,2.302464000000001
+"place+Bienvenue,Paris,France","Place Bienvenue, 75015 Paris, France",48.8426564,2.3204991
+"rue+Blomet,Paris,France","Rue Blomet, 75015 Paris, France",48.8409462,2.3006326
+"rue+Borromee,Paris,France","Rue Borromee, 75015 Paris, France",48.8414916,2.3049419
+"rue+Lucien+Bossoutrot,Paris,France","Rue Lucien Bossoutrot, 75015 Paris, France",48.8369464,2.2723203
+"rue+Marguerite+Boucicaut,Paris,France","Rue Boucicaut, 75015 Paris, France",48.8423574,2.2862576
+"avenue+Pierre+Masse,Paris,France","Avenue Pierre Masse, Paris, France",48.8172047,2.3343105
+"rue+Emile+Deutsch+de+La+Meurthe,Paris,France","Rue Emile Deutsch de la Meurthe, 75014 Paris, France",48.82198529999999,2.3347324
+"rue+Auguste+Mie,Paris,France","Rue Auguste Mie, 75014 Paris, France",48.8369639,2.3234842
+"rue+Montbrun,Paris,France","Rue Montbrun, 75014 Paris, France",48.8286411,2.3301253
+"rue+du+Parc+de+Montsouris,Paris,France","Rue du Parc de Montsouris, 75014 Paris, France",48.822619,2.3351558
+"rue+Morere,Paris,France","Rue Morere, 75014 Paris, France",48.8245355,2.3225243
+"avenue+Jean+Moulin,Paris,France","Avenue Jean Moulin, 75014 Paris, France",48.82632460000001,2.3233176
+"villa+d'Orleans,Paris,France","Villa d'Orleans, 75014 Paris, France",48.82862129999999,2.3285049
+"rue+Pauly,Paris,France","Rue Pauly, 75014 Paris, France",48.8309649,2.3123412
+"rue+Eugene+Pelletan,Paris,France","Rue Eugene Pelletan, 75014 Paris, France",48.8349449,2.3293096
+"rue+Pernety,Paris,France","Rue Pernety, 75014 Paris, France",48.8339568,2.3181455
+"villa+des+Plantes,Paris,France","Villa des Plantes, 75014 Paris, France",48.8302585,2.3230347
+"rue+Poinsot,Paris,France","Rue Poinsot, 75014 Paris, France",48.8408884,2.3233382
+"rue+Francis+De+Pressense,Paris,France","Rue Francis de Pressense, 75014 Paris, France",48.833861,2.3165759
+"square+Auguste+Renoir,Paris,France","Square Auguste Renoir, 75014 Paris, France",48.8278931,2.3089514
+"avenue+Andre+Rivoire,Paris,France","Rue Andre Rivoire, 92240 Malakoff, France",48.8104712,2.2913843
+"avenue+Rockefeller,Paris,France","Avenue Rockefeller, 75014 Paris, France",48.8195639,2.3390392
+"allee+Rodenbach,Paris,France","Allee Rodenbach, 75014 Paris, France",48.8338167,2.3379017
+"rue+du+Texel,Paris,France","Rue du Texel, 75014 Paris, France",48.8364003,2.3202396
+"avenue+de+la+Porte+de+Vanves,Paris,France","Avenue de la Porte de Sevres, 75015 Paris, France",48.8343635,2.2772739
+"impasse+du+Moulin+Vert,Paris,France","Impasse du Moulin Vert, 75014 Paris, France",48.82912899999999,2.324536
+"rue+du+Professeur+Hyacinthe+Vincent,Paris,France","Rue du Professeur Hyacinthe Vincent, 75014 Paris, France",48.819576,2.3295493
+"rue+Jean+Zay,Paris,France","Rue Jean Zay, 75014 Paris, France",48.8375745,2.3217002
+"place+des+Cinq+Martyrs+du+Lycee+Buffon,Paris,France","Place des Cinq Martyrs du Lycee Buffon, Paris, France",48.8385417,2.3174245
+"voie+AA/19,Paris,France","Paris, France",48.856614,2.3522219
+"boulevard+d'Algerie,Paris,France","Boulevard d'Algerie, 75019 Paris, France",48.8811009,2.4000421
+"impasse+des+Anglais,Paris,France","Impasse des Anglais, 75019 Paris, France",48.8891065,2.3756549
+"rue+des+Annelets,Paris,France","Rue des Annelets, 75019 Paris, France",48.8780453,2.3894887
+"voie+BR/14,Paris,France","14 Voie 24, 75015 Paris, France",48.83815999999999,2.3146438
+"voie+AP/19,Paris,France","Paris, France",48.856614,2.3522219
+"cours+du+Septieme+Art,Paris,France","Cours du 7eme art, 75019 Paris, France",48.878143,2.3868333
+"passage+de+l'Atlas,Paris,France","Passage de l'Atlas, 75019 Paris, France",48.8752011,2.3767893
+"avenue+du+Belvedere,Paris,France","Avenue du Belvedere, Paris, France",48.8807097,2.4070639
+"sente+a+Bigot,Paris,France","Sente a Bigot, 75019 Paris, France",48.9011328,2.3848817
+"place+de+Bitche,Paris,France","Place de Bitche, 75019 Paris, France",48.8890682,2.3793809
+"rue+Sidi+Brahim,Paris,France","Rue Sidi Brahim, 75012 Paris, France",48.8387327,2.3999204
+"sentier+Briens,Paris,France","Sentier Briens, 75012 Paris, France",48.8436211,2.4021394
+"voie+BY/12,Paris,France","BY/12, 75012 Paris, France",48.8377192,2.3826512
+"passerelle+BZ/12,Paris,France","Paris, France",48.856614,2.3522219
+"voie+CH/12,Paris,France","12 Avenue la Voie Lactee, 92100 Boulogne-Billancourt, France",48.833367,2.2602664
+"rue+Chaligny,Paris,France","Rue Chaligny, 75012 Paris, France",48.8470063,2.3837823
+"rue+de+Chalon,Paris,France","Rue de Chalon, 75012 Paris, France",48.8445526,2.3766425
+"passage+du+Charolais,Paris,France","Passage du Charolais, 75012 Paris, France",48.8406802,2.3870338
+"rue+Michel+Chasles,Paris,France","Rue Michel Chasles, 75012 Paris, France",48.8469209,2.3738662
+"passage+Chaussin,Paris,France","Passage Chaussin, 75012 Paris, France",48.8392369,2.4016117
+"rue+de+Citeaux,Paris,France","Rue de Citeaux, 75012 Paris, France",48.8484078,2.3808428
+"voie+CJ/12,Paris,France","Paris, France",48.856614,2.3522219
+"voie+CN/12,Paris,France","Paris, France",48.856614,2.3522219
+"carrefour+de+la+Conservation,Paris,France","Avenue de la Conservation, 75020 Paris, France",48.85969069999999,2.3894655
+"square+Georges+Contenot,Paris,France","Square Georges Contenot, 75012 Paris, France",48.8370535,2.3961985
+"rue+de+Cotte,Paris,France","Rue de Cotte, 75012 Paris, France",48.8494074,2.377635
+"avenue+Courteline,Paris,France","Avenue Courteline, 75012 Paris, France",48.8439966,2.413081500000001
+"rue+Cremieux,Paris,France","Rue Cremieux, 75012 Paris, France",48.8469173,2.3709433
+"voie+CW/12,Paris,France","Paris, France",48.856614,2.3522219
+"avenue+Daumesnil,Paris,France","Avenue Daumesnil, Paris, France",48.8376631,2.400815300000001
+"voie+DB/12,Paris,France","12U Voie 24, 75015 Paris, France",48.83809249999999,2.3147169
+"rue+Maurice+Denis,Paris,France","Rue Maurice Denis, 75012 Paris, France",48.8447007,2.3788124
+"rue+Sainte-Claire+Deville,Paris,France","Rue Sainte-Claire Deville, 75012 Paris, France",48.8441184,2.3872195
+"voie+DI/12,Paris,France","Voie Georges Pompidou, 75004 Paris, France",48.862976,2.323793
+"passage+Driancourt,Paris,France","Passage Driancourt, 75012 Paris, France",48.8493045,2.3810873
+"rue+Dubrunfaut,Paris,France","Rue Dubrunfaut, 75012 Paris, France",48.83997220000001,2.39027
+"rue+Dugommier,Paris,France","Rue Dugommier, 75012 Paris, France",48.8396701,2.3909358
+"rue+Ebelmen,Paris,France","Rue Ebelmen, 75012 Paris, France",48.8438189,2.3874117
+"place+Felix+Eboue,Paris,France","Place Felix Eboue, 75012 Paris, France",48.8395254,2.3960932
+"route+de+l'Esplanade,Paris,France","Route de l'Esplanade, 75012 Paris, France",48.8403956,2.4305299
+"route+de+l'Etang,Paris,France","Chaussee de l'Etang, Paris, France",48.8401398,2.4205627
+"route+de+la+Faluere,Paris,France","Route de la Faluere, 75012 Paris, France",48.8323721,2.4418714
+"rue+du+Gabon,Paris,France","Rue du Gabon, 75012 Paris, France",48.84537779999999,2.4092146
+"rue+Emile+Gilbert,Paris,France","Rue Emile Gilbert, 75012 Paris, France",48.8463265,2.373232
+"La+Porte+Jaune,Paris,France","Route de la Porte Jaune, 75012 Paris, France",48.84111619999999,2.4563782
+"route+de+la+Porte+Jaune,Paris,France","Route de la Porte Jaune, 75012 Paris, France",48.84111619999999,2.4563782
+"rue+Elisa+Lemonnier,Paris,France","Rue Elisa Lemonnier, 75012 Paris, France",48.8404935,2.3898554
+"sentier+de+la+Lieutenance,Paris,France","Sentier de la Lieutenance, 75012 Paris, France",48.8417576,2.4087564
+"rue+Hector+Malot,Paris,France","Rue Hector Malot, 75012 Paris, France",48.8462737,2.3761681
+"route+des+Pelouses+Marigny,Paris,France","Route des Pelouses Marigny, 75012 Paris, France",48.84510419999999,2.4423929
+"route+des+Merisiers,Paris,France","Route des Merisiers, 75012 Paris, France",48.8320357,2.4606416
+"cour+du+Minervois,Paris,France","Cour du Minervois, 75012 Paris, France",48.831806,2.38687
+"avenue+des+Minimes,Paris,France","Avenue des Minimes, Paris, France",48.8402804,2.4399159
+"sentier+de+Montempoivre,Paris,France","Sentier de Montempoivre, 75012 Paris, France",48.8402866,2.401571
+"rue+Montgallet,Paris,France","Rue Montgallet, 75012 Paris, France",48.8435139,2.3877669
+"impasse+Mousset,Paris,France","Impasse Mousset, 75012 Paris, France",48.8453009,2.3906684
+"route+du+Parc,Paris,France","Route du Parc, 75012 Paris, France",48.8251319,2.4209997
+"rue+de+Picpus,Paris,France","Rue de Picpus, 75012 Paris, France",48.8417096,2.3983793
+"ruelle+de+la+Planchette,Paris,France","Ruelle de la Planchette, 75012 Paris, France",48.8393475,2.3883475
+"route+de+la+Pompadour,Paris,France","Route de la Pompadour, 75012 Paris, France",48.8263078,2.4286696
+"route+de+la+Pyramide,Paris,France","Route de la Pyramide, Paris, France",48.8302112,2.4502342
+"rue+de+Rambervillers,Paris,France","Rue de Rambervillers, 75012 Paris, France",48.8413465,2.4064432
+"rue+de+Rambouillet,Paris,France","Rue de Rambouillet, 75012 Paris, France",48.8436149,2.3797847
+"quai+de+la+Rapee,Paris,France","Quai de la Rapee, 75012 Paris, France",48.84655900000001,2.365875
+"rue+Jean+Renoir,Paris,France","Rue Jean Renoir, 75012 Paris, France",48.8368061,2.3828186
+"route+de+Reuilly,Paris,France","Route de Reuilly, 75012 Paris, France",48.8299934,2.4041374
+"rue+Taine,Paris,France","Rue Taine, 75012 Paris, France",48.8385557,2.3931746
+"rue+Claude+Tillier,Paris,France","Rue Claude Tillier, 75012 Paris, France",48.8483736,2.3883171
+"rue+de+Toul,Paris,France","Rue de Toul, 75012 Paris, France",48.8392339,2.4025761
+"rue+Tourneux,Paris,France","Rue Tourneux, 75012 Paris, France",48.8378021,2.3987902
+"avenue+du+Tremblay,Paris,France","Avenue du Tremblay, 75012 Paris, France",48.8329537,2.4563813
+"rue+Francois+Truffaut,Paris,France","Rue Francois Truffaut, 75012 Paris, France",48.8335137,2.3862887
+"impasse+Vassou,Paris,France","Impasse Vassou, 75012 Paris, France",48.8463568,2.4078783
+"rue+Villiot,Paris,France","Rue Villiot, 75012 Paris, France",48.8416141,2.375415
+"allee+Vivaldi,Paris,France","Allee Vivaldi, 75012 Paris, France",48.8416523,2.3907718
+"rue+Antoine+Vollon,Paris,France","Rue Antoine Vollon, 75012 Paris, France",48.8504656,2.3768055
+"impasse+de+Wattignies,Paris,France","Impasse de Wattignies, 75012 Paris, France",48.8347656,2.3995465
+"pont+National,Paris,France","Pont National, Paris, France",48.8279615,2.3871936
+"boulevard+Peripherique,Paris,France","Boulevard Peripherique, Paris, France",48.8224942,2.3150128
+"cours+de+Vincennes,Paris,France","Cours de Vincennes, Paris, France",48.8476524,2.404927
+"rue+Albert+Einstein,Paris,France","Rue Albert Einstein, 75013 Paris, France",48.8267547,2.3819399
+"place+Paul+Delouvrier,Paris,France","Place Paul Delouvrier, 75019 Paris, France",48.8919674,2.3850032
+"place+Renee+Vivien,Paris,France","Place Renee Vivien, 75003 Paris, France",48.8617704,2.3571053
+"voie+EN/19,Paris,France","19 Voie Georges Pompidou, 75004 Paris, France",48.8542102,2.3548962
+"rue+Emilie+du+Chatelet,Paris,France","Rue Emilie du Chatelet, 75013 Paris, France",48.8260318,2.380163
+"place+Antoine+Furetiere,Paris,France","Paris, France",48.856614,2.3522219
+"voie+FI/13,Paris,France","La Voie Des Livres, 93 Rue de la Reunion, 75020 Paris, France",48.8565401,2.4001226
+"voie+FM/13,Paris,France","Paris, France",48.856614,2.3522219
+"esplanade+Pierre+Vidal-Naquet,Paris,France","Espl. Pierre Vidal-Naquet, 75013 Paris, France",48.8296402,2.3814852
+"rue+Lounes+Matoub,Paris,France","Rue Lounes Matoub, 75019 Paris, France",48.8993124,2.376271
+"place+Marthe+Simard,Paris,France","Paris, France",48.856614,2.3522219
+"villa+du+Vieux+Chemin+d'Ivry,Paris,France","Quai d'Ivry, 75013 Paris, France",48.8262398,2.3869767
+"esplanade+Roger+Linet,Paris,France","Espl. Roger Linet, 75011 Paris, France",48.8678569,2.3778049
+"voie+DQ/12,Paris,France","12U Voie 24, 75015 Paris, France",48.83809249999999,2.3147169
+"voie+DR/12,Paris,France","12 Avenue la Voie Lactee, 92100 Boulogne-Billancourt, France",48.833367,2.2602664
+"voie+BX/17,Paris,France","Paris, France",48.856614,2.3522219
+"voie+BY/17,Paris,France","Paris, France",48.856614,2.3522219
+"voie+FV/13,Paris,France","Paris, France",48.856614,2.3522219
+"voie+EP/19,Paris,France","Paris, France",48.856614,2.3522219
+"voie+BZ/17,Paris,France","Paris, France",48.856614,2.3522219
+"voie+CB/17,Paris,France","Paris, France",48.856614,2.3522219
+"place+Louis+Baillot,Paris,France","Paris, France",48.856614,2.3522219
+"rue+de+Cambrai,Paris,France","Rue de Cambrai, 75019 Paris, France",48.8959218,2.3797975
+"place+Armand+Carrel,Paris,France","Place Armand Carrel, 75019 Paris, France",48.8826657,2.382082
+"square+La+Champmesle,Paris,France","Square de la Champmesle, 75019 Paris, France",48.8873832,2.3905147
+"rue+Nicole+Chouraqui,Paris,France","Rue Nicole Chouraqui, 75019 Paris, France",48.8860208,2.3805949
+"rue+Clavel,Paris,France","Rue Clavel, Paris, France",48.8753,2.3840955
+"rue+Eugenie+Cotton,Paris,France","Rue Eugenie Cotton, 75019 Paris, France",48.8788068,2.3945606
+"rue+Andre+Danjon,Paris,France","Rue Andre Danjon, 75019 Paris, France",48.8852349,2.3845838
+"voie+DE/19,Paris,France","19 Voie Georges Pompidou, 75004 Paris, France",48.8542102,2.3548962
+"place+des+Victoires,Paris,France","Place des Victoires, Paris, France",48.8658061,2.3409422
+"place+du+Chatelet,Paris,France","Place du Chatelet, 75001 Paris, France",48.8575859,2.3469754
+"rue+de+La+Reynie,Paris,France","Rue de la Reynie, Paris, France",48.86002449999999,2.3490525
+"rue+de+Rivoli,Paris,France","Rue de Rivoli, Paris, France",48.8604502,2.3422212
+"boulevard+de+la+Madeleine,Paris,France","Boulevard de la Madeleine, Paris, France",48.869646,2.3262732
+"passage+Ben-Aiad,Paris,France","Passage Ben Aiad, 75002 Paris, France",48.8662397,2.3461505
+"passage+Sainte-Anne,Paris,France","Passage Sainte-Anne, 75002 Paris, France",48.8680834,2.3355673
+"rue+Bachaumont,Paris,France","Rue Bachaumont, 75002 Paris, France",48.865968,2.3460693
+"rue+de+la+Banque,Paris,France","Rue de la Banque, 75002 Paris, France",48.8674532,2.3406882
+"rue+Beauregard,Paris,France","Rue Beauregard, 75002 Paris, France",48.8692982,2.3497172
+"voie+B/3,Paris,France","3 Voie Georges Pompidou, 75015 Paris, France",48.8357378,2.2680466
+"rue+Bailly,Paris,France","Rue Bailly, 75003 Paris, France",48.8650579,2.3562586
+"rue+Barbette,Paris,France","Rue Barbette, 75003 Paris, France",48.85887229999999,2.3606579
+"passage+du+Pont+Aux+Biches,Paris,France","Passage du Pont aux Biches, 75003 Paris, France",48.8677119,2.358653
+"rue+Borda,Paris,France","Rue Borda, 75003 Paris, France",48.866234,2.3571715
+"passage+Brantome,Paris,France","Passage Brantome, 75003 Paris, France",48.8615837,2.3525655
+"rue+de+Braque,Paris,France","Rue de Braque, 75003 Paris, France",48.8609018,2.356778
+"rue+Chapon,Paris,France","Rue Chapon, 75003 Paris, France",48.8635191,2.3557355
+"rue+de+Franche+Comte,Paris,France","Rue de Franche Comte, 75003 Paris, France",48.8646113,2.3638778
+"rue+de+Hesse,Paris,France","Rue de Hesse, 75003 Paris, France",48.85906079999999,2.3656295
+"passage+Moliere,Paris,France","Passage Moliere, 75003 Paris, France",48.8622989,2.3515768
+"rue+Notre-Dame+de+Nazareth,Paris,France","Rue Notre Dame de Nazareth, Paris, France",48.8675927,2.3574099
+"cite+Noel,Paris,France","Cite Noel, 75003 Paris, France",48.8612407,2.3545735
+"rue+Payenne,Paris,France","Rue Payenne, Paris, France",48.8579779,2.3622922
+"rue+Perree,Paris,France","Rue Perree, 75003 Paris, France",48.8645049,2.3615934
+"impasse+de+la+Planchette,Paris,France","Impasse de la Planchette, 75003 Paris, France",48.8683237,2.3556971
+"rue+de+Poitou,Paris,France","Rue de Poitou, 75003 Paris, France",48.8615777,2.3627285
+"rue+de+Thorigny,Paris,France","Rue de Thorigny, 75003 Paris, France",48.8598768,2.3629717
+"rue+Roger+Verlomme,Paris,France","Rue Roger Verlomme, 75003 Paris, France",48.856711,2.3666753
+"rue+de+Madrid,Paris,France","Rue de Madrid, 75008 Paris, France",48.8782936,2.3200101
+"cour+de+Rome,Paris,France","Cour de Rome, 75008 Paris, France",48.8758098,2.3242858
+"rue+de+Turin,Paris,France","Rue de Turin, 75008 Paris, France",48.8811596,2.3246527
+"rue+du+Havre,Paris,France","Rue du Havre, Paris, France",48.8748371,2.3267762
+"rue+des+Mathurins,Paris,France","Rue des Mathurins, Paris, France",48.8731823,2.3261165
+"place+Charles+De+Gaulle,Paris,France","Place Charles de Gaulle, Paris, France",48.87323139999999,2.2946495
+"rue+de+l'Aqueduc,Paris,France","Rue de l'Aqueduc, 75010 Paris, France",48.8819126,2.3628668
+"place+Jacques+Bonsergent,Paris,France","Place Jacques Bonsergent, 75010 Paris, France",48.8711471,2.3610096
+"rue+Pierre+Bullet,Paris,France","Rue Pierre Bullet, 75010 Paris, France",48.87163899999999,2.3580826
+"rue+de+Chabrol,Paris,France","Rue de Chabrol, 75010 Paris, France",48.8769377,2.3525318
+"rue+Chaudron,Paris,France","Rue Chaudron, 75010 Paris, France",48.8831981,2.3656376
+"cour+de+la+Grace+de+Dieu,Paris,France","Cour de la Grace de Dieu, 75010 Paris, France",48.8718282,2.3755099
+"cour+des+Petites+Ecuries,Paris,France","Cour des Petites Ecuries, 75010 Paris, France",48.8726202,2.3527838
+"rue+d'Enghien,Paris,France","Rue d'Enghien, 75010 Paris, France",48.8720157,2.3507161
+"rue+Fenelon,Paris,France","Rue Fenelon, 75010 Paris, France",48.8786896,2.3514376
+"rue+Henri+Feulard,Paris,France","Rue Henri Feulard, Paris, France",48.8752991,2.3731591
+"passage+Hebrard,Paris,France","Passage Hebrard, 75010 Paris, France",48.8729848,2.3725842
+"rue+Francis+Jammes,Paris,France","Rue Francis Jammes, 75010 Paris, France",48.878355,2.368237
+"rue+Jarry,Paris,France","Rue Jarry, 75010 Paris, France",48.8739917,2.3560194
+"rue+Saint-Laurent,Paris,France","Rue Saint-Laurent, 75010 Paris, France",48.8755071,2.357834
+"passage+du+Marche,Paris,France","Passage du Marche, 75010 Paris, France",48.8710175,2.3573855
+"rue+Martel,Paris,France","Rue Martel, 75010 Paris, France",48.8740082,2.3530084
+"rue+Ambroise+Pare,Paris,France","Rue Ambroise Pare, 75010 Paris, France",48.8819268,2.352721
+"rue+Alexandre+Parodi,Paris,France","Rue Alexandre Parodi, 75010 Paris, France",48.8798082,2.3655204
+"rue+Guy+Patin,Paris,France","Rue Guy Patin, 75010 Paris, France",48.8827901,2.3511805
+"rue+Jean+Poulmarch,Paris,France","Rue Jean Poulmarch, 75010 Paris, France",48.87243429999999,2.3635022
+"place+Dulcie+September,Paris,France","Rue Dulcie September, 93400 Saint-Ouen, France",48.9057363,2.3209023
+"avenue+Claude+Vellefaux,Paris,France","Avenue Claude Vellefaux, 75010 Paris, France",48.8746502,2.3703199
+"rue+du+Faubourg+Du+Temple,Paris,France","Rue du Faubourg du Temple, Paris, France",48.8698407,2.3705525
+"cite+d'Angouleme,Paris,France","Cite d'Angouleme, 75011 Paris, France",48.8663197,2.3748502
+"passage+Saint-Antoine,Paris,France","Passage Saint-Antoine, 75011 Paris, France",48.8530935,2.3763809
+"passage+de+l'Asile,Paris,France","Passage de l'Asile, 75011 Paris, France",48.8595585,2.3746958
+"rue+de+Crussol,Paris,France","Rue de Crussol, 75011 Paris, France",48.86433539999999,2.3686534
+"rue+du+Dahomey,Paris,France","Rue du Dahomey, 75011 Paris, France",48.85116619999999,2.3823519
+"impasse+Delepine,Paris,France","Impasse Delepine, 75011 Paris, France",48.8530941,2.3893165
+"passage+Dudouy,Paris,France","Passage Dudouy, 75011 Paris, France",48.8625859,2.3808176
+"voie+F/11,Paris,France","11 Voie F, 93500 Pantin, France",48.9146899,2.4114942
+"passage+de+la+Bonne+Graine,Paris,France","Passage de la Bonne Graine, Paris, France",48.8519853,2.3770449
+"rue+Marcel+Gromaire,Paris,France","Rue Marcel Gromaire, 75011 Paris, France",48.8601319,2.3677966
+"rue+Guenot,Paris,France","Rue Guenot, 75011 Paris, France",48.8514415,2.3921982
+"rue+Robert-Houdin,Paris,France","Rue Robert-Houdin, 75011 Paris, France",48.8707304,2.3755166
+"rue+Saint-Hubert,Paris,France","Rue Saint-Hubert, 75011 Paris, France",48.863823,2.3796572
+"rue+du+Moulin+Joly,Paris,France","Rue du Moulin Joly, 75011 Paris, France",48.86949749999999,2.3785314
+"rue+Lacharriere,Paris,France","Rue Lacharriere, 75011 Paris, France",48.8616643,2.3773638
+"boulevard+Richard+Lenoir,Paris,France","Boulevard Richard Lenoir, 75011 Paris, France",48.8602414,2.372017
+"passage+Gustave+Lepeu,Paris,France","Passage Gustave Lepeu, 75011 Paris, France",48.85622069999999,2.3872234
+"rue+Emile+Lepeu,Paris,France","Rue Emile Lepeu, 75011 Paris, France",48.8558381,2.3880205
+"voie+BL/19,Paris,France","19 Avenue la Voie Lactee, 92100 Boulogne-Billancourt, France",48.833285,2.2601377
+"villa+des+Boers,Paris,France","Villa des Boers, 75019 Paris, France",48.8808585,2.3904148
+"square+des+Bouleaux,Paris,France","Square des Bouleaux, 75019 Paris, France",48.8821418,2.3756273
+"voie+BT/19,Paris,France","Paris, France",48.856614,2.3522219
+"rue+Burnouf,Paris,France","Rue Burnouf, Paris, France",48.8758271,2.3740743
+"villa+des+Buttes+Chaumont,Paris,France","Villa des Buttes Chaumont, 75019 Paris, France",48.8792899,2.3865281
+"avenue+de+la+Porte+Chaumont,Paris,France","Avenue de la Porte Chaumont, Paris, France",48.8861556,2.3967327
+"rue+de+la+Cloture,Paris,France","Rue de la Cloture, 75019 Paris, France",48.8974692,2.3942213
+"place+du+General+Cochet,Paris,France","Paris, France",48.856614,2.3522219
+"voie+CR/19,Paris,France","19 Avenue la Voie Lactee, 92100 Boulogne-Billancourt, France",48.833285,2.2601377
+"voie+CU/19,Paris,France","19 Voie Georges Pompidou, 75004 Paris, France",48.8542102,2.3548962
+"voie+CY/19,Paris,France","19 Voie Georges Pompidou, 75004 Paris, France",48.8542102,2.3548962
+"rue+David+d'Angers,Paris,France","Rue David d'Angers, 75019 Paris, France",48.88214850000001,2.3925218
+"allee+Gabrielle+D'Estrees,Paris,France","Allee Gabrielle d'Estrees, 75019 Paris, France",48.8735848,2.378959
+"rue+Dampierre,Paris,France","Rue Dampierre, 75019 Paris, France",48.8941048,2.3838311
+"villa+du+Danube,Paris,France","Villa du Danube, 75019 Paris, France",48.8812968,2.3947951
+"voie+DB/19,Paris,France","Paris, France",48.856614,2.3522219
+"avenue+Debidour,Paris,France","Avenue Debidour, 75019 Paris, France",48.8814187,2.3970733
+"voie+DH/19,Paris,France","19 Voie Georges Pompidou, 75004 Paris, France",48.8542102,2.3548962
+"rue+Marie-Andree+Lagroua+Weill-Halle,Paris,France","Rue Marie-Andree Lagroua Weill-Halle, 75013 Paris, France",48.8286743,2.3800865
+"allee+des+Eiders,Paris,France","Allee des Eiders, 75019 Paris, France",48.8938857,2.3787188
+"rue+de+l'Encheval,Paris,France","Rue de l'Encheval, 75019 Paris, France",48.87913640000001,2.3890944
+"passage+de+Flandre,Paris,France","Passage de Flandre, 75019 Paris, France",48.8870263,2.3737246
+"villa+Fleurie,Paris,France","Villa Fleurie, 75019 Paris, France",48.8777554,2.3867556
+"allee+de+Fontainebleau,Paris,France","Allee de Fontainebleau, 75019 Paris, France",48.8858292,2.3915753
+"quai+de+la+Gironde,Paris,France","Quai de la Gironde, 75019 Paris, France",48.8962448,2.3833518
+"passage+Goix,Paris,France","Passage Goix, 75019 Paris, France",48.8850373,2.3658651
+"voie+H/19,Paris,France","19 Voie Georges Pompidou, 75004 Paris, France",48.8542102,2.3548962
+"villa+d'Hauterive,Paris,France","Villa d'Hauterive, 75019 Paris, France",48.8813154,2.391437
+"rue+d'Hautpoul,Paris,France","Rue d'Hautpoul, 75019 Paris, France",48.8836622,2.3877355
+"rue+Emile+Borel,Paris,France","Rue Emile Borel, 75017 Paris, France",48.89946459999999,2.3223353
+"place+Boulnois,Paris,France","Place Boulnois, 75017 Paris, France",48.879288,2.295976
+"impasse+Boursault,Paris,France","Impasse Boursault, 75017 Paris, France",48.8829364,2.3205766
+"rue+Bremontier,Paris,France","Rue Bremontier, 75017 Paris, France",48.8846587,2.3040175
+"rue+du+Docteur+Paul+Brousse,Paris,France","Rue du Dr Paul Brousse, 75017 Paris, France",48.8954987,2.3184243
+"passage+Cardinet,Paris,France","Passage Cardinet, 75017 Paris, France",48.8860391,2.311242
+"place+du+General+Catroux,Paris,France","Place du General Catroux, 75017 Paris, France",48.8830615,2.3104605
+"rue+Alexandre+Charpentier,Paris,France","Rue Alexandre Charpentier, 75017 Paris, France",48.88435,2.2876611
+"villa+Sainte-Croix,Paris,France","Villa Sainte-Croix, 75017 Paris, France",48.8939652,2.324312
+"rue+Faraday,Paris,France","Rue Faraday, 75017 Paris, France",48.8819863,2.2931184
+"square+Gabriel+Faure,Paris,France","Square Gabriel Faure, 75017 Paris, France",48.884918,2.3134727
+"rue+Floreal,Paris,France","Rue Floreal, Paris, France",48.900292,2.3200978
+"rue+Fourcroy,Paris,France","Rue Fourcroy, 75017 Paris, France",48.8804536,2.2964427
+"rue+Broussais,Paris,France","Rue Broussais, 75014 Paris, France",48.8291012,2.3366219
+"rue+Cabanis,Paris,France","Rue Cabanis, 75014 Paris, France",48.8303053,2.3396795
+"rue+des+Camelias,Paris,France","Rue des Camelias, 75014 Paris, France",48.8288845,2.3087231
+"rue+Cassini,Paris,France","Rue Cassini, 75014 Paris, France",48.8373184,2.3365617
+"avenue+de+la+Porte+de+Chatillon,Paris,France","Avenue de la Porte de Sevres, 75015 Paris, France",48.8343635,2.2772739
+"rue+du+Pere+Corentin,Paris,France","Rue du Pere Corentin, 75014 Paris, France",48.8251935,2.329367
+"villa+Montcalm,Paris,France","Villa Montcalm, 75018 Paris, France",48.892987,2.3367588
+"rue+de+la+Moskova,Paris,France","Rue de la Moskova, 75018 Paris, France",48.896884,2.334564400000001
+"rue+du+Nord,Paris,France","Rue du N, 75018 Paris, France",48.892973,2.350579
+"place+Pierre+Mac+Orlan,Paris,France","Place Pierre Mac Orlan, 75018 Paris, France",48.8953879,2.3623221
+"square+Ornano,Paris,France","Square Ornano, 75018 Paris, France",48.8923919,2.3494462
+"rue+d'Orsel,Paris,France","Rue d'Orsel, 75018 Paris, France",48.8836758,2.3432278
+"rue+d'Oslo,Paris,France","Rue d'Oslo, 75018 Paris, France",48.8918883,2.3292296
+"voie+P/18,Paris,France","18 Avenue la Voie Lactee, 92100 Boulogne-Billancourt, France",48.833382,2.2601481
+"impasse+Pers,Paris,France","Impasse Pers, 75018 Paris, France",48.8898193,2.3456353
+"rue+Polonceau,Paris,France","Rue Polonceau, 75018 Paris, France",48.8858137,2.3525448
+"impasse+Raymond+Queneau,Paris,France","Impasse Raymond Queneau, 75018 Paris, France",48.89562170000001,2.3616605
+"rue+Ramey,Paris,France","Rue Ramey, 75018 Paris, France",48.8891984,2.3463389
+"passage+Ruelle,Paris,France","Paris, 83470 Seillons-Source-d'Argens, France",43.4939571,5.8930665
+"rue+Andre+Del+Sarte,Paris,France","Rue Andre del Sarte, 75018 Paris, France",48.8857688,2.34644
+"rue+Simart,Paris,France","Rue Simart, 75018 Paris, France",48.890851,2.3479175
+"rue+Stephenson,Paris,France","Rue Stephenson, 75018 Paris, France",48.8876729,2.3563043
+"rue+Camille+Tahan,Paris,France","Rue Camille Tahan, 75018 Paris, France",48.8868046,2.3288494
+"rue+Tchaikovski,Paris,France","Rue Tchaikovski, 75018 Paris, France",48.8949292,2.3649201
+"place+du+Tertre,Paris,France","Place du Tertre, Place du Tertre, 75018 Paris, France",48.88650320000001,2.3408022
+"rue+Gaston+Tissandier,Paris,France","Rue Gaston Tissandier, 75018 Paris, France",48.8990055,2.3664583
+"rue+Maurice+Utrillo,Paris,France","Rue Maurice Utrillo, 75018 Paris, France",48.8862579,2.3445396
+"place+Suzanne+Valadon,Paris,France","Place Suzanne Valadon, 75018 Paris, France",48.8844659,2.3424766
+"rue+Jean+Varenne,Paris,France","Rue Jean Varenne, 75018 Paris, France",48.8984278,2.3358707
+"cite+Veron,Paris,France","Cite Veron, 75018 Paris, France",48.88483,2.332291
+"rue+Versigny,Paris,France","Rue Versigny, 75018 Paris, France",48.8945801,2.3444119
+"voie+Z/18,Paris,France","18 Voie Georges Pompidou, 75004 Paris, France",48.8542125,2.3548903
+"rue+d'Aubervilliers,Paris,France","Rue d'Aubervilliers, Paris, France",48.89202359999999,2.3691863
+"avenue+de+la+Porte+d'Aubervilliers,Paris,France","Avenue de la Porte d'Aubervilliers, Paris, France",48.8998406,2.3702279
+"rue+Philippe+De+Champagne,Paris,France","Rue Philippe de Champagne, 75013 Paris, France",48.8328626,2.355557
+"rue+Charbonnel,Paris,France","Rue Charbonnel, 75013 Paris, France",48.82278849999999,2.3436341
+"impasse+Clisson,Paris,France","Impasse Clisson, 75013 Paris, France",48.8315444,2.3671342
+"rue+de+la+Colonie,Paris,France","Rue de la Colonie, 75013 Paris, France",48.8239917,2.3487502
+"rue+Coypel,Paris,France","Rue Coypel, 75013 Paris, France",48.83321180000001,2.3555575
+"rue+Jeanne+D'Arc,Paris,France","Rue Jeanne d'Arc, Paris, France",48.833526,2.363389
+"rue+Dalloz,Paris,France","Rue Dalloz, 75013 Paris, France",48.82185579999999,2.3704401
+"impasse+Damesme,Paris,France","Impasse Damesme, 75013 Paris, France",48.8224284,2.3556083
+"villa+Daviel,Paris,France","Villa Daviel, 75013 Paris, France",48.82753659999999,2.3463329
+"voie+DH/13,Paris,France","13Z Voie Communale en 19, 75019 Paris, France",48.8997505,2.3780913
+"rue+Dieulafoy,Paris,France","Rue Dieulafoy, 75013 Paris, France",48.8236571,2.3544821
+"voie+DL/13,Paris,France","13Z Voie Communale en 19, 75019 Paris, France",48.8997505,2.3780913
+"rue+de+Domremy,Paris,France","Rue de Domremy, 75013 Paris, France",48.8295874,2.3715388
+"voie+DU/13,Paris,France","13Z Voie Communale en 19, 75019 Paris, France",48.8997505,2.3780913
+"rue+Duchefdelaville,Paris,France","Rue Duchefdelaville, 75013 Paris, France",48.83202350000001,2.3703125
+"rue+Dunois,Paris,France","Rue Dunois, 75013 Paris, France",48.8317588,2.3682819
+"voie+DV/13,Paris,France","13Z Voie Communale en 19, 75019 Paris, France",48.8997505,2.3780913
+"voie+DX/13,Paris,France","13Z Voie Communale en 19, 75019 Paris, France",48.8997505,2.3780913
+"avenue+Edison,Paris,France","Avenue Edison, 75013 Paris, France",48.8292357,2.3607023
+"rue+Toussaint-Feron,Paris,France","Rue Toussaint-Feron, 75013 Paris, France",48.8270062,2.3580828
+"rue+de+Campo-Formio,Paris,France","Rue de Campo-Formio, 75013 Paris, France",48.8345603,2.35983
+"rue+Charles+Fourier,Paris,France","Rue Charles Fourier, 75013 Paris, France",48.82503519999999,2.351497
+"port+de+la+Gare,Paris,France","Port de la Gare, 75013 Paris, France",48.8348235,2.3771864
+"rue+Gerard,Paris,France","Rue Gerard, 75013 Paris, France",48.8292079,2.3519395
+"rue+Godefroy,Paris,France","Rue Godefroy, 75013 Paris, France",48.83194659999999,2.3575187
+"rue+Edmond+Gondinet,Paris,France","Rue Edmond Gondinet, 75013 Paris, France",48.8308246,2.3479099
+"rue+Pierre+Gourdault,Paris,France","Rue Pierre Gourdault, 75013 Paris, France",48.831445,2.3709689
+"rue+Albin+Haller,Paris,France","Rue Albin Haller, 75013 Paris, France",48.8225878,2.349092
+"rue+Abel+Hovelacque,Paris,France","Rue Abel Hovelacque, 75013 Paris, France",48.8319694,2.3527807
+"allee+Marcel+Jambenoire,Paris,France","Allee Marcel Jambenoire, 75013 Paris, France",48.820417,2.3471055
+"rue+de+la+Croix+Jarry,Paris,France","Rue de la Croix Jarry, 75013 Paris, France",48.82707509999999,2.3818918
+"rue+Auguste+Lancon,Paris,France","Rue Auguste Lancon, 75013 Paris, France",48.82320720000001,2.3447512
+"rue+Valery+Larbaud,Paris,France","Rue Valery Larbaud, 75013 Paris, France",48.8362043,2.3740568
+"rue+du+Docteur+Leray,Paris,France","Rue du Dr Leray, 75013 Paris, France",48.823353,2.3543524
+"rue+de+l'Interne+Loeb,Paris,France","Rue de l'Interne Loeb, 75013 Paris, France",48.822319,2.3540994
+"impasse+du+Credit+Lyonnais,Paris,France","Impasse du Credit Lyonnais, 75013 Paris, France",48.8201887,2.3447159
+"rue+des+Malmaisons,Paris,France","Rue des Malmaisons, 75013 Paris, France",48.8214267,2.3620703
+"passage+Victor+Marchand,Paris,France","Passage Victor Marchand, 75013 Paris, France",48.8288032,2.3422057
+"rue+Soeur+Catherine+Marie,Paris,France","Rue Soeur Catherine Marie, 75013 Paris, France",48.8298189,2.3429871
+"rue+Henri+Michaux,Paris,France","Rue Henri Michaux, 75013 Paris, France",48.8271841,2.3543132
+"villa+Nieuport,Paris,France","Villa Nieuport, 75013 Paris, France",48.82496030000001,2.371294
+"rue+Eugene+Oudine,Paris,France","Rue Eugene Oudine, 75013 Paris, France",48.8257524,2.3753447
+"rue+Henri+Pape,Paris,France","Rue Henri Pape, 75013 Paris, France",48.8243488,2.354387
+"square+des+Peupliers,Paris,France","Square des Peupliers, 75013 Paris, France",48.82539269999999,2.3535618
+"avenue+Stephen+Pichon,Paris,France","Avenue Stephen Pichon, 75013 Paris, France",48.83296989999999,2.3591618
+"rue+Ernest+Et+Henri+Rousselle,Paris,France","Rue Ernest et Henri Rousselle, 75013 Paris, France",48.8251142,2.3546441
+"rue+des+Tanneries,Paris,France","Rue des Tanneries, 75013 Paris, France",48.83344289999999,2.3459412
+"place+de+Venetie,Paris,France","Place Venetie, 75013 Paris, France",48.8213285,2.3643859
+"place+Paul+Verlaine,Paris,France","Place Paul Verlaine, 75013 Paris, France",48.8276514,2.3519407
+"rue+des+Freres+D'Astier+De+La+Vigerie,Paris,France","Rue des Freres d'Astier de la Vigerie, 75013 Paris, France",48.82403100000001,2.3631054
+"rue+des+Wallons,Paris,France","Rue des Wallons, 75013 Paris, France",48.838579,2.3595478
+"rue+Watt,Paris,France","Rue Watt, 75013 Paris, France",48.82746909999999,2.3810356
+"rue+Louise+Weiss,Paris,France","Rue Louise Weiss, 75013 Paris, France",48.8335705,2.370359
+"place+du+Docteur+Yersin,Paris,France","Place du Dr Yersin, 75013 Paris, France",48.8203101,2.3726253
+"rue+Zadkine,Paris,France","Rue Zadkine, 75013 Paris, France",48.83176659999999,2.3694884
