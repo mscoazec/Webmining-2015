@@ -356,31 +356,46 @@ for i in range(len(arrFeat)):
         
         arrFeat[i]["properties"]["gagnant"]["_nb_apparts"] = gagnant
         
-        max = -1;
+        min = 9999999999999;
         
         for s in sites:
             
             candidat = arrFeat[i]["properties"][s]["m_prix_surface"]
             
-            if candidat > max:
+            if (0 < candidat < min):
                 
                 gagnant = s
-                max = candidat
+                min = candidat
         
         arrFeat[i]["properties"]["gagnant"]["m_prix_surface"] = gagnant
         
         for j in range(len(labels)):
             
-            max = -1;
-            
-            for s in sites:
-            
-                candidat = arrFeat[i]["properties"][s]["m_"+labels[j]]
+            if (labels[j] == "prix"):
                 
-                if candidat > max:
+                min = 9999999999999;
+                
+                for s in sites:
                     
-                    gagnant = s
-                    max = candidat
+                    candidat = arrFeat[i]["properties"][s]["m_prix"]
+                    
+                    if (0 < candidat < min):
+                        
+                        gagnant = s
+                        min = candidat
+         
+            else:
+                
+                max = -1;
+                
+                for s in sites:
+                    
+                    candidat = arrFeat[i]["properties"][s]["m_"+labels[j]]
+                    
+                    if candidat > max:
+                        
+                        gagnant = s
+                        max = candidat
         
             arrFeat[i]["properties"]["gagnant"]["m_"+labels[j]] = gagnant
 

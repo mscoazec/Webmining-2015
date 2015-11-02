@@ -291,6 +291,8 @@
 			popupAnchor:  [0, 0] // point from which the popup should open relative to the iconAnchor
 		});
 		
+		mark = {}
+		
 		function highlightFeature(e) {
 			var layer = e.target;
 
@@ -307,11 +309,28 @@
 			
 			info.update(layer.feature.properties);
 			
-			s = layer.feature.properties.nom + '<br>' + '<br>';
-			s =  s + "Meilleurs offres sur : " + '<b>' + dicoSite[layer.feature.properties["gagnant"][currentLayer]]
+			console.log(layer.feature.properties.nom)
 			
-			polygon_center = layer.getBounds().getCenter();
-			L.marker([polygon_center.lat, polygon_center.lng], {icon: icones[layer.feature.properties["gagnant"][currentLayer]]}).addTo(map).bindPopup(s);
+			if (!(layer.feature.properties.nom in mark)) {
+			
+				s = layer.feature.properties.nom + '<br>' + '<br>'
+				s = s + "Meilleurs offres sur : " + '<b>' + dicoSite[layer.feature.properties["gagnant"][currentLayer]] + '<br>' + '<br>'
+				
+				s = s + '<table>'
+				
+				for (si in dicoSite) {
+				
+					s = s + '<tr> <td>' + dicoSite[si] + '</td>' + '<td> <b>' + layer.feature.properties[si][currentLayer] + '</td> </tr>'
+				
+				}
+				
+				s = s + '</table>'
+					
+				polygon_center = layer.getBounds().getCenter();
+				mark[layer.feature.properties.nom] = L.marker([polygon_center.lat, polygon_center.lng], {icon: icones[layer.feature.properties["gagnant"][currentLayer]]}).addTo(map).bindPopup(s);
+			
+			}
+			
 		}
 		
 		// mouseout event
@@ -345,11 +364,13 @@
 		// function to add the listeners
 		
 		function onEachFeature(feature, layer) {
+		
 			layer.on({
 				mouseover: highlightFeature,
 				mouseout: resetHighlight,
 				click: onMapClick
 			});
+			
 		}
 		
 		// add geojson data to map with style and listeners
@@ -532,6 +553,12 @@
 		map.on('baselayerchange', function (eventLayer) {
 			// change les légendes ...
 			this.removeControl(currentLegend);
+			
+			for (m in mark) {
+				this.removeLayer(mark[m]);
+			}
+			
+			mark = {}
 			
 			s = String(eventLayer.layer.options.style)
 			e = s.split(" ")[1]
