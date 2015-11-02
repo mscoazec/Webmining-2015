@@ -137,6 +137,30 @@ def traceHisto(yname):
     plt.savefig('hist_'+yname+'_all.png')
     plt.close("all")
     
+def traceHisto2(yname, tname):
+    
+    # affichage
+    plt.figure(figsize = (12,10))
+
+    # donnees    
+    y = data[:,labels.index(yname)]
+    t = data[:,labels.index(tname)]
+    
+    # trace du graphe
+    hist(y/t, bins=200)
+    
+    # gestion de l'affichage
+    plt.ylabel(yname,fontsize=14)
+    plt.grid(True)
+    title("Histogramme de repartition de '"+yname+"' sur le training set",
+          fontsize=18)
+    
+    # sauvegarde en png
+    plt.savefig('hist_'+yname+'_'+tname+'_all.png')
+    plt.close("all")
+    
+traceHisto2('prix', 'surface')
+    
 # fonction pour tracer des repartitions en fonction d'un parametre discret
 
 def traceHistoPar(yname, xname):
@@ -289,6 +313,8 @@ def traceMoustachePar(yname, xname, defini, y_min, y_max):
 traceHisto('prix')
 
 traceHisto('surface')
+
+traceHisto2('prix', 'surface')
 
 # prix en fonction de la surface
 

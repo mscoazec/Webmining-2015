@@ -372,3 +372,27 @@ traceMoustachePar('surface','arrondissement',  1, 400)
 # prix en fonction de la présence d'ascenseur
 
 traceMoustachePar('prix', 'ascenseur', 1, y_max_prix)
+
+def traceHisto2(yname, tname):
+    
+    # affichage
+    plt.figure(figsize = (12,10))
+
+    # donnees    
+    y = data[:,labels.index(yname)]
+    t = data[:,labels.index(tname)]
+    
+    # trace du graphe
+    hist(y/t)
+    
+    # gestion de l'affichage
+    plt.ylabel(yname,fontsize=14)
+    plt.grid(True)
+    title("Histogramme de repartition de '"+yname+"' sur le training set",
+          fontsize=18)
+    
+    # sauvegarde en png
+    plt.savefig('hist_'+yname+'_'+tname+'_all.png')
+    plt.close("all")
+    
+traceHisto2('prix', 'surface')
