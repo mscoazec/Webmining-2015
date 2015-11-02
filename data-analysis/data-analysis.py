@@ -17,8 +17,8 @@ pour l'analyse
 """
 
 ##### donnees a modifier en fonction du fichier que l'on souhaite analyser
-filename = "clean_dataset-10-22.csv"
-datename = "-10-22"
+filename = "apparts_10-22_traite.csv"
+datename = "-10-28"
 ##### ##### #####
 
 # ouverture du csv
@@ -246,55 +246,20 @@ def traceMoustachePar(yname, xname, defini, y_max):
     plt.close("all")
     
 # histogrammes prix, surface
-
-al = 1;
-
-traceHisto('prix')
-if al:
-    traceHistoPar('prix','arrondissement')
-
-traceHisto('surface')
-if al:
-    traceHistoPar('surface','arrondissement')
-
-# prix en fonction de la surface
-
-traceNuage('surface','prix')
-if al:
-    traceNuagePar('surface','prix','arrondissement')
-
-# prix en fonction de l'
-
-y_max_prix = 5000000
-
-traceMoustachePar('prix', 'arrondissement', 1, y_max_prix)
-
-# surface en fonction de l'arrondissement
-
-traceMoustachePar('surface','arrondissement',  1, 400)
-
-# prix en fonction de la présence d'ascenseur
-
-traceMoustachePar('prix', 'ascenseur', 1, y_max_prix)
-
-# 
-
+    
 """
 pour la carte
 """
 
-arr, prix_arr, count_arr = statsPar('prix', 'arrondissement')
-arr_, surface_arr, count_arr_ = statsPar('surface', 'arrondissement')
+m_data_arr = []
 
-meanPrix_arr = []
-
-for i in range(len(arr)):
-    meanPrix_arr.append(np.average(prix_arr[i]))
+for i in range(len(labels)):
+    arr, data_arr, count_arr = statsPar(labels[i], 'arrondissement')
     
-meanSurf_arr = []
-
-for i in range(len(arr)):
-    meanSurf_arr.append(np.average(surface_arr[i]))
+    m_data_arr.append([])
+    
+    for j in range(len(arr)):
+        m_data_arr[i].append(np.average(data_arr[j]))
     
 # import
 file_id = open('communes-75.json')
@@ -304,11 +269,121 @@ arrJson = json.load(file_id)
 arrFeat =  arrJson["features"]
 
 for i in range(len(arrFeat)):
-    i_arr = int(arrFeat[i]["properties"]["code"]) - 75100
-    arrFeat[i]["properties"]["nb_apparts"] = str(count_arr[i_arr])
-    arrFeat[i]["properties"]["prix_moyen"] = str(meanPrix_arr[i_arr])
-    arrFeat[i]["properties"]["surface_moyenne"] = str(meanSurf_arr[i_arr])
     
+    # indice de l'arrondissement dans le tableau
+    i_arr = int(arrFeat[i]["properties"]["code"]) - 75100
+    
+    # nombre d'appartements pour cet arrondissement
+    arrFeat[i]["properties"]["nb_apparts"] = str(count_arr[i_arr])
+    
+    # autres caractéristiques stats de l'arrondissement
+    arrFeat[i]["properties"]["m_prix_surface"] = str(m_data_arr[labels.index(
+    'prix')][i_arr]/m_data_arr[labels.index('surface')][i_arr])
+    
+    for j in range(len(labels)):
+        arrFeat[i]["properties"]["m_"+labels[j]] = str(m_data_arr[j][i_arr])
+        
+# prix par metre carre par site d'annonce
+        
+sites = {'seloger', 'pap', 'paruvendu', 'laforet', 'explorimmo', 'fnaim'}
+
+split = {}
+
+for s in sites:
+    rows = data[:,labels.index(s)].astype(np.bool)
+    split[s] = data[rows, :]
+    
+for s in sites:
+    
+    data = split[s]
+    
+    m_data_arr = []
+
+    for i in range(len(labels)):
+        arr, data_arr, count_arr = statsPar(labels[i], 'arrondissement')
+        
+        m_data_arr.append([])
+        
+        for j in range(len(arr)):
+            m_data_arr[i].append(np.average(data_arr[j]))
+    
+    for i in range(len(arrFeat)):
+        
+        arrFeat[i]["properties"][s] = {}
+        
+        if (i + 1) in arr:
+            
+            i_arr = arr.tolist().index(i+1)
+            
+            # nombre d'appartements pour cet arrondissement
+            arrFeat[i]["properties"][s]["_nb_apparts"] = str(count_arr[i_arr])
+            
+            # autres caractéristiques stats de l'arrondissement
+            arrFeat[i]["properties"][s]["m_prix_surface"] = str(m_data_arr[labels.index(
+            'prix')][i_arr]/m_data_arr[labels.index('surface')][i_arr])
+            
+            for j in range(len(labels)):
+                arrFeat[i]["properties"][s]["m_"+labels[j]] = str(m_data_arr[j][i_arr])
+        
+        else:
+            
+            # nombre d'appartements pour cet arrondissement
+            arrFeat[i]["properties"][s]["_nb_apparts"] = str(0)
+            
+            # autres caractéristiques stats de l'arrondissement
+            arrFeat[i]["properties"][s]["m_prix_surface"] = str(0.0)
+            
+            for j in range(len(labels)):
+                arrFeat[i]["properties"][s]["m_"+labels[j]] = str(0.0)
+       
+# sites gagnants
+       
+for i in range(len(arrFeat)):
+        
+        arrFeat[i]["properties"]["gagnant"] = {}
+        
+        max = -1;
+        
+        for s in sites:
+
+            candidat = arrFeat[i]["properties"][s]["_nb_apparts"]
+
+            if candidat > max:
+                
+                gagnant = s
+                
+                max = candidat
+        
+        arrFeat[i]["properties"]["gagnant"]["_nb_apparts"] = gagnant
+        
+        max = -1;
+        
+        for s in sites:
+            
+            candidat = arrFeat[i]["properties"][s]["m_prix_surface"]
+            
+            if candidat > max:
+                
+                gagnant = s
+                max = candidat
+        
+        arrFeat[i]["properties"]["gagnant"]["m_prix_surface"] = gagnant
+        
+        for j in range(len(labels)):
+            
+            max = -1;
+            
+            for s in sites:
+            
+                candidat = arrFeat[i]["properties"][s]["m_"+labels[j]]
+                
+                if candidat > max:
+                    
+                    gagnant = s
+                    max = candidat
+        
+            arrFeat[i]["properties"]["gagnant"]["m_"+labels[j]] = gagnant
+
 arrJson["features"] = arrFeat
 
 #arrJson = "var communesData = " + str(arrJson)

@@ -33,6 +33,9 @@
 			margin-right: 8px;
 			opacity: 0.5;
 		}
+		table, th, td {
+			padding: 3px;
+		}
 	</style>
 </head>
 <body>
@@ -59,13 +62,22 @@
 			"Niveaux de gris": grayscale
 		};
 		
+		var mines = L.marker([48.845444, 2.339375]).bindPopup('Ici MINES Paristech'),
+			telecom = L.marker([48.826506, 2.346462]).bindPopup('Ici Télécom Paristech');
+
+		var places = L.layerGroup([mines, telecom]);
+		
+		var basePlaces = {
+			"Quelques lieux": places
+		};
+				
 		var map = L.map('map', {
-			center: [48.8555875, 2.3526803],
+			center: [48.8555875, 2.3366803],
 			zoom: 13,
-			layers: [streets]
+			layers: [streets, places]
 		});
 		
-		L.control.layers(baseLayers).addTo(map);
+		currentLayer = "m_prix_surface";
 		
 		// ------------------------------------------
 		
@@ -78,49 +90,42 @@
 		var grades_prix_surface = [7000, 8000, 9000, 10000, 11000, 12000, 14000]
 		var grades_prix = [400000, 600000, 800000, 900000, 1000000, 1200000, 1400000]
 		var grades_surface = [40, 50, 60, 70, 80, 90, 100]
+		var grades_ratio = [10, 20, 30, 40, 50, 60, 70, 80]
 		
-		function getColor_prix_surface(d) {
-			var grades = grades_prix_surface
-			
-			return d > grades[6] ? '#1A0000' :
-				   d > grades[5] ? '#660000' :
-				   d > grades[4] ? '#990000' :
-				   d > grades[3] ? '#CC0000' :
-				   d > grades[2] ? '#FF0000' :
-				   d > grades[1] ? '#FF4D4D' :
-				   d > grades[0] ? '#FF8080' :
-							   '#FFB2B2';
-		}
+		var colormap_r = ['#1A0000', '#660000', '#990000', '#CC0000', '#FF0000', '#FF4D4D', '#FF8080', '#FFB2B2']
+		var colormap_b = ['#00141A', '#003D4C', '#006680', '#008FB2', '#00B8E6', '#33D6FF', '#80E6FF', '#CCF5FF']
+		var colormap_j = ['#331F00', '#804C00', '#B26B00', '#E68A00', '#FFA319', '#FFAD33', '#FFC266', '#FFC266']
+		var colormap_v = ['#002E0F', '#004C1A', '#007A29', '#009933', '#33AD5C', '#66C285', '#B2E0C2', '#E6F5EB']
 		
-		function getColor_prix(d) {
-			var grades = grades_prix
-			
-			return d > grades[6] ? '#331F00' :
-				   d > grades[5] ? '#804C00' :
-				   d > grades[4] ? '#B26B00' :
-				   d > grades[3] ? '#E68A00' :
-				   d > grades[2] ? '#FFA319' :
-				   d > grades[1] ? '#FFAD33' :
-				   d > grades[0] ? '#FFC266' :
-							   '#FFC266';
-		}
+		function getColor(d, mode) {
 		
-		function getColor_surface(d) {
-			var grades = grades_surface
+		if (mode == "prix_surface") {
+			var grades = grades_prix_surface;
+			var colormap = colormap_r}
+		if (mode == "prix") {
+			var grades = grades_prix;
+			var colormap = colormap_j}
+		if (mode == "surface") {
+			var grades = grades_surface;
+			var colormap = colormap_v}
+		if (mode == "ratio") {
+			var grades = grades_ratio;
+			var colormap = colormap_b}
 			
-			return d > grades[6] ? '#002E0F' :
-				   d > grades[5] ? '#004C1A' :
-				   d > grades[4] ? '#007A29' :
-				   d > grades[3] ? '#009933' :
-				   d > grades[2] ? '#33AD5C' :
-				   d > grades[1] ? '#66C285' :
-				   d > grades[0] ? '#B2E0C2' :
-							   '#E6F5EB';
-		}
+			return d > grades[6] ? colormap[0] :
+				   d > grades[5] ? colormap[1] :
+				   d > grades[4] ? colormap[2] :
+				   d > grades[3] ? colormap[3] :
+				   d > grades[2] ? colormap[4] :
+				   d > grades[1] ? colormap[5] :
+				   d > grades[0] ? colormap[6] :
+							   colormap[7];
+	    }
 
+		
 		function style_prix_surface(feature) {
 			return {
-				fillColor: getColor_prix_surface(feature.properties.prix_moyen/feature.properties.surface_moyenne),
+				fillColor: getColor(feature.properties.m_prix/feature.properties.m_surface, "prix_surface"),
 				weight: 2,
 				opacity: 1,
 				color: 'white',
@@ -130,7 +135,7 @@
 		
 		function style_surface(feature) {
 			return {
-				fillColor: getColor_surface(feature.properties.surface_moyenne),
+				fillColor: getColor(feature.properties.m_surface, "surface"),
 				weight: 2,
 				opacity: 1,
 				color: 'white',
@@ -140,7 +145,7 @@
 		
 		function style_prix(feature) {
 			return {
-				fillColor: getColor_prix(feature.properties.prix_moyen),
+				fillColor: getColor(feature.properties.m_prix, "prix"),
 				weight: 2,
 				opacity: 1,
 				color: 'white',
@@ -148,7 +153,42 @@
 			};
 		}
 		
-		var legend_prix_surface = L.control({position: 'bottomleft'});
+		var labels = communesData.features[0].properties;
+		
+		function style_label(l) {
+			
+			return function style(feature) {
+				return {
+					fillColor: getColor(feature.properties[l]*100, "ratio"),
+					weight: 2,
+					opacity: 1,
+					color: 'white',
+					fillOpacity: 0.5
+				};
+			}
+		};
+		
+		
+		var legend_ratio = L.control({position: 'topleft'});
+
+		legend_ratio.onAdd = function (map) {
+
+			var div = L.DomUtil.create('div', 'info legend'),
+				grades = grades_ratio,
+				labels = [];
+
+			// loop through our density intervals and generate a label with a colored square for each interval
+			for (var i = 0; i < grades.length; i++) {
+				div.innerHTML +=
+					'<i style="background:' + getColor(grades[i] + 1, "ratio") + '"></i> ' +
+					grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + ' %' + '<br>' : ' +');
+			}
+
+			return div;
+			
+		};
+		
+		var legend_prix_surface = L.control({position: 'topleft'});
 
 		legend_prix_surface.onAdd = function (map) {
 
@@ -159,15 +199,15 @@
 			// loop through our density intervals and generate a label with a colored square for each interval
 			for (var i = 0; i < grades.length; i++) {
 				div.innerHTML +=
-					'<i style="background:' + getColor_prix_surface(grades[i] + 1) + '"></i> ' +
-					grades[i]/1000 + ' €/m²' + (grades[i + 1] ? ' &ndash; ' + grades[i + 1]/1000 + ' €/m²' + '<br>' : ' +');
+					'<i style="background:' + getColor(grades[i] + 1, "prix_surface") + '"></i> ' +
+					grades[i]/1000 + (grades[i + 1] ? '&ndash;' + grades[i + 1]/1000 + ' k€/m²' + '<br>' : ' +');
 			}
 
 			return div;
 			
 		};
 		
-		var legend_prix = L.control({position: 'bottomleft'});
+		var legend_prix = L.control({position: 'topleft'});
 
 		legend_prix.onAdd = function (map) {
 
@@ -178,14 +218,14 @@
 			// loop through our density intervals and generate a label with a colored square for each interval
 			for (var i = 0; i < grades.length; i++) {
 				div.innerHTML +=
-					'<i style="background:' + getColor_prix(grades[i] + 1) + '"></i> ' +
-					grades[i]/1000000 + ' M€' + (grades[i + 1] ? ' &ndash; ' + grades[i + 1]/1000000 + ' M€' + '<br>' : ' +');
+					'<i style="background:' + getColor(grades[i] + 1, "prix") + '"></i> ' +
+					grades[i]/1000000 + (grades[i + 1] ? '&ndash;' + grades[i + 1]/1000000 + ' M€' + '<br>' : ' +');
 			}
 
 			return div;
 		};
 		
-		var legend_surface = L.control({position: 'bottomleft'});
+		var legend_surface = L.control({position: 'topleft'});
 
 		legend_surface.onAdd = function (map) {
 
@@ -196,50 +236,66 @@
 			// loop through our density intervals and generate a label with a colored square for each interval
 			for (var i = 0; i < grades.length; i++) {
 				div.innerHTML +=
-					'<i style="background:' + getColor_surface(grades[i] + 1) + '"></i> ' +
-					grades[i] + ' m²' + (grades[i + 1] ? ' &ndash; ' + grades[i + 1] + ' m²' + '<br>' : ' +');
+					'<i style="background:' + getColor(grades[i] + 1, "surface") + '"></i> ' +
+					grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + ' m²' + '<br>' : ' +');
 			}
 
 			return div;
 		};
 		
-		// --------------------- listeners
-		
-		// control that shows state info on hover
-		
-		var info = L.control({position: 'bottomright'});
-
-		info.onAdd = function (map) {
-			this._div = L.DomUtil.create('div', 'info');
-			this.update();
-			return this._div;
-		};
-
-		info.update = function (props) {
-			this._div.innerHTML = '<h4> Nom</h4>' +  (props ?
-				'<b>' + props.nom + '</b><br />' + '</b><br />' +
-				"Nombre d'appartements analysés : " + '</b><br />' +
-				'<b>' + props.nb_apparts + '</b><br />' + '</b><br />' +
-				"Prix par mètre carré en moyenne : " + '</b><br />' +
-				'<b>' + parseInt(props.prix_moyen/props.surface_moyenne) + ' € par m²' + '</b><br />' + '</b><br />' +
-				"Surface moyenne des appartements analysés : " + '</b><br />' +
-				'<b>' + parseInt(props.surface_moyenne) + ' m²' + '</b><br />' + '</b><br />' +
-				"Prix moyen des appartements analysés : " + '</b><br />' +
-				'<b>' + parseInt(props.prix_moyen/1000) + ' k€' + '</b><br />':
-				'</b><br />' + 'Passez la souris sur un arrondissement' + '</b><br />'
-				) + '</b><br />' 
-				+ '</b><br />' + 'Cliquez sur un objet pour zoomer';
-		};
-
-		info.addTo(map);
-		
 		// mouseover event
+		
+		dicoSite = {'pap': 'PAP', 'explorimmo': 'Explorimmo', 'paruvendu': 'ParuVendu', 'seloger': 'Se Loger', 'fnaim': 'FNAIM', 'laforet': 'La Forêt'}
+		
+		var icones = {};
+		
+		icones['pap'] = L.icon({
+			iconUrl: 'logo-pap.png',
+			iconSize:     [120, 30], // size of the icon
+			iconAnchor:   [60, 15], // point of the icon which will correspond to marker's location
+			popupAnchor:  [0, 0] // point from which the popup should open relative to the iconAnchor
+		});
+		
+		icones['explorimmo'] = L.icon({
+			iconUrl: 'logo-explorimmo.png',
+			iconSize:     [120, 30], // size of the icon
+			iconAnchor:   [60, 15], // point of the icon which will correspond to marker's location
+			popupAnchor:  [0, 0] // point from which the popup should open relative to the iconAnchor
+		});
+		
+		icones['paruvendu'] = L.icon({
+			iconUrl: 'logo-paruvendu.png',
+			iconSize:     [120, 30], // size of the icon
+			iconAnchor:   [60, 15], // point of the icon which will correspond to marker's location
+			popupAnchor:  [0, 0] // point from which the popup should open relative to the iconAnchor
+		});
+		
+		icones['seloger'] = L.icon({
+			iconUrl: 'logo-seloger.png',
+			iconSize:     [120, 30], // size of the icon
+			iconAnchor:   [60, 15], // point of the icon which will correspond to marker's location
+			popupAnchor:  [0, 0] // point from which the popup should open relative to the iconAnchor
+		});
+		
+		icones['fnaim'] = L.icon({
+			iconUrl: 'logo-fnaim.png',
+			iconSize:     [120, 30], // size of the icon
+			iconAnchor:   [60, 15], // point of the icon which will correspond to marker's location
+			popupAnchor:  [0, 0] // point from which the popup should open relative to the iconAnchor
+		});
+		
+		icones['laforet'] = L.icon({
+			iconUrl: 'logo-laforet.png',
+			iconSize:     [120, 30], // size of the icon
+			iconAnchor:   [60, 15], // point of the icon which will correspond to marker's location
+			popupAnchor:  [0, 0] // point from which the popup should open relative to the iconAnchor
+		});
 		
 		function highlightFeature(e) {
 			var layer = e.target;
 
 			layer.setStyle({
-				weight: 5,
+				weight: 7,
 				color: 'white',
 				dashArray: '',
 				fillOpacity: 0.5
@@ -250,6 +306,14 @@
 			}
 			
 			info.update(layer.feature.properties);
+			
+			s = layer.feature.properties.nom + '<br>' + '<br>';
+			
+			s =  s + "Meilleurs offres sur : " + '<b>' + dicoSite[layer.feature.properties["gagnant"][currentLayer]]
+			
+			L.marker([48.845444, 2.439375], {icon: icones[layer.feature.properties["gagnant"][currentLayer]]}).addTo(map).bindPopup("I am a green leaf.");
+			
+			layer.bindPopup(s);
 		}
 		
 		// mouseout event
@@ -263,24 +327,20 @@
 				dashArray: '',
 				fillOpacity: 0.5
 			});
+			
+			info.update();
 		}
 		
-		// zoom to feature
-		
-		function zoomToFeature(e) {
-			map.fitBounds(e.target.getBounds());
-		}
+		// on map click
 		
 		var popup = L.popup();
 		
 		function onMapClick(e) {
-			popup
+			/* popup
 				.setLatLng(e.latlng)
-				.setContent("Coordonnées : " + e.latlng.toString())
-				.openOn(map);
+				.setContent("Ce point a pour coordonnées : " + Math.round(e.latlng.lat*1000)/1000 + ", " + Math.round(e.latlng.lng*1000)/1000)
+				.openOn(map); */
 		}
-
-		map.on('click', onMapClick);
 				
 		// --------------------- add geojson data to map
 		
@@ -298,37 +358,207 @@
 		
 		var arr_prix_surface = L.geoJson(communesData, {
 			style: style_prix_surface,
-			onEachFeature: onEachFeature
+			onEachFeature: onEachFeature,
+			name: "m_prix_surface"
 		})
 		
 		var arr_prix = L.geoJson(communesData, {
 			style: style_prix,
-			onEachFeature: onEachFeature
+			onEachFeature: onEachFeature,
+			name: "m_prix"
 		})
 		
 		var arr_surface = L.geoJson(communesData, {
 			style: style_surface,
-			onEachFeature: onEachFeature
+			onEachFeature: onEachFeature,
+			name: "m_surface"
 		})
+
+		var arr = {};
+		
+		for (l in labels) {
+			
+			arr[String(l)] = L.geoJson(communesData, {
+				style: style_label(l),
+				onEachFeature: onEachFeature,
+				name: l
+			})
+			
+		}
+		
+		console.log(arr_prix_surface)
 		
 		var geoLayers = {
-			"Prix par mètre carré": arr_prix_surface,
-			"Prix": arr_prix,
-			"Surface": arr_surface
+		
+			"Répartition du prix au mètre carré": arr_prix_surface,
+			"... des biens chers": arr_prix,
+			"... des grandes surfaces": arr_surface,
+			
+			"... des studios": arr["m_studio"],
+			
+			"... des ascenseurs": arr["m_ascenseur"],
+			"... des gardiens": arr["m_gardien"],
+			"... des parkings": arr["m_parking"],
+			
+			"... des cuisines": arr["m_cuisine"],
+			"... des cuisines américaines": arr["m_cuisine_americaine"],
+			"... des cuisines équipées": arr["m_cuisine_equipee"],
+			"... des WC séparés": arr["m_wc_separes"],
+			"... des buanderies": arr["m_buanderie"],
+			"... des baignoires": arr["m_baignoire"],
+			
+			"... des balcons": arr["m_balcon"],
+			"... des terrasses": arr["m_terrasse"],
+			"... du parquet": arr["m_parquet"],
+			
+			"... des jardins ": arr["m_jardin"],
+			"... des orientations Sud": arr["m_orientation_sud"],
+			"... de la luminosité": arr["m_lumineux"],
+			"... du calme": arr["m_calme"],
+
+			"... du style Haussmann": arr["m_haussmann"],
 		};
 		
-		var legendes = {
-			"Légende prix par mètre carré": legend_prix_surface,
-			"Légende prix": legend_prix,
-			"Légende surface": legend_surface
-		};
+				
+		// --------------------- listeners
 		
-		L.control.layers(geoLayers).addTo(map);
+		// control that shows state info on hover
+		
+		var info = L.control({position: 'topright'});
+
+		info.onAdd = function (map) {
+			this._div = L.DomUtil.create('div', 'info');
+			this.update();
+			return this._div;
+		};
+
+		info.update = function (props) {
+		
+			bold = '<b>';
+			
+			b = {};
+			b["m_prix_surface"] = [];
+			for (l in labels) {
+				b[l] = '';
+			}
+			b[currentLayer] = bold;
+		
+			this._div.innerHTML = '<h4> Nom</h4>' +  (props ?
+				'<b>' + props.nom + '</b><br />' + '</b><br />' +
+				
+				'<table>' +
+				
+				'<tr> <td>' + "Nombre d'appartements en vente : " + '</td>' +
+				'<td> <b>' + props.nb_apparts + '</td> </tr>' +
+				
+				'<tr> <td>' + b["m_prix_surface"] + "Prix par mètre carré en moyenne : " + '</td>' +
+				'<td> <b>' + parseInt(props.m_prix/props.m_surface) + ' € / m²' + '</td> </tr>' +
+				
+				'<tr> <td>' + b["m_prix"] + "Prix moyen des ventes : " + '</td>' +
+				'<td> <b>' + parseInt(props.m_prix/1000) + ' k€' + '</td> </tr>' +
+				
+				'<tr> <td>' + b["m_surface"] + "Surface moyenne des ventes : " + '</td>' +
+				'<td> <b>' + parseInt(props.m_surface) + ' m²' + '</td> </tr>' +
+				
+				'<tr> <td>' + b["m_studio"] + "Studios : " + '</td>' +
+				'<td> <b>' + parseInt(props.m_studio*100) + ' %' + '</td> </tr>' +
+				
+				'<tr> <td>' + b["m_ascenseur"] + "Appartements avec ascenseur : " + '</td>' +
+				'<td> <b>' + parseInt(props.m_ascenseur*100) + ' %' + '</td> </tr>' +
+				
+				'<tr> <td>' + b["m_gardien"] + "... avec gardien : " + '</td>' +
+				'<td> <b>' + parseInt(props.m_gardien*100) + ' %' + '</td> </tr>' +
+				
+				'<tr> <td>' + b["m_parking"] + "... avec parking : " + '</td>' +
+				'<td> <b>' + parseInt(props.m_parking*100) + ' %' + '</td> </tr>' +
+				
+				'<tr> <td>' + b["m_cuisine"] + "... avec cuisine : " + '</td>' +
+				'<td> <b>' + parseInt(props.m_cuisine*100) + ' %' + '</td> </tr>' +
+				
+				'<tr> <td>' + b["m_cuisine_americaine"] + "... avec cuisine américaine : " + '</td>' +
+				'<td> <b>' + parseInt(props.m_cuisine_americaine*100) + ' %' + '</td> </tr>' +
+				
+				'<tr> <td>' + b["m_cuisine_equipee"] + "... avec cuisine équipée : " + '</td>' +
+				'<td> <b>' + parseInt(props.m_cuisine_equipee*100) + ' %' + '</td> </tr>' +
+				
+				'<tr> <td>' + b["m_wc_separes"] + "... avec WC séparés : " + '</td>' +
+				'<td> <b>' + parseInt(props.m_wc_separes*100) + ' %' + '</td> </tr>' +
+				
+				'<tr> <td>' + b["m_buanderie"] + "... avec buanderie : " + '</td>' +
+				'<td> <b>' + parseInt(props.m_buanderie*100) + ' %' + '</td> </tr>' +
+				
+				'<tr> <td>' + b["m_baignoire"] + "... avec baignoire : " + '</td>' +
+				'<td> <b>' + parseInt(props.m_baignoire*100) + ' %' + '</td> </tr>' +
+				
+				'<tr> <td>' + b["m_balcon"] + "... avec balcon : " + '</td>' +
+				'<td> <b>' + parseInt(props.m_balcon*100) + ' %' + '</td> </tr>' +
+				
+				'<tr> <td>' + b["m_terrasse"] + "... avec terrasse : " + '</td>' +
+				'<td> <b>' + parseInt(props.m_terrasse*100) + ' %' + '</td> </tr>' +
+				
+				'<tr> <td>' + b["m_parquet"] + "... avec parquet : " + '</td>' +
+				'<td> <b>' + parseInt(props.m_parquet*100) + ' %' + '</td> </tr>' +
+				
+				'<tr> <td>' + b["m_jardin"] + "... avec jardin : " + '</td>' +
+				'<td> <b>' + parseInt(props.m_jardin*100) + ' %' + '</td> </tr>' +
+				
+				'<tr> <td>' + b["m_orientation_sud"] + "... avec orientation Sud : " + '</td>' +
+				'<td> <b>' + parseInt(props.m_orientation_sud*100) + ' %' + '</td> </tr>' +
+				
+				'<tr> <td>' + b["m_lumineux"] + "... lumineux : " + '</td>' +
+				'<td> <b>' + parseInt(props.m_lumineux*100) + ' %' + '</td> </tr>' +
+				
+				'<tr> <td>' + b["m_calme"] + "... calme : " + '</td>' +
+				'<td> <b>' + parseInt(props.m_calme*100) + ' %' + '</td> </tr>' +
+				
+				'<tr> <td>' + b["m_haussmann"] + "... de style hausmannien : " + '</td>' +
+				'<td> <b>' + parseInt(props.m_haussmann*100) + ' %' + '</td> </tr>' +
+				
+				'</table>'
+				
+				: '</b><br />' + 'Passez la souris sur un arrondissement' + '</b><br />'
+				
+				);
+		};
+
+		info.addTo(map);
+		
+		L.control.layers(baseLayers, basePlaces, {position:'topleft'}).addTo(map);
+		L.control.layers(geoLayers, {}, {collapsed:false, position:'bottomleft'}).addTo(map);
+		
 		arr_prix_surface.addTo(map);
-		legend_prix_surface.addTo(map);
-		legend_prix.addTo(map);
-		legend_surface.addTo(map);
 		
+		legend_prix_surface.addTo(map);
+		currentLegend = legend_prix_surface;
+		
+		map.on('baselayerchange', function (eventLayer) {
+			// change les légendes ...
+			this.removeControl(currentLegend);
+			
+			s = String(eventLayer.layer.options.style)
+			e = s.split(" ")[1]
+			
+			if (e === 'style_prix_surface(feature)') {
+				currentLegend = legend_prix_surface;
+				currentLayer = "m_prix_surface"
+				}
+			else if (e === 'style_surface(feature)') {
+				currentLegend = legend_surface;
+				currentLayer = "m_surface"
+				}
+			else if (e === 'style_prix(feature)') {
+				currentLegend = legend_prix;
+				currentLayer = "m_prix"
+				}
+			else if (e === 'style(feature)') {
+				currentLegend = legend_ratio;
+				currentLayer = eventLayer.layer.options.name
+				}
+			
+			currentLegend.addTo(this);
+			
+		});
+
 		// ------------------------------------------
 		
     </script>
