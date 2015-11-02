@@ -285,7 +285,7 @@ for i in range(len(arrFeat)):
         
 # prix par metre carre par site d'annonce
         
-sites = {'seloger', 'pap', 'paruvendu', 'laforet', 'explorimmo', 'fnaim'}
+sites = ['seloger', 'pap', 'paruvendu', 'laforet', 'explorimmo', 'fnaim']
 
 split = {}
 
@@ -316,7 +316,7 @@ for s in sites:
             i_arr = arr.tolist().index(i+1)
             
             # nombre d'appartements pour cet arrondissement
-            arrFeat[i]["properties"][s]["_nb_apparts"] = str(count_arr[i_arr])
+            arrFeat[i]["properties"][s]["nb_apparts"] = str(count_arr[i_arr])
             
             # autres caractéristiques stats de l'arrondissement
             arrFeat[i]["properties"][s]["m_prix_surface"] = str(m_data_arr[labels.index(
@@ -328,13 +328,13 @@ for s in sites:
         else:
             
             # nombre d'appartements pour cet arrondissement
-            arrFeat[i]["properties"][s]["_nb_apparts"] = str(0)
+            arrFeat[i]["properties"][s]["nb_apparts"] = str(0)
             
             # autres caractéristiques stats de l'arrondissement
-            arrFeat[i]["properties"][s]["m_prix_surface"] = str(0.0)
+            arrFeat[i]["properties"][s]["m_prix_surface"] = str(-1.0)
             
             for j in range(len(labels)):
-                arrFeat[i]["properties"][s]["m_"+labels[j]] = str(0.0)
+                arrFeat[i]["properties"][s]["m_"+labels[j]] = str(-1.0)
        
 # sites gagnants
        
@@ -342,62 +342,53 @@ for i in range(len(arrFeat)):
         
         arrFeat[i]["properties"]["gagnant"] = {}
         
-        max = -1;
+        # nombre apparts
+        
+        tab = []
         
         for s in sites:
-
-            candidat = arrFeat[i]["properties"][s]["_nb_apparts"]
-
-            if candidat > max:
-                
-                gagnant = s
-                
-                max = candidat
+            tab.append(float(arrFeat[i]["properties"][s]["nb_apparts"]))
         
-        arrFeat[i]["properties"]["gagnant"]["_nb_apparts"] = gagnant
+        gagnant = sites[tab.index(np.max(tab))]      
+        arrFeat[i]["properties"]["gagnant"]["nb_apparts"] = gagnant
         
-        min = 9999999999999;
+        # prix par metre carre
+        
+        tab = []
         
         for s in sites:
-            
-            candidat = arrFeat[i]["properties"][s]["m_prix_surface"]
-            
-            if (0 < candidat < min):
-                
-                gagnant = s
-                min = candidat
+            tab.append(float(arrFeat[i]["properties"][s]["m_prix_surface"]))
+        tab[tab==-1] = 9999999999
         
+        gagnant = sites[tab.index(np.min(tab))]
         arrFeat[i]["properties"]["gagnant"]["m_prix_surface"] = gagnant
         
         for j in range(len(labels)):
             
+            # prix
+            
             if (labels[j] == "prix"):
                 
-                min = 9999999999999;
-                
+                tab = []
+        
                 for s in sites:
-                    
-                    candidat = arrFeat[i]["properties"][s]["m_prix"]
-                    
-                    if (0 < candidat < min):
-                        
-                        gagnant = s
-                        min = candidat
+                    tab.append(float(arrFeat[i]["properties"][s]["m_prix"]))
+                
+                tab[tab==-1] = 9999999999
+                gagnant = sites[tab.index(np.min(tab))]      
+                arrFeat[i]["properties"]["gagnant"]["m_prix"] = gagnant
+         
+            # tout le reste
          
             else:
                 
-                max = -1;
-                
-                for s in sites:
-                    
-                    candidat = arrFeat[i]["properties"][s]["m_"+labels[j]]
-                    
-                    if candidat > max:
-                        
-                        gagnant = s
-                        max = candidat
+                tab = []
         
-            arrFeat[i]["properties"]["gagnant"]["m_"+labels[j]] = gagnant
+                for s in sites:
+                    tab.append(float(arrFeat[i]["properties"][s]["m_"+labels[j]]))
+                
+                gagnant = sites[tab.index(np.max(tab))]      
+                arrFeat[i]["properties"]["gagnant"]["m_"+labels[j]] = gagnant
 
 arrJson["features"] = arrFeat
 

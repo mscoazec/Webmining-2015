@@ -313,21 +313,42 @@
 			
 			if (!(layer.feature.properties.nom in mark)) {
 			
-				s = layer.feature.properties.nom + '<br>' + '<br>'
-				s = s + "Meilleurs offres sur : " + '<b>' + dicoSite[layer.feature.properties["gagnant"][currentLayer]] + '<br>' + '<br>'
+				s = "Détails de la répartition par site d'annonce pour : " + '<br> <b> <font size="3">' + layer.feature.properties.nom + '</font> </b> <br> <br>'
 				
-				s = s + '<table>'
+				s = s + "Combien par site d'annonce :" + '</b> <br> <table>'
 				
 				for (si in dicoSite) {
-				
-					s = s + '<tr> <td>' + dicoSite[si] + '</td>' + '<td> <b>' + layer.feature.properties[si][currentLayer] + '</td> </tr>'
+					
+					var valeur = "";
+					
+					if (layer.feature.properties[si][currentLayer] > 0) {
+					
+						if (currentLayer === "m_prix") {
+							valeur = parseInt(layer.feature.properties[si][currentLayer]/1000) + ' k€'
+						}
+						else if (currentLayer === "m_prix_surface") {
+							valeur = parseInt(layer.feature.properties[si][currentLayer]) + ' €/m²'
+						}
+						else if (currentLayer === "m_surface") {
+							valeur = parseInt(layer.feature.properties[si][currentLayer]) + ' m²'
+						}
+						else {
+							valeur = parseInt(layer.feature.properties[si][currentLayer]*100) + ' %'
+						}
+						
+						s = s + '<tr> <td>' + dicoSite[si] + '</td>' + '<td> ' + valeur + '</td> </tr>'
+					
+					}
 				
 				}
 				
-				s = s + '</table>'
+				s = s + '</table> <br>'
+				
+				s = s + '<b> <font size="2"> Meilleurs offres pour ce critère sur : <b>' + dicoSite[layer.feature.properties["gagnant"][currentLayer]] + '</b> </font> </b>'
 					
 				polygon_center = layer.getBounds().getCenter();
-				mark[layer.feature.properties.nom] = L.marker([polygon_center.lat, polygon_center.lng], {icon: icones[layer.feature.properties["gagnant"][currentLayer]]}).addTo(map).bindPopup(s);
+				mark[layer.feature.properties.nom] = L.marker([polygon_center.lat, polygon_center.lng],
+					{icon: icones[layer.feature.properties["gagnant"][currentLayer]]}).addTo(map).bindPopup(s);//.openPopup();
 			
 			}
 			
@@ -345,20 +366,9 @@
 				fillOpacity: 0.5
 			});
 			
-			info.update();
+			// info.update();
 		}
 		
-		// on map click
-		
-		var popup = L.popup();
-		
-		function onMapClick(e) {
-			/* popup
-				.setLatLng(e.latlng)
-				.setContent("Ce point a pour coordonnées : " + Math.round(e.latlng.lat*1000)/1000 + ", " + Math.round(e.latlng.lng*1000)/1000)
-				.openOn(map); */
-		}
-				
 		// --------------------- add geojson data to map
 		
 		// function to add the listeners
@@ -367,8 +377,7 @@
 		
 			layer.on({
 				mouseover: highlightFeature,
-				mouseout: resetHighlight,
-				click: onMapClick
+				mouseout: resetHighlight
 			});
 			
 		}
@@ -453,7 +462,7 @@
 
 		info.update = function (props) {
 		
-			bold = '<b>';
+			bold = '<b style="color:Firebrick">';
 			
 			b = {};
 			b["m_prix_surface"] = [];
@@ -471,67 +480,67 @@
 				'<td> <b>' + props.nb_apparts + '</td> </tr>' +
 				
 				'<tr> <td>' + b["m_prix_surface"] + "Prix par mètre carré en moyenne : " + '</td>' +
-				'<td> <b>' + parseInt(props.m_prix/props.m_surface) + ' € / m²' + '</td> </tr>' +
+				'<td> <b>' + b["m_prix_surface"] + parseInt(props.m_prix/props.m_surface) + ' € / m²' + '</td> </tr>' +
 				
 				'<tr> <td>' + b["m_prix"] + "Prix moyen des ventes : " + '</td>' +
-				'<td> <b>' + parseInt(props.m_prix/1000) + ' k€' + '</td> </tr>' +
+				'<td> <b>' + b["m_prix"] + parseInt(props.m_prix/1000) + ' k€' + '</td> </tr>' +
 				
 				'<tr> <td>' + b["m_surface"] + "Surface moyenne des ventes : " + '</td>' +
-				'<td> <b>' + parseInt(props.m_surface) + ' m²' + '</td> </tr>' +
+				'<td> <b>' + b["m_surface"] + parseInt(props.m_surface) + ' m²' + '</td> </tr>' +
 				
 				'<tr> <td>' + b["m_studio"] + "Studios : " + '</td>' +
-				'<td> <b>' + parseInt(props.m_studio*100) + ' %' + '</td> </tr>' +
+				'<td> <b>' + b["m_studio"] + parseInt(props.m_studio*100) + ' %' + '</td> </tr>' +
 				
 				'<tr> <td>' + b["m_ascenseur"] + "Appartements avec ascenseur : " + '</td>' +
-				'<td> <b>' + parseInt(props.m_ascenseur*100) + ' %' + '</td> </tr>' +
+				'<td> <b>' + b["m_ascenseur"] + parseInt(props.m_ascenseur*100) + ' %' + '</td> </tr>' +
 				
 				'<tr> <td>' + b["m_gardien"] + "... avec gardien : " + '</td>' +
-				'<td> <b>' + parseInt(props.m_gardien*100) + ' %' + '</td> </tr>' +
+				'<td> <b>' + b["m_gardien"] + parseInt(props.m_gardien*100) + ' %' + '</td> </tr>' +
 				
 				'<tr> <td>' + b["m_parking"] + "... avec parking : " + '</td>' +
-				'<td> <b>' + parseInt(props.m_parking*100) + ' %' + '</td> </tr>' +
+				'<td> <b>' + b["m_parking"] + parseInt(props.m_parking*100) + ' %' + '</td> </tr>' +
 				
 				'<tr> <td>' + b["m_cuisine"] + "... avec cuisine : " + '</td>' +
-				'<td> <b>' + parseInt(props.m_cuisine*100) + ' %' + '</td> </tr>' +
+				'<td> <b>' + b["m_cuisine"] + parseInt(props.m_cuisine*100) + ' %' + '</td> </tr>' +
 				
 				'<tr> <td>' + b["m_cuisine_americaine"] + "... avec cuisine américaine : " + '</td>' +
-				'<td> <b>' + parseInt(props.m_cuisine_americaine*100) + ' %' + '</td> </tr>' +
+				'<td> <b>' + b["m_cuisine_americaine"] + parseInt(props.m_cuisine_americaine*100) + ' %' + '</td> </tr>' +
 				
 				'<tr> <td>' + b["m_cuisine_equipee"] + "... avec cuisine équipée : " + '</td>' +
-				'<td> <b>' + parseInt(props.m_cuisine_equipee*100) + ' %' + '</td> </tr>' +
+				'<td> <b>' + b["m_cuisine_equipee"] + parseInt(props.m_cuisine_equipee*100) + ' %' + '</td> </tr>' +
 				
 				'<tr> <td>' + b["m_wc_separes"] + "... avec WC séparés : " + '</td>' +
-				'<td> <b>' + parseInt(props.m_wc_separes*100) + ' %' + '</td> </tr>' +
+				'<td> <b>' + b["m_wc_separes"] + parseInt(props.m_wc_separes*100) + ' %' + '</td> </tr>' +
 				
 				'<tr> <td>' + b["m_buanderie"] + "... avec buanderie : " + '</td>' +
-				'<td> <b>' + parseInt(props.m_buanderie*100) + ' %' + '</td> </tr>' +
+				'<td> <b>' + b["m_buanderie"] + parseInt(props.m_buanderie*100) + ' %' + '</td> </tr>' +
 				
 				'<tr> <td>' + b["m_baignoire"] + "... avec baignoire : " + '</td>' +
-				'<td> <b>' + parseInt(props.m_baignoire*100) + ' %' + '</td> </tr>' +
+				'<td> <b>' + b["m_baignoire"] + parseInt(props.m_baignoire*100) + ' %' + '</td> </tr>' +
 				
 				'<tr> <td>' + b["m_balcon"] + "... avec balcon : " + '</td>' +
-				'<td> <b>' + parseInt(props.m_balcon*100) + ' %' + '</td> </tr>' +
+				'<td> <b>' + b["m_balcon"] + parseInt(props.m_balcon*100) + ' %' + '</td> </tr>' +
 				
 				'<tr> <td>' + b["m_terrasse"] + "... avec terrasse : " + '</td>' +
-				'<td> <b>' + parseInt(props.m_terrasse*100) + ' %' + '</td> </tr>' +
+				'<td> <b>' + b["m_terrasse"] + parseInt(props.m_terrasse*100) + ' %' + '</td> </tr>' +
 				
 				'<tr> <td>' + b["m_parquet"] + "... avec parquet : " + '</td>' +
-				'<td> <b>' + parseInt(props.m_parquet*100) + ' %' + '</td> </tr>' +
+				'<td> <b>' + b["m_parquet"] + parseInt(props.m_parquet*100) + ' %' + '</td> </tr>' +
 				
 				'<tr> <td>' + b["m_jardin"] + "... avec jardin : " + '</td>' +
-				'<td> <b>' + parseInt(props.m_jardin*100) + ' %' + '</td> </tr>' +
+				'<td> <b>' + b["m_jardin"] + parseInt(props.m_jardin*100) + ' %' + '</td> </tr>' +
 				
 				'<tr> <td>' + b["m_orientation_sud"] + "... avec orientation Sud : " + '</td>' +
-				'<td> <b>' + parseInt(props.m_orientation_sud*100) + ' %' + '</td> </tr>' +
+				'<td> <b>' + b["m_orientation_sud"] + parseInt(props.m_orientation_sud*100) + ' %' + '</td> </tr>' +
 				
 				'<tr> <td>' + b["m_lumineux"] + "... lumineux : " + '</td>' +
-				'<td> <b>' + parseInt(props.m_lumineux*100) + ' %' + '</td> </tr>' +
+				'<td> <b>' + b["m_lumineux"] + parseInt(props.m_lumineux*100) + ' %' + '</td> </tr>' +
 				
 				'<tr> <td>' + b["m_calme"] + "... calme : " + '</td>' +
-				'<td> <b>' + parseInt(props.m_calme*100) + ' %' + '</td> </tr>' +
+				'<td> <b>' + b["m_calme"] + parseInt(props.m_calme*100) + ' %' + '</td> </tr>' +
 				
 				'<tr> <td>' + b["m_haussmann"] + "... de style hausmannien : " + '</td>' +
-				'<td> <b>' + parseInt(props.m_haussmann*100) + ' %' + '</td> </tr>' +
+				'<td> <b>' + b["m_haussmann"] + parseInt(props.m_haussmann*100) + ' %' + '</td> </tr>' +
 				
 				'</table>'
 				
