@@ -392,7 +392,12 @@ class explorimmoSpider(CrawlSpider):
         # Attribut prix
   
         item['prix'] = ''
-        zone_prix = sel.xpath('//span[@class="price"]/text()').extract()
+  
+        if vente:
+            zone_prix = sel.xpath('//span[@class="price"]/text()').extract()
+            
+        if location :
+            zone_prix = sel.xpath('//span[@class="price"]/h2/text()').extract()
         
         if zone_prix:
             item['prix'] = zone_prix[0]
