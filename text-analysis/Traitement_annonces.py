@@ -176,12 +176,12 @@ class Text_analysis:
                     self.feature_and_price_list.append(row[self.column_featureName])
                 
                 #Si c'est la ligne de la coordonne x, on renseigne la position des features x et y
-                if row[self.column_featureName] == "coordonnee_x":
+                if row[self.column_featureName] == "coordonnee_x_q":
                     self.pos_xCoordinate = self.number_features
                     self.pos_yCoordinate = self.number_features + 1
                 
                 #Si c'est la ligne de l'arrondissement, on renseigne la position de la feature ardt
-                if row[self.column_featureName] == "arrondissement":
+                if row[self.column_featureName] == "arrondissement_q":
                     self.pos_ardt = self.number_features
                     
                 #Si c'est la ligne de coordonnees_precises, on renseigne la position de la feature ardt
@@ -192,8 +192,11 @@ class Text_analysis:
             self.number_features += 1
         
         
-        #On ajoute le prix en toute dernière colonne
+        #On ajoute l'url, la description, et le prix en toute dernière colonne
         self.feature_and_price_list.append("prix")
+        self.feature_and_price_list.append("url")
+        self.feature_and_price_list.append("titre")
+        self.feature_and_price_list.append("description")
         
         
         
@@ -548,7 +551,7 @@ class Text_analysis:
             
             #On rajoute le prix à la main (la fonction float("") bug si la chaîne est vide)
             if annonce["prix"] != "":
-                feat_values_description.append(int(float(annonce["prix"].replace(",", "."))))
+                feat_values_description.append(int(float(annonce["prix"].replace(",", ".").replace("HC","").replace("CC",""))))
         
         
         
@@ -589,7 +592,7 @@ class Text_analysis:
             
             #On rajoute le prix à la main (la fonction float("") bug si la chaîne est vide)
             if annonce["prix"] != "":
-                feat_values_description.append(int(float(annonce["prix"].replace(",", "."))))
+                feat_values_description.append(int(float(annonce["prix"].replace(",", ".").replace("HC","").replace("CC",""))))
         
         
         
@@ -632,7 +635,7 @@ class Text_analysis:
             #On rajoute le prix à la main (la fonction float("") bug si la chaîne est vide)
             #Il y a des espaces qu'il faut enlever
             if annonce["prix"] != "":
-                feat_values_description.append(int(float(annonce["prix"].replace(",", ".").replace(" ",""))))
+                feat_values_description.append(int(float(annonce["prix"].replace(",", ".").replace(" ","").replace("HC","").replace("CC",""))))
         
         
         
@@ -673,7 +676,7 @@ class Text_analysis:
             #On rajoute le prix à la main (la fonction float("") bug si la chaîne est vide)
             #Il y a des espaces qu'il faut enlever
             if annonce["prix"] != "":
-                feat_values_description.append(int(float(annonce["prix"].replace(",", ".").replace(" ",""))))
+                feat_values_description.append(int(float(annonce["prix"].replace(",", ".").replace(" ","").replace("HC","").replace("CC",""))))
         
         
         
@@ -749,7 +752,7 @@ class Text_analysis:
             
             #On rajoute le prix à la main (la fonction float("") bug si la chaîne est vide)
             if annonce["prix"] != "":
-                feat_values_description.append(int(float(annonce["prix"].replace(".","").replace(",", "."))))
+                feat_values_description.append(int(float(annonce["prix"].replace(".","").replace(",", ".").replace("HC","").replace("CC",""))))
         
         
         
@@ -793,7 +796,7 @@ class Text_analysis:
             #On rajoute le prix à la main (la fonction float("") bug si la chaîne est vide)
             #Il y a des espaces qu'il faut enlever
             if annonce["prix"] != "":
-                feat_values_description.append(int(float(annonce["prix"].replace(",", ".").replace(" ", ""))))
+                feat_values_description.append(int(float(annonce["prix"].replace(",", ".").replace(" ", "").replace("HC","").replace("CC",""))))
         
         
         
@@ -812,6 +815,9 @@ class Text_analysis:
             
             #On n'a pas de prix vu que l'on veut une estimation, donc on met la valeur à 0
             feat_values_description.append(0)
+        
+        
+        
         
         
         """
@@ -878,6 +884,24 @@ class Text_analysis:
                 nombre_deletions += 1
         
         
+        
+        
+        
+        
+        """
+        Opérations faites dans tous les cas, sauf pour notre site
+        """
+        #Ajout de l'url et de la description dans le fichier à la demande d'Adrien et Marion
+        if site_annonce != "" and site_annonce != "notresite":
+            feat_values_description.append(annonce["url"])
+            feat_values_description.append(annonce["titre"])
+            feat_values_description.append(annonce["description"])
+        
+        
+        
+        
+        
+        
         #La sortie : le tableau de features avec le prix au bout
         return feat_values_description
     
@@ -935,12 +959,14 @@ class Text_analysis:
         
         #On traite chacune des annonces une par une
         #On vérifie que les prix sont bien des valeurs numériques, et qu'il n'y a pas d'espaces
+        #On enlève des prix les espaces, on remplace les "." par des ","
+        #Et on enlève les "HC" qui causent des problèmes pour certains apparts en location
         for i in range(nombre_annonces):
-            if annoncesJson[i]["prix"].replace(".","").replace(" ","").isdigit():
+            if annoncesJson[i]["prix"].replace(".","").replace(" ","").replace("HC","").replace("CC","").isdigit():
                 fichier_sortie.writerow(self.traitement_annonce(annoncesJson[i]))
             
             #Affichage du nombre d'annonces par seconde au bout de 50 annonces pour estimer le temps total
-            if (i == 15):
+            if (i == 10):
                 temps_fin = time.clock()
                 temps_total = temps_fin - temps_debut + 0.0
                 annonces_par_seconde = (i + 0.0)/(temps_total + 0.001)
@@ -1009,14 +1035,24 @@ class Text_analysis:
         
     
         #Impression du temps de traitement
-        #On indique le nombre de minutes si cela a pris plus d'une minute
+        #Moins d'une minute
         if temps_total < 60:
             print "Temps total du programme : %d secondes." %(temps_total)
         else:
+            #Entre une et deux minutes
             if temps_total < 120:
                 print "Temps total du programme : 1 minute %d secondes." %(temps_total - 60)
             else:
-                print "Temps total du programme : %d minutes %d secondes." %(int(temps_total/60), temps_total%60)
+                #Entre deux minutes et une heure
+                if temps_total < 3600:
+                    print "Temps total du programme : %d minutes %d secondes." %(int(temps_total/60), temps_total%60)
+                else:
+                    #Entre une et deux heures
+                    if temps_total < 7200:
+                        print "Temps total du programme : 1 heure %d minutes %d secondes." %(int(temps_total/60) - 60, temps_total%60)
+                    else:
+                        #Au-delà de deux heures
+                        print "Temps total du programme : %d heure %d minutes %d secondes." %(int(temps_total/3600), int(temps_total/60) - 60*int(temps_total/3600), temps_total%60)
         
     
     
@@ -1051,20 +1087,20 @@ class Text_analysis:
         #nom du site
         sitename = ""
         if site == 1:
-            sitename = "explorimmo"
+            sitename = "explorimmo-10-22"
         if site == 2:
-            sitename = "fnaim"
+            sitename = "fnaim-10-22"
         if site == 3:
-            sitename = "laforet"
+            sitename = "laforet-10-22"
         if site == 4:
-            sitename = "pap"
+            sitename = "pap-10-23"
         if site == 5:
-            sitename = "paruvendu"
+            sitename = "paruvendu-10-22"
         if site == 6:
-            sitename = "seloger"
+            sitename = "seloger_15eme-11-02"
             
         #Ouverture du fichier du site
-        fichierJson = "Input/apparts_10-22/items_appart_" + sitename + "-10-22.json"
+        fichierJson = "Input/appart_vente_11-02/items_appart_" + sitename + ".json"
         annoncesJson = json.load(open(fichierJson))
 
         #Nombre d'annonces dans le fichier
@@ -1127,7 +1163,7 @@ class Text_analysis:
                 if isinstance(features_de_lannonce[i], str):
                     print self.feature_and_price_list[i] + " : " + features_de_lannonce[i]
                 else:
-                    print self.feature_and_price_list[i] + " : %d." %features_de_lannonce[i]
+                    print self.feature_and_price_list[i] + " : %s." %features_de_lannonce[i]
                 
 
         
@@ -1150,9 +1186,6 @@ Commandes de tests
 
 
 
-#Pour tester sur certains fichiers
-#Text_analysis().traitement_dossier('Test')
-
 #Pour tester l'affichage de mes dictionnaires de coordonnées
 #print Text_analysis().dict_yCoordonnees_lieux
 
@@ -1161,9 +1194,12 @@ Commandes de tests
 #print Text_analysis().traitement_annonce(annoncetest)
 
 #Test avec impression propre sur des annonces aléatoires
-#Text_analysis().test_une_annonce()
+Text_analysis().test_une_annonce()
+
+#Pour tester sur certains fichiers
+#Text_analysis().traitement_dossier('Test')
 
 """
 Appel de la fonction traitement_dossier sur les vraies données
 """
-Text_analysis().traitement_dossier('apparts_10-22')
+#Text_analysis().traitement_dossier('appart_vente_11-02')
