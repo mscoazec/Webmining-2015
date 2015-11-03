@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Leaflet Map</title>
+    <meta charset="utf-8" />
+    <link 
+        rel="stylesheet" 
+        href="http://cdn.leafletjs.com/leaflet-0.5/leaflet.css"
+    />
+	<style>
+	</style>
+</head>
+<body>
+    <div id="map" style="width: 10Opx; height: 500px"></div>
+
+    <script src="http://cdn.leafletjs.com/leaflet-0.5/leaflet.js"></script>
+    <script src="./communes-75.json"></script>
+    <script>
+	
+		// create map on Paris
+			
+		// layer on map -- which map (openstreetmap for instance...)
+		
+		var mbAttr = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+				'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+				'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+			mbUrl = 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6IjZjNmRjNzk3ZmE2MTcwOTEwMGY0MzU3YjUzOWFmNWZhIn0.Y8bhBaUMqFiPrDRW9hieoQ';
+
+	    var grayscale   = L.tileLayer(mbUrl, {id: 'mapbox.light', attribution: mbAttr}),
+		    streets  = L.tileLayer(mbUrl, {id: 'mapbox.streets',   attribution: mbAttr});
+		
+		var baseLayers = {
+			"Rues": streets,
+			"Niveaux de gris": grayscale
+		};
+				
+		var map = L.map('map', {
+			center: [48.8555875, 2.3366803],
+			zoom: 13,
+			layers: [streets]
+		});
+		
+		var dataset = [
+			{description : "Notre Dame de Paris", x : 48.853056, y : 2.349722},
+			{description : "Musée d'Orsay", x: 48.86, y: 2.327},
+			{description : "Muséum National d'Histoire Naturelle", x : 48.8422, y : 2.3564}
+		];
+		
+		var markers = new L.featureGroup();
+
+			for (i = 0; i < dataset.length ;i++) {
+				item = dataset[i]
+				marker = new L.marker([item.xloc,item.yloc]).bindPopup(item.y);
+				markers.addLayer(marker);
+			}
+
+			markers.on('mouseover', function(e){
+							e.layer.openPopup();
+							})
+			       .on('mouseout', function(e){
+							e.layer.closePopup();
+							});
+				   
+			map.addLayer(markers);
+			map.fitBounds(markers.getBounds());
+
+		// ------------------------------------------
+		
+    </script>
+</body>
+</html>
