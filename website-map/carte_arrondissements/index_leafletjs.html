@@ -9,8 +9,8 @@
     />
 	<style>
 		.info {
-			padding: 6px 8px;
-			font: 14px/16px Arial, Helvetica, sans-serif;
+			padding: 8px 8px;
+			font: 12px/14px Arial, Helvetica, sans-serif;
 			background: white;
 			background: rgba(255,255,255,0.8);
 			box-shadow: 0 0 15px rgba(0,0,0,0.2);
@@ -36,12 +36,24 @@
 		table, th, td {
 			padding: 3px;
 		}
+		.leaflet-control-layers-toggle:after{ 
+			content:"Plus d'options"; 
+			color:#000 ;
+		}
+		.leaflet-control-layers-toggle{ 
+			width:auto;
+			background-position:3px 50% ;
+			padding:3px;
+			padding-left:36px;
+			text-decoration:none;
+			line-height:36px;
+		}
 	</style>
 </head>
 <body>
-    <div id="map" style="width: 1600px; height: 900px"></div>
+    <div id="map" style="width: 1200px; height: 800px"></div>
 
-    <script src="http://cdn.leafletjs.com/leaflet-0.5/leaflet.js"></script>
+    <script src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script>
     <script src="./communes-75.json"></script>
     <script>
 	
@@ -66,18 +78,22 @@
 			telecom = L.marker([48.826506, 2.346462]).bindPopup('Ici Télécom Paristech');
 
 		var places = L.layerGroup([mines, telecom]);
+		var mark_ = L.layerGroup([]);
 		
 		var basePlaces = {
-			"Quelques lieux": places
+			"Quelques lieux": places,
+			"Comparaison des sites d'annonce": mark_
 		};
 				
 		var map = L.map('map', {
 			center: [48.8555875, 2.3366803],
-			zoom: 13,
-			layers: [streets, places]
+			zoom: 12,
+			layers: [streets]
 		});
 		
 		currentLayer = "m_prix_surface";
+		
+		lutte_des_sites = 0;
 		
 		// ------------------------------------------
 		
@@ -251,43 +267,43 @@
 		
 		icones['pap'] = L.icon({
 			iconUrl: 'logo-pap.png',
-			iconSize:     [80, 50], // size of the icon
-			iconAnchor:   [40, 25], // point of the icon which will correspond to marker's location
+			iconSize:     [40, 24], // size of the icon
+			iconAnchor:   [20, 12], // point of the icon which will correspond to marker's location
 			popupAnchor:  [0, 0] // point from which the popup should open relative to the iconAnchor
 		});
 		
 		icones['explorimmo'] = L.icon({
 			iconUrl: 'logo-explorimmo.png',
-			iconSize:     [120, 30], // size of the icon
-			iconAnchor:   [60, 15], // point of the icon which will correspond to marker's location
+			iconSize:     [60, 16], // size of the icon
+			iconAnchor:   [30, 8], // point of the icon which will correspond to marker's location
 			popupAnchor:  [0, 0] // point from which the popup should open relative to the iconAnchor
 		});
 		
 		icones['paruvendu'] = L.icon({
 			iconUrl: 'logo-paruvendu.png',
-			iconSize:     [120, 18], // size of the icon
-			iconAnchor:   [60, 9], // point of the icon which will correspond to marker's location
+			iconSize:     [60, 10], // size of the icon
+			iconAnchor:   [30, 5], // point of the icon which will correspond to marker's location
 			popupAnchor:  [0, 0] // point from which the popup should open relative to the iconAnchor
 		});
 		
 		icones['seloger'] = L.icon({
 			iconUrl: 'logo-seloger.png',
-			iconSize:     [110, 34], // size of the icon
-			iconAnchor:   [55, 17], // point of the icon which will correspond to marker's location
+			iconSize:     [54, 16], // size of the icon
+			iconAnchor:   [27, 8], // point of the icon which will correspond to marker's location
 			popupAnchor:  [0, 0] // point from which the popup should open relative to the iconAnchor
 		});
 		
 		icones['fnaim'] = L.icon({
 			iconUrl: 'logo-fnaim.png',
-			iconSize:     [90, 70], // size of the icon
-			iconAnchor:   [45, 35], // point of the icon which will correspond to marker's location
+			iconSize:     [44, 34], // size of the icon
+			iconAnchor:   [22, 17], // point of the icon which will correspond to marker's location
 			popupAnchor:  [0, 0] // point from which the popup should open relative to the iconAnchor
 		});
 		
 		icones['laforet'] = L.icon({
 			iconUrl: 'logo-laforet.png',
-			iconSize:     [60, 60], // size of the icon
-			iconAnchor:   [30, 30], // point of the icon which will correspond to marker's location
+			iconSize:     [30, 30], // size of the icon
+			iconAnchor:   [15, 15], // point of the icon which will correspond to marker's location
 			popupAnchor:  [0, 0] // point from which the popup should open relative to the iconAnchor
 		});
 		
@@ -309,46 +325,48 @@
 			
 			info.update(layer.feature.properties);
 			
-			console.log(layer.feature.properties.nom)
+			if (lutte_des_sites) {
 			
-			if (!(layer.feature.properties.nom in mark)) {
-			
-				s = "Détails de la répartition par site d'annonce pour : " + '<br> <b> <font size="3">' + layer.feature.properties.nom + '</font> </b> <br> <br>'
+				if (!(layer.feature.properties.nom in mark)) {
 				
-				s = s + "Combien par site d'annonce :" + '</b> <br> <table>'
-				
-				for (si in dicoSite) {
+					s = "Moyenne du critère par site d'annonce :"
 					
-					var valeur = "";
+					s = s + '</b> <br> <table>'
 					
-					if (layer.feature.properties[si][currentLayer] > 0) {
-					
-						if (currentLayer === "m_prix") {
-							valeur = parseInt(layer.feature.properties[si][currentLayer]/1000) + ' k€'
-						}
-						else if (currentLayer === "m_prix_surface") {
-							valeur = parseInt(layer.feature.properties[si][currentLayer]) + ' €/m²'
-						}
-						else if (currentLayer === "m_surface") {
-							valeur = parseInt(layer.feature.properties[si][currentLayer]) + ' m²'
-						}
-						else {
-							valeur = parseInt(layer.feature.properties[si][currentLayer]*100) + ' %'
-						}
+					for (si in dicoSite) {
 						
-						s = s + '<tr> <td>' + dicoSite[si] + '</td>' + '<td> ' + valeur + '</td> </tr>'
+						var valeur = "";
+						
+						if (layer.feature.properties[si][currentLayer] > 0) {
+						
+							if (currentLayer === "m_prix") {
+								valeur = parseInt(layer.feature.properties[si][currentLayer]/1000) + ' k€'
+							}
+							else if (currentLayer === "m_prix_surface") {
+								valeur = parseInt(layer.feature.properties[si][currentLayer]) + ' €/m²'
+							}
+							else if (currentLayer === "m_surface") {
+								valeur = parseInt(layer.feature.properties[si][currentLayer]) + ' m²'
+							}
+							else {
+								valeur = parseInt(layer.feature.properties[si][currentLayer]*100) + ' %'
+							}
+							
+							s = s + '<tr> <td>' + dicoSite[si] + '</td>' + '<td> ' + valeur + '</td> </tr>'
+						
+						}
 					
 					}
+					
+					s = s + '</table> <br>'
+					
+					s = s + '<b> <font size="2"> Meilleurs offres pour ce critère sur : <br> <b>' + dicoSite[layer.feature.properties["gagnant"][currentLayer]] + '</b> </font> </b>'
+						
+					polygon_center = layer.getBounds().getCenter();
+					mark[layer.feature.properties.nom] = L.marker([polygon_center.lat, polygon_center.lng],
+						{icon: icones[layer.feature.properties["gagnant"][currentLayer]]}).addTo(map).bindPopup(s);//.openPopup();
 				
 				}
-				
-				s = s + '</table> <br>'
-				
-				s = s + '<b> <font size="2"> Meilleurs offres pour ce critère sur : <b>' + dicoSite[layer.feature.properties["gagnant"][currentLayer]] + '</b> </font> </b>'
-					
-				polygon_center = layer.getBounds().getCenter();
-				mark[layer.feature.properties.nom] = L.marker([polygon_center.lat, polygon_center.lng],
-					{icon: icones[layer.feature.properties["gagnant"][currentLayer]]}).addTo(map).bindPopup(s);//.openPopup();
 			
 			}
 			
@@ -418,33 +436,32 @@
 		
 		var geoLayers = {
 		
-			"Répartition du prix au mètre carré": arr_prix_surface,
-			"... des biens chers": arr_prix,
-			"... des grandes surfaces": arr_surface,
+			"Répartition par prix au mètre carré": arr_prix_surface,
+			"Répartition par prix": arr_prix,
+			"Répartition par surface": arr_surface,
 			
-			"... des studios": arr["m_studio"],
+			"Répartition des studios": arr["m_studio"],
 			
-			"... des ascenseurs": arr["m_ascenseur"],
-			"... des gardiens": arr["m_gardien"],
-			"... des parkings": arr["m_parking"],
+			"Répartition des ascenseurs": arr["m_ascenseur"],
+			"Répartition des gardiens": arr["m_gardien"],
+			"Répartition des parkings": arr["m_parking"],
 			
-			"... des cuisines": arr["m_cuisine"],
-			"... des cuisines américaines": arr["m_cuisine_americaine"],
-			"... des cuisines équipées": arr["m_cuisine_equipee"],
-			"... des WC séparés": arr["m_wc_separes"],
-			"... des buanderies": arr["m_buanderie"],
-			"... des baignoires": arr["m_baignoire"],
+			"Répartition des cuisines": arr["m_cuisine"],
+			"... américaines": arr["m_cuisine_americaine"],
+			"Répartition des WC séparés": arr["m_wc_separes"],
+			"Répartition des buanderies": arr["m_buanderie"],
+			"Répartition des baignoires": arr["m_baignoire"],
 			
-			"... des balcons": arr["m_balcon"],
-			"... des terrasses": arr["m_terrasse"],
-			"... du parquet": arr["m_parquet"],
+			"Répartition des balcons": arr["m_balcon"],
+			"Répartition des terrasses": arr["m_terrasse"],
+			"Répartition du parquet": arr["m_parquet"],
 			
-			"... des jardins ": arr["m_jardin"],
-			"... des orientations Sud": arr["m_orientation_sud"],
-			"... de la luminosité": arr["m_lumineux"],
-			"... du calme": arr["m_calme"],
+			"Répartition des jardins ": arr["m_jardin"],
+			"Répartition des orientations Sud": arr["m_orientation_sud"],
+			"Répartition de la luminosité": arr["m_lumineux"],
+			"Répartition du calme": arr["m_calme"],
 
-			"... du style Haussmann": arr["m_haussmann"],
+			"Répartition du style Haussmann": arr["m_haussmann"],
 		};
 		
 				
@@ -471,8 +488,10 @@
 			}
 			b[currentLayer] = bold;
 		
-			this._div.innerHTML = '<h4> Nom</h4>' +  (props ?
-				'<b>' + props.nom + '</b><br />' + '</b><br />' +
+			this._div.innerHTML = '<h4> <font size="2">' + "Ventes d'appartements à : " + '</font> </h4>' +  (props ?
+				'<b> <font size="3">' + props.nom + '</font> </b><br /> </b><br /> </b><br />' +
+				
+				'<h4> <font size="2"> Statistiques détaillées : </font> </h4>' +
 				
 				'<table>' +
 				
@@ -482,64 +501,61 @@
 				'<tr> <td>' + b["m_prix_surface"] + "Prix par mètre carré en moyenne : " + '</td>' +
 				'<td> <b>' + b["m_prix_surface"] + parseInt(props.m_prix/props.m_surface) + ' € / m²' + '</td> </tr>' +
 				
-				'<tr> <td>' + b["m_prix"] + "Prix moyen des ventes : " + '</td>' +
+				'<tr> <td>' + b["m_prix"] + "Prix moyen : " + '</td>' +
 				'<td> <b>' + b["m_prix"] + parseInt(props.m_prix/1000) + ' k€' + '</td> </tr>' +
 				
-				'<tr> <td>' + b["m_surface"] + "Surface moyenne des ventes : " + '</td>' +
+				'<tr> <td>' + b["m_surface"] + "Surface moyenne : " + '</td>' +
 				'<td> <b>' + b["m_surface"] + parseInt(props.m_surface) + ' m²' + '</td> </tr>' +
 				
 				'<tr> <td>' + b["m_studio"] + "Studios : " + '</td>' +
 				'<td> <b>' + b["m_studio"] + parseInt(props.m_studio*100) + ' %' + '</td> </tr>' +
 				
-				'<tr> <td>' + b["m_ascenseur"] + "Appartements avec ascenseur : " + '</td>' +
+				'<tr> <td>' + b["m_ascenseur"] + "Proportion d'appartements avec ascenseur : " + '</td>' +
 				'<td> <b>' + b["m_ascenseur"] + parseInt(props.m_ascenseur*100) + ' %' + '</td> </tr>' +
 				
-				'<tr> <td>' + b["m_gardien"] + "... avec gardien : " + '</td>' +
+				'<tr> <td>' + b["m_gardien"] + "Appartements avec gardien : " + '</td>' +
 				'<td> <b>' + b["m_gardien"] + parseInt(props.m_gardien*100) + ' %' + '</td> </tr>' +
 				
-				'<tr> <td>' + b["m_parking"] + "... avec parking : " + '</td>' +
+				'<tr> <td>' + b["m_parking"] + "Appartements avec parking : " + '</td>' +
 				'<td> <b>' + b["m_parking"] + parseInt(props.m_parking*100) + ' %' + '</td> </tr>' +
 				
-				'<tr> <td>' + b["m_cuisine"] + "... avec cuisine : " + '</td>' +
+				'<tr> <td>' + b["m_cuisine"] + "Appartements avec cuisine : " + '</td>' +
 				'<td> <b>' + b["m_cuisine"] + parseInt(props.m_cuisine*100) + ' %' + '</td> </tr>' +
 				
-				'<tr> <td>' + b["m_cuisine_americaine"] + "... avec cuisine américaine : " + '</td>' +
+				'<tr> <td>' + b["m_cuisine_americaine"] + "... américaine : " + '</td>' +
 				'<td> <b>' + b["m_cuisine_americaine"] + parseInt(props.m_cuisine_americaine*100) + ' %' + '</td> </tr>' +
 				
-				'<tr> <td>' + b["m_cuisine_equipee"] + "... avec cuisine équipée : " + '</td>' +
-				'<td> <b>' + b["m_cuisine_equipee"] + parseInt(props.m_cuisine_equipee*100) + ' %' + '</td> </tr>' +
-				
-				'<tr> <td>' + b["m_wc_separes"] + "... avec WC séparés : " + '</td>' +
+				'<tr> <td>' + b["m_wc_separes"] + "Appartements avec WC séparés : " + '</td>' +
 				'<td> <b>' + b["m_wc_separes"] + parseInt(props.m_wc_separes*100) + ' %' + '</td> </tr>' +
 				
-				'<tr> <td>' + b["m_buanderie"] + "... avec buanderie : " + '</td>' +
+				'<tr> <td>' + b["m_buanderie"] + "Appartements avec buanderie : " + '</td>' +
 				'<td> <b>' + b["m_buanderie"] + parseInt(props.m_buanderie*100) + ' %' + '</td> </tr>' +
 				
-				'<tr> <td>' + b["m_baignoire"] + "... avec baignoire : " + '</td>' +
+				'<tr> <td>' + b["m_baignoire"] + "Appartements avec baignoire : " + '</td>' +
 				'<td> <b>' + b["m_baignoire"] + parseInt(props.m_baignoire*100) + ' %' + '</td> </tr>' +
 				
-				'<tr> <td>' + b["m_balcon"] + "... avec balcon : " + '</td>' +
+				'<tr> <td>' + b["m_balcon"] + "Appartements avec balcon : " + '</td>' +
 				'<td> <b>' + b["m_balcon"] + parseInt(props.m_balcon*100) + ' %' + '</td> </tr>' +
 				
-				'<tr> <td>' + b["m_terrasse"] + "... avec terrasse : " + '</td>' +
+				'<tr> <td>' + b["m_terrasse"] + "Appartements avec terrasse : " + '</td>' +
 				'<td> <b>' + b["m_terrasse"] + parseInt(props.m_terrasse*100) + ' %' + '</td> </tr>' +
 				
-				'<tr> <td>' + b["m_parquet"] + "... avec parquet : " + '</td>' +
+				'<tr> <td>' + b["m_parquet"] + "Appartements avec parquet : " + '</td>' +
 				'<td> <b>' + b["m_parquet"] + parseInt(props.m_parquet*100) + ' %' + '</td> </tr>' +
 				
-				'<tr> <td>' + b["m_jardin"] + "... avec jardin : " + '</td>' +
+				'<tr> <td>' + b["m_jardin"] + "Appartements avec jardin : " + '</td>' +
 				'<td> <b>' + b["m_jardin"] + parseInt(props.m_jardin*100) + ' %' + '</td> </tr>' +
 				
-				'<tr> <td>' + b["m_orientation_sud"] + "... avec orientation Sud : " + '</td>' +
+				'<tr> <td>' + b["m_orientation_sud"] + "Appartements avec orientation Sud : " + '</td>' +
 				'<td> <b>' + b["m_orientation_sud"] + parseInt(props.m_orientation_sud*100) + ' %' + '</td> </tr>' +
 				
-				'<tr> <td>' + b["m_lumineux"] + "... lumineux : " + '</td>' +
+				'<tr> <td>' + b["m_lumineux"] + "Appartements lumineux : " + '</td>' +
 				'<td> <b>' + b["m_lumineux"] + parseInt(props.m_lumineux*100) + ' %' + '</td> </tr>' +
 				
-				'<tr> <td>' + b["m_calme"] + "... calme : " + '</td>' +
+				'<tr> <td>' + b["m_calme"] + "Appartements calme : " + '</td>' +
 				'<td> <b>' + b["m_calme"] + parseInt(props.m_calme*100) + ' %' + '</td> </tr>' +
 				
-				'<tr> <td>' + b["m_haussmann"] + "... de style hausmannien : " + '</td>' +
+				'<tr> <td>' + b["m_haussmann"] + "Appartements de style hausmannien : " + '</td>' +
 				'<td> <b>' + b["m_haussmann"] + parseInt(props.m_haussmann*100) + ' %' + '</td> </tr>' +
 				
 				'</table>'
@@ -590,6 +606,29 @@
 				}
 			
 			currentLegend.addTo(this);
+			
+		});
+		
+		map.on('overlayadd', function (eventLayer) {
+			if (eventLayer.name === "Comparaison des sites d'annonce") {
+				lutte_des_sites = 1;
+			}
+		});
+		
+		map.on('overlayremove', function (eventLayer) {
+			
+			
+			if (eventLayer.name === "Comparaison des sites d'annonce") {
+		
+			lutte_des_sites = 0;
+			
+			for (m in mark) {
+					this.removeLayer(mark[m]);
+				}
+				
+				mark = {}
+				
+			}
 			
 		});
 

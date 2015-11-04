@@ -17,7 +17,7 @@ pour l'analyse
 """
 
 ##### donnees a modifier en fonction du fichier que l'on souhaite analyser
-filename = "apparts_10-22_traite.csv"
+filename = "base_filtre_2.csv"
 datename = "-10-28"
 ##### ##### #####
 
@@ -28,12 +28,17 @@ x = list(r)
 # labels des colonnes du csv
 labels = x[0]
 
+for l in range(len(labels)):
+    string = labels[l]
+    if string[-2:] == "_q":
+        labels[l] = string[:-2]
+        
 # donnees du csv
 data = x[1:]
 data = np.array(data)
 
 # string vide to -1 (donnee manquante) pour faire le cast to float
-data[data=='']='0'
+data[data=='-1']='0'
 
 # cast to float
 data = data.astype(np.float)
@@ -271,7 +276,7 @@ arrFeat =  arrJson["features"]
 for i in range(len(arrFeat)):
     
     # indice de l'arrondissement dans le tableau
-    i_arr = int(arrFeat[i]["properties"]["code"]) - 75100
+    i_arr = int(arrFeat[i]["properties"]["code"]) - 75100 - 1
     
     # nombre d'appartements pour cet arrondissement
     arrFeat[i]["properties"]["nb_apparts"] = str(count_arr[i_arr])
