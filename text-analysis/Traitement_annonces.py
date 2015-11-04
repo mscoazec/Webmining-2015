@@ -470,7 +470,7 @@ class Text_analysis:
     
     
     #Extraction de toutes les caractéristiques d'une annonce complète (comprenant URL, titre, description, prix ...)
-    def traitement_annonce(self, annonce, fonction_test = False, notre_site = False):
+    def traitement_annonce(self, annonce, fonction_test = False, notre_site = False, vente = True):
         """
         annonce est un tableau de string, contenant obligatoirement l'URL, et possiblement d'autres
         champs : texte de l'annonce, prix, récapitulatif des caractéristiques ... Cela dépend du site
@@ -826,7 +826,7 @@ class Text_analysis:
         
         #Emmanuel m'a demandé d'arrondir les prix au millier, je le fais dans tous les cas
         #Le prix est en toute dernière place de ma liste donc je peux trouver sa place avec len()-1
-        if site_annonce != "":
+        if site_annonce != "" and vente:
             feat_values_description[len(feat_values_description) - 1] = int(math.ceil(feat_values_description[len(feat_values_description) - 1] / 1000) * 1000)
         
         
@@ -917,7 +917,7 @@ class Text_analysis:
     
     #Extraction de toutes les annonces d'un fichier json résultant du crawling, et écriture dans un fichier csv
     #des features pour chacune des annonces
-    def traitement_fichier(self, fichierJson, fichier_sortie = None):
+    def traitement_fichier(self, fichierJson, fichier_sortie = None, vente = True):
         """
         fichierJson est le nom d'un fichier Json contenant des annonces extraites d'un site Web :
         Il doit se terminer par .json
@@ -963,7 +963,7 @@ class Text_analysis:
         #Et on enlève les "HC" qui causent des problèmes pour certains apparts en location
         for i in range(nombre_annonces):
             if annoncesJson[i]["prix"].replace(".","").replace(" ","").replace("HC","").replace("CC","").isdigit():
-                fichier_sortie.writerow(self.traitement_annonce(annoncesJson[i]))
+                fichier_sortie.writerow(self.traitement_annonce(annoncesJson[i], False, False, vente))
             
             #Affichage du nombre d'annonces par seconde au bout de 50 annonces pour estimer le temps total
             if (i == 10):
@@ -999,7 +999,7 @@ class Text_analysis:
     
     
     #Extraction de toutes les annonces de tous les fichiers d'un dossier contenant des fichiers Json
-    def traitement_dossier(self, dossierEnInput):
+    def traitement_dossier(self, dossierEnInput, vente = True):
         """
         dossierFichiers est le chemin d'un dossier contenant des .json d'annonces
         La fonction traitement_dossier crée un fichier csv concaténant toutes les caractéristiques
@@ -1026,7 +1026,7 @@ class Text_analysis:
         for fichierJson in os.listdir(dossierFichiers):
             if fichierJson[-5:] == ".json":
                 #On traite chaque fichier un par un en écrivant les données dans fichier_sortie
-                self.traitement_fichier(dossierFichiers + "/" + fichierJson, fichier_sortie)
+                self.traitement_fichier(dossierFichiers + "/" + fichierJson, fichier_sortie, vente)
         
         
         #Calcul du temps total du programme
@@ -1061,7 +1061,7 @@ class Text_analysis:
     
     
 
-    def test_une_annonce(self, site=0, numero_annonce=0):
+    def test_une_annonce(self, site=0, numero_annonce=0, vente = True):
         """
         Fonction pour comparer le texte d'une annonce (aléatoire par défaut) avec les features que je donne
         """
@@ -1087,20 +1087,47 @@ class Text_analysis:
         #nom du site
         sitename = ""
         if site == 1:
-            sitename = "explorimmo-10-22"
+            if vente:
+                sitename = "explorimmo-10-22"
+            else:
+                sitename = "explorimmo-11-02"
         if site == 2:
-            sitename = "fnaim-10-22"
+            if vente:
+                sitename = "fnaim-10-22"
+            else:
+                sitename = "fnaim-11-01"
+            
         if site == 3:
-            sitename = "laforet-10-22"
+            if vente:
+                sitename = "pap-10-23"
+            else:
+                sitename = "pap-11-01"
+            
         if site == 4:
-            sitename = "pap-10-23"
+            if vente:
+                sitename = "laforet-10-22"
+            else:
+                sitename = "laforet-11-01"
+            
         if site == 5:
-            sitename = "paruvendu-10-22"
+            if vente:
+                sitename = "paruvendu-10-22"
+            else:
+                sitename = "paruvendu-11-01"
+            
         if site == 6:
-            sitename = "seloger_15eme-11-02"
+            if vente:
+                sitename = "seloger_15eme-11-02"
+            else:
+                sitename = "seloger-11-01"
+            
             
         #Ouverture du fichier du site
-        fichierJson = "Input/appart_vente_11-02/items_appart_" + sitename + ".json"
+        if vente:
+            nom_debut_dossier = "Input/appart_vente_11-02/items_appart_"
+        else:
+            nom_debut_dossier = "Input/apparts_location_11-01/items_appart_location_"
+        fichierJson = nom_debut_dossier + sitename + ".json"
         annoncesJson = json.load(open(fichierJson))
 
         #Nombre d'annonces dans le fichier
@@ -1121,7 +1148,7 @@ class Text_analysis:
         
         #Extraction des features avec ma fonction
         annonce = annoncesJson[numero_annonce]
-        features_de_lannonce = self.traitement_annonce(annonce, True)
+        features_de_lannonce = self.traitement_annonce(annonce, vente = vente)
         
         #Impression d'informations sur la console
         print "Site " + sitename + " (n°%d)," %site+ " annonce numéro %d." %numero_annonce
@@ -1194,7 +1221,7 @@ Commandes de tests
 #print Text_analysis().traitement_annonce(annoncetest)
 
 #Test avec impression propre sur des annonces aléatoires
-Text_analysis().test_une_annonce()
+#Text_analysis().test_une_annonce(vente = False)
 
 #Pour tester sur certains fichiers
 #Text_analysis().traitement_dossier('Test')
@@ -1202,4 +1229,4 @@ Text_analysis().test_une_annonce()
 """
 Appel de la fonction traitement_dossier sur les vraies données
 """
-#Text_analysis().traitement_dossier('apparts_location_11-01')
+Text_analysis().traitement_dossier('apparts_location_11-01', vente = False)
