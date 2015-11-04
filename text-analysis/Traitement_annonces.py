@@ -470,7 +470,7 @@ class Text_analysis:
     
     
     #Extraction de toutes les caractéristiques d'une annonce complète (comprenant URL, titre, description, prix ...)
-    def traitement_annonce(self, annonce, fonction_test = False):
+    def traitement_annonce(self, annonce, fonction_test = False, notre_site = False):
         """
         annonce est un tableau de string, contenant obligatoirement l'URL, et possiblement d'autres
         champs : texte de l'annonce, prix, récapitulatif des caractéristiques ... Cela dépend du site
@@ -892,7 +892,7 @@ class Text_analysis:
         Opérations faites dans tous les cas, sauf pour notre site
         """
         #Ajout de l'url et de la description dans le fichier à la demande d'Adrien et Marion
-        if site_annonce != "" and site_annonce != "notresite":
+        if site_annonce != "" and site_annonce != "notresite" and notre_site == False:
             feat_values_description.append(annonce["url"])
             feat_values_description.append(annonce["titre"])
             feat_values_description.append(annonce["description"])
@@ -1202,4 +1202,4 @@ Text_analysis().test_une_annonce()
 """
 Appel de la fonction traitement_dossier sur les vraies données
 """
-#Text_analysis().traitement_dossier('appart_vente_11-02')
+#Text_analysis().traitement_dossier('apparts_location_11-01')
