@@ -11,10 +11,10 @@
 	</style>
 </head>
 <body>
-    <div id="map" style="width: 10Opx; height: 500px"></div>
+    <div id="map" style="width: 1600px; height: 900px"></div>
 
     <script src="http://cdn.leafletjs.com/leaflet-0.5/leaflet.js"></script>
-    <script src="./communes-75.json"></script>
+    <script src="./appart_vente_11-02_traite_mini.json"></script>
     <script>
 	
 		// create map on Paris
@@ -40,26 +40,18 @@
 			layers: [streets]
 		});
 		
-		var dataset = [
-			{description : "Notre Dame de Paris", x : 48.853056, y : 2.349722},
-			{description : "Musée d'Orsay", x: 48.86, y: 2.327},
-			{description : "Muséum National d'Histoire Naturelle", x : 48.8422, y : 2.3564}
-		];
-		
 		var markers = new L.featureGroup();
+		var l = dataset.length;
 
-			for (i = 0; i < dataset.length ;i++) {
+			for (i = 0; i < 2000; i++) {
 				item = dataset[i]
-				marker = new L.marker([item.xloc,item.yloc]).bindPopup(item.y);
+				marker = new L.circleMarker([item.coordonnee_y_q/10000,item.coordonnee_x_q/10000], {opacity:0.75})
+					.bindPopup('Prix : ' + item.prix/1000 + ' k€' + '<br>' + 'Surface : ' + item.surface_q + ' m²');
 				markers.addLayer(marker);
 			}
 
-			markers.on('mouseover', function(e){
-							e.layer.openPopup();
-							})
-			       .on('mouseout', function(e){
-							e.layer.closePopup();
-							});
+			markers.on('mouseover', function(e){ e.layer.openPopup();})
+			       .on('mouseout', function(e){e.layer.closePopup();});
 				   
 			map.addLayer(markers);
 			map.fitBounds(markers.getBounds());
