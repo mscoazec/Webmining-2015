@@ -70,6 +70,9 @@ class Text_analysis:
         #la colonne de la coordonnee y
         self.column_yCoordonnee = 2
         
+        #la colonne de la surface
+        self.column_surface = 0
+        
         #la ligne de la première ligne d'arrondissements (la ligne de l'excel moins un)
         self.line_ardt = 1
         
@@ -187,6 +190,11 @@ class Text_analysis:
                 #Si c'est la ligne de coordonnees_precises, on renseigne la position de la feature ardt
                 if row[self.column_featureName] == "coordonnees_precises":
                     self.pos_coor_precises = self.number_features
+                    
+                    
+                #Si c'est la ligne de coordonnees_precises, on renseigne la position de la feature ardt
+                if row[self.column_featureName] == "surface_q":    
+                    self.column_surface = self.number_features
                 
                 
             self.number_features += 1
@@ -386,7 +394,9 @@ class Text_analysis:
                 
                 #On met à jour la recherche si on a trouvé quelque chose
                 if value_feat_chain != None:
-                    value_feat = value_feat_chain
+                    #On ne prend que la plus grande des surfaces si on en trouve
+                    if feat_num <> self.column_surface or value_feat < value_feat_chain:
+                        value_feat = value_feat_chain
                 
             #feature yesNo
             if self.tab_features[feat_num][1]:
@@ -662,7 +672,7 @@ class Text_analysis:
             #Mais il y a plus d'informations dans la description donc on part des valeurs tirées de la description       
             for i in range(len(feat_values_description)):
                 #Recopie des valeurs contenues dans infos et titre
-                if feat_values_infos[i] != '':
+                if feat_values_infos[i] != '' and i <> self.column_surface:
                     feat_values_description[i] = feat_values_infos[i]
             
             
@@ -1052,7 +1062,7 @@ class Text_analysis:
                         print "Temps total du programme : 1 heure %d minutes %d secondes." %(int(temps_total/60) - 60, temps_total%60)
                     else:
                         #Au-delà de deux heures
-                        print "Temps total du programme : %d heure %d minutes %d secondes." %(int(temps_total/3600), int(temps_total/60) - 60*int(temps_total/3600), temps_total%60)
+                        print "Temps total du programme : %d heures %d minutes %d secondes." %(int(temps_total/3600), int(temps_total/60) - 60*int(temps_total/3600), temps_total%60)
         
     
     
@@ -1221,7 +1231,8 @@ Commandes de tests
 #print Text_analysis().traitement_annonce(annoncetest)
 
 #Test avec impression propre sur des annonces aléatoires
-#Text_analysis().test_une_annonce(vente = False)
+#Text_analysis().test_une_annonce(4, 464)
+#Text_analysis().test_une_annonce(4)
 
 #Pour tester sur certains fichiers
 #Text_analysis().traitement_dossier('Test')
@@ -1229,4 +1240,5 @@ Commandes de tests
 """
 Appel de la fonction traitement_dossier sur les vraies données
 """
-Text_analysis().traitement_dossier('apparts_location_11-01', vente = False)
+Text_analysis().traitement_dossier('appart_vente_11-02')
+
